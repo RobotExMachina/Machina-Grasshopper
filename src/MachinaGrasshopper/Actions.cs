@@ -583,5 +583,451 @@ namespace MachinaGrasshopper
 
 
 
+    //   █████╗ ██╗  ██╗███████╗███████╗
+    //  ██╔══██╗╚██╗██╔╝██╔════╝██╔════╝
+    //  ███████║ ╚███╔╝ █████╗  ███████╗
+    //  ██╔══██║ ██╔██╗ ██╔══╝  ╚════██║
+    //  ██║  ██║██╔╝ ██╗███████╗███████║
+    //  ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝
+    //                                  
+    public class Axes : GH_Component
+    {
+        public Axes() : base(
+            "Axes",
+            "Axes",
+            "Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("15ea7b44-c5d8-470b-9edb-867cc4c0b1aa");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("A1Inc", "A1", "Rotational increment in degrees for Axis 1", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A2Inc", "A2", "Rotational increment in degrees for Axis 2", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A3Inc", "A3", "Rotational increment in degrees for Axis 3", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A4Inc", "A4", "Rotational increment in degrees for Axis 4", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A5Inc", "A5", "Rotational increment in degrees for Axis 5", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A6Inc", "A6", "Rotational increment in degrees for Axis 6", GH_ParamAccess.item, 0);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Axis Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double a1inc = 0;
+            double a2inc = 0;
+            double a3inc = 0;
+            double a4inc = 0;
+            double a5inc = 0;
+            double a6inc = 0;
+
+            if (!DA.GetData(0, ref a1inc)) return;
+            if (!DA.GetData(1, ref a2inc)) return;
+            if (!DA.GetData(2, ref a3inc)) return;
+            if (!DA.GetData(3, ref a4inc)) return;
+            if (!DA.GetData(4, ref a5inc)) return;
+            if (!DA.GetData(5, ref a6inc)) return;
+
+            DA.SetData(0, new ActionJoints(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true));
+        }
+    }
+
+    public class AxesTo : GH_Component
+    {
+        public AxesTo() : base(
+            "AxesTo",
+            "AxesTo",
+            "Set the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("5b9bc63f-a0f1-4d66-b6a6-679c38ed8014");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("A1", "A1", "Angular value in degrees for Axis 1", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A2", "A2", "Angular value in degrees for Axis 2", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A3", "A3", "Angular value in degrees for Axis 3", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A4", "A4", "Angular value in degrees for Axis 4", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A5", "A5", "Angular value in degrees for Axis 5", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("A6", "A6", "Angular value in degrees for Axis 6", GH_ParamAccess.item, 0);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Axis Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double a1 = 0;
+            double a2 = 0;
+            double a3 = 0;
+            double a4 = 0;
+            double a5 = 0;
+            double a6 = 0;
+
+            if (!DA.GetData(0, ref a1)) return;
+            if (!DA.GetData(1, ref a2)) return;
+            if (!DA.GetData(2, ref a3)) return;
+            if (!DA.GetData(3, ref a4)) return;
+            if (!DA.GetData(4, ref a5)) return;
+            if (!DA.GetData(5, ref a6)) return;
+
+            DA.SetData(0, new ActionJoints(new Joints(a1, a2, a3, a4, a5, a6), false));
+        }
+    }
+
+    //  ██╗    ██╗ █████╗ ██╗████████╗
+    //  ██║    ██║██╔══██╗██║╚══██╔══╝
+    //  ██║ █╗ ██║███████║██║   ██║   
+    //  ██║███╗██║██╔══██║██║   ██║   
+    //  ╚███╔███╔╝██║  ██║██║   ██║   
+    //   ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝   ╚═╝   
+    //                                
+    public class Wait : GH_Component
+    {
+        public Wait() : base(
+            "Wait",
+            "Wait",
+            "Pause program execution for a specified amount of time.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("4ec5c686-0ca9-4b60-a99e-8eaf4fe594ac");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("Time", "T", "Pause time in milliseconds", GH_ParamAccess.item, 1000);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Wait Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double t = 0;
+
+            if (!DA.GetData(0, ref t)) return;
+
+            DA.SetData(0, new ActionWait((long)Math.Round(t)));
+        }
+    }
+
+    //  ███╗   ███╗███████╗███████╗███████╗ █████╗  ██████╗ ███████╗
+    //  ████╗ ████║██╔════╝██╔════╝██╔════╝██╔══██╗██╔════╝ ██╔════╝
+    //  ██╔████╔██║█████╗  ███████╗███████╗███████║██║  ███╗█████╗  
+    //  ██║╚██╔╝██║██╔══╝  ╚════██║╚════██║██╔══██║██║   ██║██╔══╝  
+    //  ██║ ╚═╝ ██║███████╗███████║███████║██║  ██║╚██████╔╝███████╗
+    //  ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+    //                                                              
+    public class Message : GH_Component
+    {
+        public Message() : base(
+            "Message",
+            "Message",
+            "Displays a text message on the device. This will depend on the device's configuration. For example, for ABB robots it will display it on the FlexPendant's log window.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("2675e57a-5b6f-441a-9f94-69bb155b7b59");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddTextParameter("Message", "T", "Text message to display", GH_ParamAccess.item, "Hello World!");
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Message Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            string msg = "";
+
+            if (!DA.GetData(0, ref msg)) return;
+
+            DA.SetData(0, new ActionMessage(msg));
+        }
+    }
+
+
+
+    //   ██████╗ ██████╗ ███╗   ███╗███╗   ███╗███████╗███╗   ██╗████████╗
+    //  ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
+    //  ██║     ██║   ██║██╔████╔██║██╔████╔██║█████╗  ██╔██╗ ██║   ██║   
+    //  ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║   
+    //  ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║███████╗██║ ╚████║   ██║   
+    //   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   
+    //                                                                    
+    public class Comment : GH_Component
+    {
+        public Comment() : base(
+            "Comment",
+            "Comment",
+            "Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("a3fc9af6-04ab-49e9-a0fe-d224f4e7e9bf");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddTextParameter("Comment", "T", "The comment to be displayed on code compilation", GH_ParamAccess.item, "This is a comment");
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Comment Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            string comment = "";
+
+            if (!DA.GetData(0, ref comment)) return;
+
+            DA.SetData(0, new ActionComment(comment));
+        }
+    }
+
+
+    //  ██████╗ ███████╗    ██╗ █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗
+    //  ██╔══██╗██╔════╝   ██╔╝██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║  ██║
+    //  ██║  ██║█████╗    ██╔╝ ███████║   ██║      ██║   ███████║██║     ███████║
+    //  ██║  ██║██╔══╝   ██╔╝  ██╔══██║   ██║      ██║   ██╔══██║██║     ██╔══██║
+    //  ██████╔╝███████╗██╔╝   ██║  ██║   ██║      ██║   ██║  ██║╚██████╗██║  ██║
+    //  ╚═════╝ ╚══════╝╚═╝    ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+    //                                                                           
+    public class Attach : GH_Component
+    {
+        public Attach() : base(
+            "Attach",
+            "Attach",
+            "Attach a Tool to the flange of the object, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the tool change.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("5598bf85-6887-40b4-a29b-efff6af0864f");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Tool", "T", "A Tool object to attach to the Robot flange", GH_ParamAccess.item);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Attach Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            Tool tool = Tool.Unset;
+
+            if (!DA.GetData(0, ref tool))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Tool specified, using default \"NoTool\" object");
+            }
+
+            DA.SetData(0, new ActionAttach(tool));
+        }
+    }
+
+    public class Detach : GH_Component
+    {
+        public Detach() : base(
+            "Detach",
+            "Detach",
+            "Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("f3195b55-742a-429f-bf66-94fce5497bc9");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager) { }  // no info needed
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Detach Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA) 
+        {
+            DA.SetData(0, new ActionDetach());
+        }
+    }
+
+
+
+    //  ██╗    ██╗ ██████╗ 
+    //  ██║   ██╔╝██╔═══██╗
+    //  ██║  ██╔╝ ██║   ██║
+    //  ██║ ██╔╝  ██║   ██║
+    //  ██║██╔╝   ╚██████╔╝
+    //  ╚═╝╚═╝     ╚═════╝ 
+    //                     
+    public class WriteDigital : GH_Component
+    {
+        public WriteDigital() : base(
+            "WriteDigital",
+            "WriteDigital",
+            "Activate/deactivate digital output.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("a08ed4f1-1913-4f32-8d43-0c98fd1e5bd4");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("DPin", "N", "Digital pin number", GH_ParamAccess.item, 1);
+            pManager.AddBooleanParameter("On", "B", "Turn on?", GH_ParamAccess.item, false);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "WriteDigital Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+            bool on = false;
+
+            if (!DA.GetData(0, ref id)) return;
+            if (!DA.GetData(1, ref on)) return;
+
+            DA.SetData(0, new ActionIODigital(id, on));
+        }
+    }
+
+    public class WriteAnalog : GH_Component
+    {
+        public WriteAnalog() : base(
+            "WriteAnalog",
+            "WriteAnalog",
+            "Send a value to analog output.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("ace7ecb7-2a7a-4a39-b181-73d00c412b82");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("APin", "N", "Analog pin number", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Value", "V", "Value to send to pin", GH_ParamAccess.item, 0);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "WriteAnalog Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+            double val = 0;
+
+            if (!DA.GetData(0, ref id)) return;
+            if (!DA.GetData(1, ref val)) return;
+
+            DA.SetData(0, new ActionIOAnalog(id, val));
+        }
+    }
+
+    public class TurnOn : GH_Component
+    {
+        public TurnOn() : base(
+            "TurnOn",
+            "TurnOn",
+            "Turn digital output on. Alias for `WriteDigital(ioNum, true)`",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("8bd5bc0d-249e-4744-8530-cf8fced77492");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("DPin", "N", "Digital pin number", GH_ParamAccess.item, 1);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "TurnOn Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+
+            if (!DA.GetData(0, ref id)) return;
+
+            DA.SetData(0, new ActionIODigital(id, true));
+        }
+    }
+
+    public class TurnOff : GH_Component
+    {
+        public TurnOff() : base(
+            "TurnOff",
+            "TurnOff",
+            "Turn digital output off. Alias for `WriteDigital(ioNum, false)`",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("15d234aa-2f63-488e-a95e-cc89ffcca3b6");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("APin", "N", "Analog pin number", GH_ParamAccess.item, 1);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "TurnOff Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+
+            if (!DA.GetData(0, ref id)) return;
+
+            DA.SetData(0, new ActionIODigital(id, false));
+        }
+    }
+
+
+
+
+
 
 }

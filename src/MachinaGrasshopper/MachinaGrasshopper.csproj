@@ -67,11 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Robots.cs" />
     <Compile Include="Actions.cs" />
     <Compile Include="ExportCode.cs" />
-    <Compile Include="MoveTo.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
-    <Compile Include="Create.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

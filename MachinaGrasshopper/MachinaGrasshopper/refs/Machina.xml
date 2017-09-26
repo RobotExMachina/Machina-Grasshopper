@@ -1,0 +1,3718 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Machina</name>
+    </assembly>
+    <members>
+        <member name="T:Machina.ActionType">
+            <summary>
+            Defines an Action Type, like Translation, Rotation, Wait... 
+            Useful to flag base Actions into children classes.
+            </summary>
+        </member>
+        <member name="T:Machina.Action">
+            <summary>
+            Actions represent high-level abstract operations such as movements, rotations, 
+            transformations or joint manipulations, both in absolute and relative terms. 
+            They are independent from the device's properties, and their translation into
+            actual robotic instructions depends on the robot's properties and state. 
+            </summary>
+        </member>
+        <member name="M:Machina.Action.#ctor">
+            <summary>
+            A base constructor to take care of common setup for all actionss
+            </summary>
+        </member>
+        <member name="T:Machina.ActionSpeed">
+            <summary>
+            An Action to change the current speed setting.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionZone">
+            <summary>
+            An Action to change current zone setting.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionMotion">
+            <summary>
+            An Action to change current MotionType.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionCoordinates">
+            <summary>
+            An Action to change current Reference Coordinate System.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionPushPop">
+            <summary>
+            An Action to Push or Pop current device settings (such as speed, zone, etc.)
+            </summary>
+        </member>
+        <member name="T:Machina.ActionTranslation">
+            <summary>
+            An action representing a Translation transform in along a guiding vector.
+            </summary>
+        </member>
+        <member name="M:Machina.ActionTranslation.#ctor(Machina.Vector,System.Boolean)">
+            <summary>
+            Full constructor.
+            </summary>
+            <param name="world"></param>
+            <param name="trans"></param>
+            <param name="relTrans"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+        </member>
+        <member name="T:Machina.ActionRotation">
+            <summary>
+            An Action representing a Rotation transformation in Quaternion represnetation.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionTransformation">
+            <summary>
+            An Action representing a combined Translation and Rotation Transformation.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionJoints">
+            <summary>
+            An Action representing the raw angular values of the device's joint rotations.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionMessage">
+            <summary>
+            An Action representing a string message sent to the device to be displayed.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionWait">
+            <summary>
+            An Action represening the device staying idle for a period of time.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionComment">
+            <summary>
+            Adds a line comment to the compiled code
+            </summary>
+        </member>
+        <member name="T:Machina.ActionAttach">
+            <summary>
+            Attaches a Tool to the robot flange. 
+            If the robot already had a tool, this will be substituted.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionDetach">
+            <summary>
+            Detaches any tool currently attached to the robot.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionIODigital">
+            <summary>
+            Turns digital pin # on or off.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionIOAnalog">
+            <summary>
+            Writes a value to analog pin #.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionBuffer">
+            <summary>
+            A class that manages a FIFO list of Actions.
+            </summary>
+        </member>
+        <member name="F:Machina.ActionBuffer.pending">
+            <summary>
+            Actions pending to be released.
+            </summary>
+        </member>
+        <member name="F:Machina.ActionBuffer.released">
+            <summary>
+            Keep track of past released actions.
+            </summary>
+        </member>
+        <member name="F:Machina.ActionBuffer.blockCounts">
+            <summary>
+            Stores the amount of Actions per 'block'. 
+            A 'block' is a set of Actions flagged to be released as a group,
+            like in Execute mode. 
+            </summary>
+        </member>
+        <member name="M:Machina.ActionBuffer.#ctor">
+            <summary>
+            Main constructor.
+            </summary>
+        </member>
+        <member name="M:Machina.ActionBuffer.Add(Machina.Action)">
+            <summary>
+            Add an Action to the pending buffer.
+            </summary>
+            <param name="act"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.GetNext">
+            <summary>
+            Release the next pending Action with the highest priority.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.GetLast">
+            <summary>
+            Returns the last Action that was released by the buffer
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.GetAllPending(System.Boolean)">
+            <summary>
+            Release all pending Actions in the order they were issued.
+            </summary>
+            <param name="flush">If true, pending actions will be flushed from the buffer and flagged as released</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.GetAllPending">
+            <summary>
+            Release all pending Actions in the order they were issued.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.SetBlock">
+            <summary>
+            Wraps all pending actions outside release blocks into one.
+            </summary>
+        </member>
+        <member name="M:Machina.ActionBuffer.GetBlockPending(System.Boolean)">
+            <summary>
+            Returns the next block of Actions to be released. If no block
+            is present, it will return all pending Actions. 
+            </summary>
+            <param name="flush">If true, this block will be moved 
+            from pending to released.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.AreActionsPending">
+            <summary>
+            Is there any Action pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.ActionsPending">
+            <summary>
+            How many Actions are pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.IsVirgin">
+            <summary>
+            Has any Action ever been issued to this buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.ActionBuffer.Flush">
+            <summary>
+            Clear all buffered and past released Actions.
+            </summary>
+        </member>
+        <member name="M:Machina.ActionBuffer.LogBufferedActions">
+            <summary>
+            Writes a description of each pending Action to the Console.
+            </summary>
+        </member>
+        <member name="T:Machina.AxisAngle">
+            <summary>
+            A class representing a spatial rotation as an Axis-Angle:
+            an unit axis vector and the rotation angle.
+            </summary>
+        </member>
+        <member name="P:Machina.AxisAngle.Axis">
+            <summary>
+            The rotation axis.
+            </summary>
+        </member>
+        <member name="P:Machina.AxisAngle.Angle">
+            <summary>
+            Rotation angle in degrees.
+            </summary>
+        </member>
+        <member name="P:Machina.AxisAngle.X">
+            <summary>
+            X coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="P:Machina.AxisAngle.Y">
+            <summary>
+            Y coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="P:Machina.AxisAngle.Z">
+            <summary>
+            Z coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="M:Machina.AxisAngle.IsSimilar(Machina.AxisAngle)">
+            <summary>
+            Test if this AxisAngle is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.op_Implicit(Machina.AxisAngle)~Machina.Vector">
+            <summary>
+            Implicit conversion to Vector object.
+            </summary>
+            <param name="aa"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor">
+            <summary>
+            Creates an AxisAngle representing no rotation.
+            </summary>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor(Machina.AxisAngle)">
+            <summary>
+            Creates an AxisAngle as a shallow copy of another one.
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="axisAngle"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor(Machina.AxisAngle,System.Boolean)">
+            <summary>
+            Creates an AxisAngle as a shallow copy of another one.
+            Internal constructor to bypass normalization.
+            </summary>
+            <param name="aa"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create an AxisAngle representation of a spatial rotation from the XYZ components of the rotation axis, 
+            and the rotation angle in degrees. 
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angleDegs"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor(Machina.Vector,System.Double)">
+            <summary>
+            Create an AxisAngle representation of a spatial rotation from the XYZ components of the rotation axis, 
+            and the rotation angle in degrees. 
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="axis"></param>
+            <param name="angleDegs"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Private constructor, can bypass normalization if input axis is ensured to be normalized. 
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angleDegs"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.AxisAngle.Normalize">
+            <summary>
+            Make the Axis a vector unit.
+            </summary>
+        </member>
+        <member name="M:Machina.AxisAngle.IsZero">
+            <summary>
+            Returns true if this AxisAngle represents no rotation: zero rotation axis or zero (modulated) angle.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.AxisLength">
+            <summary>
+            Returns the length of the rotation axis.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.Modulate">
+            <summary>
+            Transforms this AxisAngle into a rotation around the same axis, but with an equivalent rotation angle
+            in the [0, 360]. Note the axis vector will be flipped if the original angle was negative. 
+            </summary>
+        </member>
+        <member name="M:Machina.AxisAngle.Flip">
+            <summary>
+            Flip this AxisAngle to represent the same rotation with inverted vector and opposite angle.
+            </summary>
+        </member>
+        <member name="M:Machina.AxisAngle.IsEquivalent(Machina.AxisAngle)">
+            <summary>
+            Is this rotation equivalent to a given one? 
+            Equivalence is defined as rotations around vectors sharing the same axis (including opposite directions)
+            and an angle with the same modulated equivalence. This in turn means the same spatial orientation after transformation.
+            For example, the following rotations are equivalent:
+            [0, 0, 1, 315]
+            [0, 0, 1, 675] (one additional turn, same angle)
+            [0, 0, 1, -45] (negative rotation, same angle)
+            [0, 0, -1, 45] (flipped axis, same angle)
+            [0, 0, 10, 315] (same axis and angle, longer vector. note non-unit vectors are not allowed in this AA representation)
+            
+            Also, these are equivalent:
+            [0, 0, 0, 0]
+            [0, 0, 1, 720] 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.ToQuaternion">
+            <summary>
+            Returns a unit Quaternion representing this AxisAngle rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.ToRotationVector">
+            <summary>
+            Returns a RotationVector representing this AxisAngle rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.ToRotationMatrix">
+            <summary>
+            Returns a Rotation Matrix representation of this Axis Angle. 
+            Please note that rotation matrices represent rotations in orthonormalized coordinates,  
+            so that additional Axis Angle information such as overturns (angles outside [0, 180])
+            will get lost, and rotation axis might be flipped. 
+            If this Axis Angle represents no effective rotation, the identity matrix will be returned. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.AxisAngle.ToYawPitchRoll">
+            <summary>
+            Returns a YawPitchRoll representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.Orientation">
+            <summary>
+            Defines an Orientation in three-dimensional space represented by a triplet of orthogonal XYZ unit vectors
+            following right-hand rule orientations. Useful for spatial and rotational orientation operations. 
+            </summary>
+        </member>
+        <member name="F:Machina.Orientation.Q">
+             NOTE: just as rotation, this class is just a wrapper around the underlying 
+             rotational elements that represent Orientation in space.
+             The main purpose of this class it to be an intuitive way of representing Orientation 
+             in three-dimensional space. AxisAngle is therefore not used here, since conceptually
+             there is no need to represent rotations or store overturns in an object that represents
+             pure orientation. 
+             Typical inputs will be vectors in space or conversions from other rotation representations, 
+             and typical visual outputs will be main Vectors, Rotation Matrices or Euler Angles 
+             (even though all internal computation is based on Quaternion algebra). 
+            
+        </member>
+        <member name="P:Machina.Orientation.XAxis">
+            <summary>
+            The main X direction of this Orientation.
+            </summary>
+        </member>
+        <member name="P:Machina.Orientation.YAxis">
+            <summary>
+            The main Y direction of this Orientation.
+            </summary>
+        </member>
+        <member name="P:Machina.Orientation.ZAxis">
+            <summary>
+            The main Z direction of this Orientation.
+            </summary>
+        </member>
+        <member name="M:Machina.Orientation.op_Implicit(Machina.Rotation)~Machina.Orientation">
+            <summary>
+            Implicit conversion from Rotation to Orientation via its Quaternion.
+            </summary>
+            <param name="or"></param>
+        </member>
+        <member name="M:Machina.Orientation.#ctor">
+            <summary>
+            Create a  Rotation object representing no rotation.
+            </summary>
+        </member>
+        <member name="M:Machina.Orientation.#ctor(Machina.Vector,Machina.Vector)">
+            <summary>
+            Create a new Orientation object from the main X and Y axes.
+            This constructor will create the best-fit orthogonal coordinate system
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="vectorX"></param>
+            <param name="vectorY"></param>
+        </member>
+        <member name="M:Machina.Orientation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a new Orientation object from the main X and Y axes.
+            This constructor will create the best-fit orthogonal coordinate system
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:Machina.Orientation.#ctor(Machina.Quaternion)">
+            <summary>
+            Create an Orientation object from a Quaternion representation.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Orientation.#ctor(Machina.Rotation)">
+            <summary>
+            Creates an Orientation object from a Rotation representation.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="T:Machina.Geometry">
+            <summary>
+            Base abstract class that all Geometry objects inherit from.
+            </summary>
+        </member>
+        <member name="F:Machina.Geometry.EPSILON">
+            <summary>
+            Precision for floating-point comparisons.
+            </summary>
+        </member>
+        <member name="F:Machina.Geometry.EPSILON2">
+            <summary>
+            A more permissive precision factor.
+            </summary>
+        </member>
+        <member name="F:Machina.Geometry.EPSILON3">
+            <summary>
+            A more restrictive precision factor.
+            </summary>
+        </member>
+        <member name="F:Machina.Geometry.EPSILON_DECIMALS">
+            <summary>
+            Amount of digits for floating-point comparisons precision.
+            </summary>
+        </member>
+        <member name="F:Machina.Geometry.STRING_ROUND_DECIMALS_M">
+            <summary>
+            Amount of decimals for rounding on ToString() operations.
+            </summary>
+        </member>
+        <member name="M:Machina.Types.Plane.#ctor">
+            <summary>
+            Creates a World centered Plane. 
+            </summary>
+        </member>
+        <member name="M:Machina.Types.Plane.#ctor(Machina.Point,Machina.Vector,Machina.Vector)">
+            <summary>
+            Creates a Plane from origin Point and main axis vectors.
+            </summary>
+            <param name="origin"></param>
+            <param name="xAxis"></param>
+            <param name="yAxis"></param>
+        </member>
+        <member name="M:Machina.Types.Plane.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a Plane from origin and main axis vector coordinates.
+            </summary>
+            <param name="originX"></param>
+            <param name="originY"></param>
+            <param name="originZ"></param>
+            <param name="xVecX"></param>
+            <param name="xVecY"></param>
+            <param name="xVecZ"></param>
+            <param name="yVecX"></param>
+            <param name="yVecY"></param>
+            <param name="yVecZ"></param>
+        </member>
+        <member name="M:Machina.Types.Plane.Identity">
+            <summary>
+            Turns this Plane into an identity Plane
+            </summary>
+        </member>
+        <member name="T:Machina.Rotation">
+            <summary>
+            Represents a rotation in three-dimensional space.
+            This rotation is usually defined by its rotation axis and angles, although other
+            definition inputs are possible, such as Quaternions, Rotation Matrices or
+            Euler Angles (Yaw-Pitch-Roll).
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.GlobalXYZ">
+            <summary>
+            An empty Rotation representing the orientation of the global XYZ coordinate system.
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.FlippedAroundX">
+            <summary>
+            A Rotation of 180 degs around the X axis.
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.FlippedAroundY">
+            <summary>
+            A Rotation of 180 degs around the Y axis. 
+            This is the most common orientation of the coordiante system of the flange of a robot in 'home' position.
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.FlippedAroundZ">
+            <summary>
+            A Rotation of 180 degs around the Z axis. 
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.AA">
+            <summary>
+            Internal AxisAngle representation of this rotation. Used as high-level representation.
+            </summary>
+        </member>
+        <member name="F:Machina.Rotation.Q">
+            <summary>
+            Internal Quaternion representation of this rotation. Used for computations.
+            </summary>
+        </member>
+        <member name="P:Machina.Rotation.Axis">
+            <summary>
+            The axis vector around which this rotation revolves.
+            </summary>
+        </member>
+        <member name="P:Machina.Rotation.Angle">
+            <summary>
+            The rotation angle in degrees. 
+            </summary>
+        </member>
+        <member name="M:Machina.Rotation.op_Implicit(Machina.Orientation)~Machina.Rotation">
+            <summary>
+            Implicit conversion from Orientation to Rotation via its Quaternion.
+            </summary>
+            <param name="or"></param>
+        </member>
+        <member name="M:Machina.Rotation.#ctor">
+            <summary>
+            Create an empty rotation object with no initialized fields.
+            </summary>
+        </member>
+        <member name="M:Machina.Rotation.#ctor(Machina.Rotation)">
+            <summary>
+            Create a Rotation as a shallow copy of another one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:Machina.Rotation.#ctor(Machina.Vector,System.Double)">
+            <summary>
+            Create a rotation of 'angle' degrees around the 'axis' vector.
+            </summary>
+            <param name="axis"></param>
+            <param name="angleDegrees"></param>
+        </member>
+        <member name="M:Machina.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a rotation around a vector axis with XYZ components with the angle
+            defined in degrees and right-hand rule. The axis will be automatically
+            normalized. 
+            </summary>
+            <param name="axisX"></param>
+            <param name="axisY"></param>
+            <param name="axisZ"></param>
+            <param name="angleDegrees"></param>
+        </member>
+        <member name="M:Machina.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Main internal constructor.
+            </summary>
+            <param name="axisX"></param>
+            <param name="axisY"></param>
+            <param name="axisZ"></param>
+            <param name="angleDegrees"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.Rotation.#ctor(Machina.Quaternion)">
+            <summary>
+            Internal constructor from a normalized Quaternion object.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Rotation.FromQuaternion(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Rotation from its Quaternion values. 
+            This is a static method because it 
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.RotateGlobal(Machina.Rotation)">
+            <summary>
+            Rotate this rotation using Global (extrinsic) coordinate system. 
+            Internally, this rotation is pre-multiplied by the given one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:Machina.Rotation.RotateLocal(Machina.Rotation)">
+            <summary>
+            Rotate this rotation using Local (intrinsic) coordinate system. 
+            Internally, this rotation is post-multiplied by the given one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:Machina.Rotation.Invert">
+            <summary>
+            Invert this rotation to negative angle around the same axis.
+            </summary>
+        </member>
+        <member name="M:Machina.Rotation.Combine(Machina.Rotation,Machina.Rotation)">
+            <summary>
+            Combine the effect of two Rotations. 
+            Please note that rotations will be applied in the order specified by the arguments
+            in intrinsic coordinates, i.e. r1, then r2 over the new LOCAL transformed coordinate system.
+            This means that, if you want to rotate a Rotation A with another Rotation B in GLOBAL coordinates, 
+            you will need to pre-multiply the rotations as in: Combine(B, A).
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.Inverse(Machina.Rotation)">
+            <summary>
+            Return a rotation around the same axis but negative angle.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.UpdateQuaternion">
+            <summary>
+            Update the Quaternion from the AxisAngle value.
+            </summary>
+        </member>
+        <member name="M:Machina.Rotation.GetRotationVector">
+            <summary>
+            Return a RotationVector representation of this Rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.GetRotationVector(System.Boolean)">
+            <summary>
+            Return a RotationVector representation of this Rotation.
+            </summary>
+            <param name="radians"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.Joints">
+            <summary>
+            Represents the 6 angular rotations of the axes in a 6-axis manipulator, in degrees.
+            </summary>
+        </member>
+        <member name="M:Machina.Joints.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Joints configuration from values.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+        </member>
+        <member name="M:Machina.Joints.Norm">
+            <summary>
+            Returns the norm (euclidean length) of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Joints.NormSq">
+            <summary>
+            Returns the square norm of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.Point">
+            <summary>
+            Represents a three dimensional point. 
+            This is just a cosmetic alias for Vectors in the Public API... Users may have a better
+            time at first understanding position as Points and direction as Vectors...?
+            </summary>
+        </member>
+        <member name="P:Machina.Point.X">
+            <summary>
+            X property of the Point.
+            </summary>
+        </member>
+        <member name="P:Machina.Point.Y">
+            <summary>
+            Y property of the Point.
+            </summary>
+        </member>
+        <member name="P:Machina.Point.Z">
+            <summary>
+            Z property of the Point.
+            </summary>
+        </member>
+        <member name="M:Machina.Point.op_Implicit(Machina.Point)~Machina.Vector">
+            <summary>
+            Implicit conversion to Vector object.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:Machina.Point.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Point from its XYZ coordinates.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="T:Machina.Vector">
+            <summary>
+            Represents a three dimensional vector.
+            </summary>
+        </member>
+        <member name="P:Machina.Vector.X">
+            <summary>
+            X property of the Vector.
+            </summary>
+        </member>
+        <member name="P:Machina.Vector.Y">
+            <summary>
+            Y property of the Vector.
+            </summary>
+        </member>
+        <member name="P:Machina.Vector.Z">
+            <summary>
+            Z property of the Vector.
+            </summary>
+        </member>
+        <member name="M:Machina.Vector.IsSimilar(Machina.Vector)">
+            <summary>
+            Test if this Vector is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.op_Implicit(Machina.Vector)~Machina.Point">
+            <summary>
+            Implicit conversion to Point object.
+            </summary>
+            <param name="vec"></param>
+        </member>
+        <member name="M:Machina.Vector.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Vector from its XYZ coordinates.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:Machina.Vector.#ctor(Machina.Vector)">
+            <summary>
+            Creates a shallow copy of the specified Vector.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:Machina.Vector.Set(Machina.Vector)">
+            <summary>
+            Shallow-copies the values of specified Vector.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:Machina.Vector.Add(System.Double,System.Double,System.Double)">
+            <summary>
+            Add specified values to this Vector.
+            </summary>
+            <param name="incX"></param>
+            <param name="incY"></param>
+            <param name="incZ"></param>
+        </member>
+        <member name="M:Machina.Vector.Add(Machina.Vector)">
+            <summary>
+            Add the coordinates of specified Vector to this one.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:Machina.Vector.Length">
+            <summary>
+            Returns the length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.SqLength">
+            <summary>
+            Returns the squared length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Normalize">
+            <summary>
+            Unitizes this Vector. Will return false if Vector is not unitizable
+            (zero length Vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.IsUnit">
+            <summary>
+            Is this a unit Vector?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Invert">
+            <summary>
+            Reverses the direction of this Vector.
+            </summary>
+        </member>
+        <member name="M:Machina.Vector.Flip">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:Machina.Vector.Reverse">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:Machina.Vector.Scale(System.Double)">
+            <summary>
+            Multiplies this Vector by a scalar. 
+            </summary>
+            <param name="factor"></param>
+        </member>
+        <member name="M:Machina.Vector.Rotate(Machina.Quaternion)">
+            <summary>
+            Rotates this Vector by speficied Quaterion.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Vector.Rotate(Machina.Vector,System.Double)">
+            <summary>
+            Rotates this Vector specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Rotate(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Rotates this Vector specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Machina.Vector.XAxis">
+            <summary>
+            Unit X Vector.
+            </summary>
+        </member>
+        <member name="F:Machina.Vector.YAxis">
+            <summary>
+            Unit Y Vector.
+            </summary>
+        </member>
+        <member name="F:Machina.Vector.ZAxis">
+            <summary>
+            Unit Z Vector.
+            </summary>
+        </member>
+        <member name="M:Machina.Vector.op_Multiply(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the dot product of specified Vectors. 
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.DotProduct(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Dot_product">Dot product</a> 
+            of specified Points (Vectors).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.AngleBetween(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the angle between two vectors in radians.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.CrossProduct(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Cross_product">Cross Product</a>
+            of specified Vectors (Points).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Distance(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.SqDistance(Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the squarde distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.AreParallel(Machina.Vector,Machina.Vector)">
+            <summary>
+            Are specified vectors parallel? This includes vectors with opposite directions, 
+            even with different magnitudes.
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.AreOrthogonal(Machina.Vector,Machina.Vector)">
+            <summary>
+            Are specified vectors orthogonal?
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.AreOpposite(Machina.Vector,Machina.Vector)">
+            <summary>
+            Are these vectors parallel but in opposite directions? They can have different magnitudes.
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.CompareDirections(Machina.Vector,Machina.Vector)">
+            <summary>
+            Compares the directions of two vectors, regardless of their magnitude.
+            Returns 1 if parallel (same direction), 2 if orthogonal (perpendicular
+            directions), 3 if opposite (parallel in opposite directions), 
+            0 otherwise
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.RandomFromDoubles(System.Double,System.Double)">
+            <summary>
+            Returns a random Vector with coordinates between specified double ranges. 
+            Useful for testing and debugging.
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Rotation(Machina.Vector,Machina.Rotation)">
+            <summary>
+            Returns a new Vector as the rotation of Vector 'p' by Rotation 'r'
+            </summary>
+            <param name="p"></param>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.SqSegmentDistance(Machina.Vector,Machina.Vector,Machina.Vector)">
+            <summary>
+            Returns the squared distance from 'p' to the segment 'p1-p2'.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="p"></param>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Orthogonalize(Machina.Vector,Machina.Vector,Machina.Vector@,Machina.Vector@,Machina.Vector@)">
+            <summary>
+            Given two vectors, this method outputs two new orthogonal vectors, where the first one is 
+            parallel to the original (although normalized), and the second one is perpendicular to the 
+            first, maintaining the orientation of the first one. 
+            Returns false if operation could not be processed (both vectors have the same direction)
+            </summary>
+            <param name="X"></param>
+            <param name="Y"></param>
+            <param name="nX"></param>
+            <param name="nY"></param>
+        </member>
+        <member name="M:Machina.Vector.SimplifyPointList(System.Collections.Generic.List{Machina.Vector},System.Double,System.Boolean)">
+            <summary>
+            Simplifies the path using a combination of radial distance and 
+            Ramer–Douglas–Peucker algorithm. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="tolerance"></param>
+            <param name="highQuality"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.SimplifyDouglasPeucker(System.Collections.Generic.List{Machina.Vector},System.Double)">
+            <summary>
+            The Ramer-Douglas-Peucker algorithm.
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.SimplifyRadialDistance(System.Collections.Generic.List{Machina.Vector},System.Double)">
+            <summary>
+            Simple distance-based simplification. Consecutive points under 
+            threshold distance are removed. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Equals(System.Object)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.Equals(Machina.Vector)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.YawPitchRoll">
+            <summary>
+            A class representing a Yaw-Pitch-Roll rotation, e.g. Euler Angles over intrinsic
+            ZY'X'' axes (Tait-Bryan angles). See <see cref="!:http://en.wikipedia.org/wiki/Euler_angles"/>
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.XAngle">
+            <summary>
+            Rotation around the X axis in degrees.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.YAngle">
+            <summary>
+            Rotation around the Y axis in degrees.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.ZAngle">
+            <summary>
+            Rotation around the Z axis in degrees. 
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Roll">
+            <summary>
+            Alias for rotation around X axis.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Pitch">
+            <summary>
+            Alias for rotation around Y axis.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Yaw">
+            <summary>
+            Alias for rotation around Z axis.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Bank">
+            <summary>
+            Alias for rotation around X axis.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Attitude">
+            <summary>
+            Alias for rotation around Y axis.
+            </summary>
+        </member>
+        <member name="P:Machina.YawPitchRoll.Heading">
+            <summary>
+            Alias for rotation around Z axis.
+            </summary>
+        </member>
+        <member name="M:Machina.YawPitchRoll.IsSimilar(Machina.YawPitchRoll)">
+            <summary>
+            Test if this YawPitchRoll is approximately equal to another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.YawPitchRoll.#ctor">
+            <summary>
+            Create a zero rotation.
+            </summary>
+        </member>
+        <member name="M:Machina.YawPitchRoll.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create an Euler Angles ZY'X'' intrinsic rotation from its constituent components in degrees.
+            </summary>
+            <param name="xAngle"></param>
+            <param name="yAngle"></param>
+            <param name="zAngle"></param>
+        </member>
+        <member name="M:Machina.YawPitchRoll.IsEquivalent(Machina.YawPitchRoll)">
+            <summary>
+            Is this rotation equivalent to another? I.e. is the resulting orientation the same?
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.YawPitchRoll.ToQuaternion">
+            <summary>
+            Returns the Quaternion representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.YawPitchRoll.ToRotationMatrix">
+            <summary>
+            Returns the Rotation Matrix representation os this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.YawPitchRoll.ToAxisAngle">
+            <summary>
+            Returns the Axis-Angle representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.YawPitchRoll.ToRotationVector">
+            <summary>
+            Returns a Rotation Vector representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.RotationMatrix">
+            <summary>
+            A class representing a 3x3 rotation matrix
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.R">
+            <summary>
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m00">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m01">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m02">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m10">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m11">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m12">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m20">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m21">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:Machina.RotationMatrix.m22">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="M:Machina.RotationMatrix.IsSimilar(Machina.RotationMatrix)">
+            <summary>
+            Test if this RotationMatrix is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor">
+            <summary>
+            Create a 3x3 identity matrix representing no rotation.
+            </summary>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a 3x3 Rotation Matrix from it's constituent components. 
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            This Matrix will be reorthogonalized if necessary.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            A private constructor to bypass orthogonalization when input parameters are
+            guaranteed to be orthogonal.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+            <param name="orthogonalize"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(System.Double[])">
+            <summary>
+            Create a 3x3 Rotation Matrix from it's constituent components. 
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            </summary>
+            <param name="rotationValues"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(Machina.RotationMatrix)">
+            <summary>
+            Create a 3x3 Rotation Matrix as a shallow copy of another.
+            </summary>
+            <param name="rotationMatrix"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(Machina.Vector,Machina.Vector)">
+            <summary>
+            Create a RotationMatrix from two Vectors. 
+            This constructor will create the best-fit orthogonal 3x3 matrix 
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a RotationMatrix from the components of two Vectors. 
+            This constructor will create the best-fit orthogonal 3x3 matrix 
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.Initialize(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            An internal initializator to start this matrix from its components. 
+            The method allows for optional re-orthogonalization of this Matrix.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+        </member>
+        <member name="M:Machina.RotationMatrix.IsIdentity">
+            <summary>
+            Is this an identity matrix?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.IsOrthogonal">
+            <summary>
+            Is this 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.Orthogonalize">
+            <summary>
+            Force the orthogonalization of this matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.Determinant">
+            <summary>
+            Returns the determinant of this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.Transpose">
+            <summary>
+            Transposes this Matrix.
+            </summary>
+        </member>
+        <member name="M:Machina.RotationMatrix.Invert">
+            <summary>
+            Inverts this Matrix.
+            Returns false if the Matrix could not be inverted (singular matrix). 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.Identity">
+            <summary>
+            Turn this into an indentity matrix, representing no transformation. 
+            </summary>
+        </member>
+        <member name="M:Machina.RotationMatrix.Multiply(Machina.RotationMatrix,Machina.RotationMatrix)">
+            <summary>
+            Multiplies two rotation matrices.
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.ToQuaternion">
+            <summary>
+            Returns a Quaternion representing the same rotation as this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.ToAxisAngle">
+            <summary>
+            Returns an Axis Angle representation of this Rotation Matrix. 
+            Note that the returned Axis Angle will always represent a positive rotation between [0, 180]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.ToRotationVector">
+            <summary>
+            Returns a Rotation Vector representation of this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationMatrix.ToYawPitchRoll">
+            <summary>
+            Return the YawPitchRoll representation of this matrix.s
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.Quaternion">
+            <summary>
+            A class to represent a spatial rotation as a Quaternion.
+            </summary>
+        </member>
+        <member name="P:Machina.Quaternion.W">
+            <summary>
+            W property of the Quaternion (scalar)
+            </summary>
+        </member>
+        <member name="P:Machina.Quaternion.X">
+            <summary>
+            X property of the Quaternion (i part)
+            </summary>
+        </member>
+        <member name="P:Machina.Quaternion.Y">
+            <summary>
+            Y property of the Quaternion (j part)
+            </summary>
+        </member>
+        <member name="P:Machina.Quaternion.Z">
+            <summary>
+            Z property of the Quaternion (k part)
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.IsSimilar(Machina.Quaternion)">
+            <summary>
+            Test if this Quaternion approximately equals another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.op_Addition(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Quaternion addition
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.op_Subtraction(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Quaternion subtraction
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.op_Multiply(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.op_Multiply(Machina.Quaternion,System.Double)">
+            <summary>
+            Returns the Quaternion reulting of scaling Q by a scalar.
+            </summary>
+            <param name="q"></param>
+            <param name="factor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.op_Division(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Division operator.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.#ctor">
+            <summary>
+            Create an identity Quaternion representing no rotation.
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Quaternion from its components: w + x * i + y * j + z * k
+            For quaternions to be used as valid representations of spatial rotations, 
+            they need to be versors (unit quaternions). This constructor will automatically
+            Vector-Normalize the resulting Quaternion.
+            While this may restrict more general complex algebra, it will be useful
+            in the context of robotics to keep quaternions tight this way ;)
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:Machina.Quaternion.#ctor(Machina.Quaternion)">
+            <summary>
+            Create a Quaternion as a shallow copy of another. 
+            This Quaternion will be vector-normalized. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.#ctor(Machina.Vector,System.Double)">
+            <summary>
+            Creates a Quaternion from a Vector and a scalar. 
+            </summary>
+            <param name="vec"></param>
+            <param name="scalar"></param>
+        </member>
+        <member name="M:Machina.Quaternion.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            A private constructor with the option to bypass automatic quaternion normalization.
+            This saves computation when using conversion algorithms that already yield normalized results.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Set(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the values of this Quaternion's components. 
+            The result is Vector-Normalized.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Set(Machina.Quaternion)">
+            <summary>
+            Shallow-copies the values of specified Quaternion.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Set(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Sets the values of this Quaternion's components with the option to bypass normalization.
+            For internal use, when wxyz come from a normalized source.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Identity">
+            <summary>
+            Turns into a positive identity Quaternion (1, 0, 0, 0).
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.Identity(System.Boolean)">
+            <summary>
+            Turns into an identity Quaternion.
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.Length">
+            <summary>
+            Returns the length (norm) of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.SqLength">
+            <summary>
+            Returns the square length of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Normalize">
+            <summary>
+            Turns this Quaternion into a <a href="https://en.wikipedia.org/wiki/Versor">Versor</a> (unit length quaternion).
+            If quaternion couldn't be normalized (zero-length), turns it into identity and return false.
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.NormalizeVector">
+            <summary>
+            Normalizes the complex portion of this Quaternion (the rotation vector)
+            maintaining the scalar portion (the rotation angle) the same. This is useful when
+            coming from a rotation specified by non-unit vectors, to maintain angular spin.
+            If the scalar is outside the [-1, 1] range, the entire quaternion will be normalized instead.
+            </summary>
+            <remarks>Homebrew algorithm, TO REVIEW</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Conjugate">
+            <summary>
+            Turns this Rotation into its conjugate.
+            </summary>
+            <seealso cref="!:http://mathworld.wolfram.com/QuaternionConjugate.html"/>
+        </member>
+        <member name="M:Machina.Quaternion.Conjugate(Machina.Quaternion)">
+            <summary>
+            Returns the conjugate of given quaternion.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Invert">
+            <summary>
+            Inverts this quaternion.
+            </summary>
+        </member>
+        <member name="M:Machina.Quaternion.Inverse(Machina.Quaternion)">
+            <summary>
+            Returns the inverse of given quaternion.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.IsUnit">
+            <summary>
+            Is this a unit length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.IsZero">
+            <summary>
+            Is this a zero length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.IsIdentity">
+            <summary>
+            Is this an identity Quaternion? 
+            The identity Quaternion (1, 0, 0, 0) or (-1, 0, 0, 0) produces no rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.IsEquivalent(Machina.Quaternion)">
+            <summary>
+            Is the rotation represented by this Quaternion equivalent to another? 
+            Equivalence is defined as the rotation operation resulting in the same
+            orientation in three-dimensional space. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Sum">
+            <summary>
+            Return the simple sum of the scalar and vector components.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Add(Machina.Quaternion)">
+            <summary>
+            Add a Quaternion to this one. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Addition(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Returns the addition of two quaternions.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Subtract(Machina.Quaternion)">
+            <summary>
+            Subtract a quaternion from this one. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Subtraction(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Returns the subtraction of two quaternions.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Multiply(Machina.Quaternion)">
+            <summary>
+            Post-Multiply this Quaternion by the specified one, a.k.a. this = this * q. 
+            Conceptually, this means that a Rotation 'q' in Local (intrinsic) coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.PreMultiply(Machina.Quaternion)">
+            <summary>
+            Premultiplies this Quaternion by the specified one, a.k.a. this = q * this. 
+            Conceptually, this means that a Rotation 'q' in Global (extrinsic) coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Multiplication(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Scale(System.Double)">
+            <summary>
+            Multiply this Quaternion by a scalar.
+            </summary>
+            <param name="factor"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Scale(Machina.Quaternion,System.Double)">
+            <summary>
+            Returns a new Quaternion equal to the original multiplied by a factor.
+            </summary>
+            <param name="q"></param>
+            <param name="factor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.Divide(Machina.Quaternion)">
+            <summary>
+            Divide this Quaternion by another one. 
+            In reality, this quaternion is post-multiplied by the inverse of the provided one.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:Machina.Quaternion.Division(Machina.Quaternion,Machina.Quaternion)">
+            <summary>
+            Returns the division of q1 by q2.
+            Under the hood, q1 is post-multiplied by the inverse of q2.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.RotateGlobal(Machina.Quaternion)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around GLOBAL (extrinsic) reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.RotateLocal(Machina.Quaternion)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around LOCAL (intrinsic) reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.ToAxisAngle">
+            <summary>
+            Returns the AxisAngle rotation represented by this Quaternion. 
+            Note it will always return the unit vector corresponding to a positive rotation, 
+            even if the quaternion was created from a negative one (flipped vector).
+            </summary>
+            <seealso cref="!:http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm"/>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.ToRotationVector(System.Boolean)">
+            <summary>
+            Returns the Rotationvector rotation represented by this Quaternion. 
+            Note it will always return the unit vector corresponding to a positive rotation, 
+            even if the quaternion was created from a negative one (flipped vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.ToRotationMatrix">
+            <summary>
+            Returns a 3x3 Rotation Matrix representing this Quaternion's rotation. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Quaternion.ToYawPitchRoll">
+            <summary>
+            Returns the Euler Angle representation of this rotation in Tait-Bryan representation
+            (intrinsic ZY'X'' rotations, or Yaw-Pitch-Roll).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.RotationVector">
+            <summary>
+            A class to represent a spatial rotation as a Rotation Vector: an unit rotation
+            axis multiplied by the rotation angle.
+            </summary>
+        </member>
+        <member name="P:Machina.RotationVector.X">
+            <summary>
+            X coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="P:Machina.RotationVector.Y">
+            <summary>
+            Y coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="P:Machina.RotationVector.Z">
+            <summary>
+            Z coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="M:Machina.RotationVector.IsSimilar(Machina.RotationVector)">
+            <summary>
+            Test if this RotationVector is approximately equal to another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a rotation represented by a RotationVector: an unit rotation
+            axis multiplied by the rotation angle.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angle"></param>
+        </member>
+        <member name="M:Machina.RotationVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Protected constructor to bypass normalization of input vector.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angle"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:Machina.RotationVector.Length">
+            <summary>
+            Returns the length of this vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.SqLength">
+            <summary>
+            Returns the squared length of this vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.IsZero">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.GetVector">
+            <summary>
+            Returns the unit vector representing the axis of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.GetAngle">
+            <summary>
+            Returns the rotation angle of this rotation (the length of the vector).
+            Note the rotation angle will always be positive.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.IsEquivalent(Machina.RotationVector)">
+            <summary>
+            Is this rotation equivalent to a given one? 
+            Equivalence is defined as rotations around vectors sharing the same axis (including opposite directions)
+            and an angle with the same modulated equivalence. This in turn means the same spatial orientation after transformation.
+            See <see cref="M:Machina.AxisAngle.IsEquivalent(Machina.AxisAngle)"/>
+            </summary>
+            <param name="rv"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.ToAxisAngle">
+            <summary>
+            Returns an Axis-Angle representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.ToQuaternion">
+            <summary>
+            Returns a Quaternion representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.ToRotationMatrix">
+            <summary>
+            Returns a Rotation Matrix representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RotationVector.ToYawPitchRoll">
+            <summary>
+            Return a YawPitchRoll representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.SettingsBuffer">
+            <summary>
+            A buffer manager for Settings objects.
+            </summary>
+        </member>
+        <member name="T:Machina.Communication">
+            <summary>
+            A class to handle communication with external controllers, real or virtual
+            </summary>
+        </member>
+        <member name="F:Machina.Communication.masterControl">
+            <summary>
+            A reference to parent Machina Control object commanding this Comm.
+            </summary>
+        </member>
+        <member name="F:Machina.Communication.isConnected">
+            <summary>
+            Is the connection to the controller fully operative?
+            </summary>
+        </member>
+        <member name="F:Machina.Communication.isRunning">
+            <summary>
+            Is the device currently running a program?
+            </summary>
+        </member>
+        <member name="M:Machina.Communication.Reset">
+            <summary>
+            Reverts the Comm object to a blank state before any connection attempt, objects retrieved, subscriptions, etc,
+            </summary>
+        </member>
+        <member name="M:Machina.Communication.ConnectToDevice(System.Int32)">
+            <summary>
+            Performs all necessary operations for a successful real-time connection to a real/virtual device.
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.DisconnectFromDevice">
+            <summary>
+            Performs all necessary operations and disposals for a full disconnection (and reset) from a real/virtual device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.SetRunMode(Machina.RunMode)">
+            <summary>
+            Sets the execution mode on the device to once or loop (useful for ControlMode.Execute)
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.LoadProgramToController(System.String,System.String,System.String)">
+            <summary>
+            Loads a program to the device.
+            </summary>
+            <param name="dirname"></param>
+            <param name="filename"></param>
+            <param name="extension"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.LoadProgramToController(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a program to the device.
+            </summary>
+            <param name="program"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.StartProgramExecution">
+            <summary>
+            Request the start of the program loaded on the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.StopProgramExecution(System.Boolean)">
+            <summary>
+            Request immediate or deferred stop of the program running on the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.GetCurrentPosition">
+            <summary>
+            Returns a Vector object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Communication.TickStreamQueue(System.Boolean)">
+            <summary>
+            Ticks the queue manager and potentially triggers streaming of targets to the controller.
+            </summary>
+            <param name="priority"></param>
+        </member>
+        <member name="M:Machina.Communication.DebugDump">
+            <summary>
+            Dumps a bunch of info to the console.
+            </summary>
+        </member>
+        <member name="M:Machina.Communication.SaveProgramToFilename(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Saves a string representation of a program to a local file. 
+            </summary>
+            <param name="module"></param>
+            <param name="filepath"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.#ctor(Machina.Control)">
+            <summary>
+            Main constructor
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.Reset">
+            <summary>
+            Reverts the Comm object to a blank state before any connection attempt. 
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.ConnectToDevice(System.Int32)">
+            <summary>
+            Performs all necessary actions to establish a connection to a real/virtual device, 
+            including connecting to the controller, loggin in, checking required states, etc.
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.DisconnectFromDevice">
+            <summary>
+            Forces disconnection from current controller and manages associated logoffs, disposals, etc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.SetRunMode(Machina.RunMode)">
+            <summary>
+            Sets the Rapid ExecutionCycle to Once, Forever or None.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadProgramToController(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a module to the ABB controller given as a string list of Rapid code lines.
+            </summary>
+            <param name="module"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadProgramToController(System.String,System.String,System.String)">
+            <summary>
+            Loads a module into de controller from a local file. 
+            @TODO: This is an expensive operation, should probably become threaded. 
+            @TODO: By default, wipes out all previous modules --> parameterize.
+            </summary>
+            <param name="dirname"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.StartProgramExecution">
+            <summary>
+            Requests start executing the program in the main task. Remember to call ResetProgramPointer() before. 
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.StopProgramExecution(System.Boolean)">
+            <summary>
+            Requests stop executing the program in the main task.
+            </summary>
+            <param name="immediate">Stop right now or wait for current cycle to complete?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.GetCurrentPosition">
+            <summary>
+            Returns a Vector object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.TickStreamQueue(System.Boolean)">
+            <summary>
+            This function will look at the state of the program pointer, the streamQueue, 
+            and if necessary will add a new target to the stream. This is meant to be called
+            to initiate the stream update chain, like when adding a new target, or pnum event handling.
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.DebugDump">
+            <summary>
+            Dumps a bunch of controller info to the console.
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadController(System.Int32)">
+            <summary>
+            Searches the network for a robot controller and establishes a connection with the specified one by position.
+            Performs no LogOn actions or similar. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.ReleaseController">
+            <summary>
+            Disposes the controller object. This has to be done manually, since COM objects are not
+            automatically garbage collected. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadIP">
+            <summary>
+            Load the controller's IP address into the object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.ReleaseIP">
+            <summary>
+            Resets IP address. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LogOn">
+            <summary>
+            Logs on to the controller with a default user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LogOff">
+            <summary>
+            Logs off from the controller.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.IsControllerInAutoMode">
+            <summary>
+            Returns true if controller is in automatic mode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.IsControllerMotorsOn">
+            <summary>
+            Returns true if controller has Motors On
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadMainTask">
+            <summary>
+            Retrieves the main task from the ABB controller, typically 't_rob1'.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.ReleaseMainTask">
+            <summary>
+            Disposes the task object. This has to be done manually, since COM objects are not
+            automatically garbage collected. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.TestMastershipRapid">
+            <summary>
+            Pings the controller's Rapid resource with a bogus request to check if it is available for
+            Mastership, or it is held by someone else.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.SubscribeToEvents">
+            <summary>
+            Subscribe to relevant events in the controller and assign them handlers.
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.ClearAllModules">
+            <summary>
+            Deletes all existing modules from main task in the controller. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.ResetProgramPointer">
+            <summary>
+            Resets the program pointer in the controller to the main entry point. Needs to be called
+            before starting execution of a program, otherwise the controller will throw an error. 
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.SetupStreamingMode">
+            <summary>
+            Performs necessary operations to set up 'stream' control mode in the controller
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadStreamingModule">
+            <summary>
+            Loads the default StreamModule designed for streaming.
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.HookUpStreamingVariables">
+            <summary>
+            Loads all relevant Rapid variables
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.LoadRapidDataVariable(System.String)">
+            <summary>
+            Retrieves a Rapid variable in current module and returns it
+            </summary>
+            <param name="varName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CommunicationABB.SetRapidDataVariable(ABB.Robotics.Controllers.RapidDomain.RapidData,System.String)">
+            <summary>
+            Sets the value of a Rapid variable from a string representation
+            </summary>
+            <param name="rd"></param>
+            <param name="declaration"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.SetNextVirtualTarget(System.Boolean)">
+            <summary>
+            Figures out the appropriate virtual target in the streaming module and 
+            sets new values according to the streaming queue.
+            </summary>
+            <param name="hasPriority"></param>
+        </member>
+        <member name="F:Machina.CommunicationABB.StreamModuleV2">
+            <summary>
+            The enhanced module used for ABB Online Stream mode
+            </summary>
+        </member>
+        <member name="M:Machina.CommunicationABB.OnRapidExecutionStatusChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.ExecutionStatusChangedEventArgs)">
+            <summary>
+            What to do when the robot starts running or stops.
+            @TODO: add new behavior here when execution changes
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.OnRapidMastershipChanged(System.Object,ABB.Robotics.Controllers.MastershipChangedEventArgs)">
+            <summary>
+            What to do when Mastership changes.
+            @TODO: add behaviors...
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.OnRapidTaskEnabledChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.TaskEnabledChangedEventArgs)">
+            <summary>
+            What to do when the Task Enabled property changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.OnOperatingModeChanged(System.Object,ABB.Robotics.Controllers.OperatingModeChangeEventArgs)">
+            <summary>
+            What to do when the controller changes Operating Mode.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Machina.CommunicationABB.OnRD_pnum_ValueChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.DataValueChangedEventArgs)">
+            <summary>
+            What to do when the 'pnum' rapid var changes value
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Machina.Control">
+            <summary>
+            The core class that centralizes all private control.
+            </summary>
+        </member>
+        <member name="F:Machina.Control.controlMode">
+            <summary>
+            Operation modes by default
+            </summary>
+        </member>
+        <member name="F:Machina.Control.comm">
+            <summary>
+            Instances of the main robot Controller and Task
+            </summary>
+        </member>
+        <member name="F:Machina.Control.robotBrand">
+            <summary>
+            What brand of robot is this?
+            </summary>
+        </member>
+        <member name="F:Machina.Control.virtualCursor">
+            <summary>
+            A virtual representation of the state of the device after application of issued actions.
+            </summary>
+        </member>
+        <member name="F:Machina.Control.writeCursor">
+            <summary>
+            A virtual representation of the state of the device after releasing pending actions to the controller.
+            Keeps track of the state of a virtual robot immediately following all the actions released from the 
+            actionsbuffer to target device defined by controlMode, like an offline program, a full intruction execution 
+            or a streamed target.
+            </summary>
+        </member>
+        <member name="F:Machina.Control.motionCursor">
+            <summary>
+            A virtual representation of the current motion state of the device.
+            </summary>
+        </member>
+        <member name="F:Machina.Control.actionsExecuter">
+            <summary>
+            A shared instance of a Thread to manage sending and executing actions
+            in the controller, which typically takes a lot of resources
+            and halts program execution
+            </summary>
+        </member>
+        <member name="F:Machina.Control.areCursorsInitialized">
+            <summary>
+            Are cursors ready to start working?
+            </summary>
+        </member>
+        <member name="M:Machina.Control.#ctor(Machina.Robot,Machina.RobotType)">
+            <summary>
+            Main constructor.
+            </summary>
+        </member>
+        <member name="M:Machina.Control.Reset">
+            <summary>
+            Resets all internal state properties to default values. To be invoked upon
+            an internal robot reset.
+            @TODO rethink this
+            </summary>
+        </member>
+        <member name="M:Machina.Control.SetControlMode(Machina.ControlMode)">
+            <summary>
+            Sets current Control Mode and establishes communication if applicable.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetControlMode">
+            <summary>
+            Returns current Control Mode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.SetRunMode(Machina.RunMode)">
+            <summary>
+            Sets current RunMode. 
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetRunMode(Machina.RunMode)">
+            <summary>
+            Returns current RunMode.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.ConnectToDevice(System.Int32)">
+            <summary>
+            Searches the network for a robot controller and establishes a connection with the specified one by position. 
+            Necessary for "online" modes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.DisconnectFromDevice">
+            <summary>
+            Requests the Communication object to disconnect from controller and reset.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IsConnectedToDevice">
+            <summary>
+            Is this robot connected to a real/virtual device?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetControllerIP">
+            <summary>
+            If connected to a device, return the IP address
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.LoadProgramToDevice(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a programm to the connected device and executes it. 
+            </summary>
+            <param name="programLines">A string list representation of the program's code.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.LoadProgramToDevice(System.String)">
+            <summary>
+            Loads a programm to the connected device and executes it. 
+            </summary>
+            <param name="filepath">Full filepath including root, directory structure, filename and extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.StartProgramOnDevice">
+            <summary>
+            Triggers program start on device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.StopProgramOnDevice(System.Boolean)">
+            <summary>
+            Stops execution of running program on device.
+            </summary>
+            <param name="immediate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentPosition">
+            <summary>
+            Returns a Vector object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentTool">
+            <summary>
+            Returns a Tool object representing the currently attached tool, null if none.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.Export(System.Boolean,System.Boolean)">
+            <summary>
+             For Offline modes, it flushes all pending actions and returns a devide-specific program 
+            as a stringList representation.
+            </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.Export(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            For Offline modes, it flushes all pending actions and exports them to a robot-specific program as a text file.
+            </summary>
+            <param name="filepath"></param>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.Execute">
+            <summary>
+            In 'execute' mode, flushes all pending actions, creates a program, 
+            uploads it to the controller and runs it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentSpeedSetting">
+            <summary>
+            Gets current speed setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentZoneSetting">
+            <summary>
+            Gets current zone setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentMotionTypeSetting">
+            <summary>
+            Gets current Motion setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.GetCurrentReferenceCS">
+            <summary>
+            Gets the reference coordinate system used for relative transform actions.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueApplyActionRequest(Machina.Action)">
+            <summary>
+            Issue an Action of whatever kind...
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueSpeedRequest(System.Int32,System.Boolean)">
+            <summary>
+            Sets the speed parameter for future issued actions.
+            </summary>
+            <param name="speed">In mm/s</param>
+        </member>
+        <member name="M:Machina.Control.IssueTranslationRequest(Machina.Vector,System.Boolean)">
+            <summary>
+            Issue a Translation action request that falls back on the state of current settings.
+            </summary>
+            <param name="world"></param>
+            <param name="trans"></param>
+            <param name="relative"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueRotationRequest(Machina.Rotation,System.Boolean)">
+            <summary>
+            Issue a Rotation action request with fully customized parameters.
+            </summary>
+            <param name="world"></param>
+            <param name="rot"></param>
+            <param name="relative"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueTransformationRequest(Machina.Vector,Machina.Rotation,System.Boolean,System.Boolean)">
+            <summary>
+            Issue a Translation + Rotation action request with fully customized parameters.
+            </summary>
+            <param name="worldTrans"></param>
+            <param name="trans"></param>
+            <param name="relTrans"></param>
+            <param name="worldRot"></param>
+            <param name="rot"></param>
+            <param name="relRot"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueJointsRequest(Machina.Joints,System.Boolean)">
+            <summary>
+            Issue a request to set the values of joint angles in configuration space. 
+            </summary>
+            <param name="joints"></param>
+            <param name="relJnts"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueMessageRequest(System.String)">
+            <summary>
+            Issue a request to display a string message on the device.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueWaitRequest(System.Int64)">
+            <summary>
+            Issue a request for the device to stay idle for a certain amount of time.
+            </summary>
+            <param name="millis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueCommentRequest(System.String)">
+            <summary>
+            Issue a request to add an internal comment in the compiled code. 
+            </summary>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueAttachRequest(Machina.Tool)">
+            <summary>
+            Issue a request to attach a Tool to the flange of the robot
+            </summary>
+            <param name="tool"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueDetachRequest">
+            <summary>
+            Issue a request to return the robot to no tools attached. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueWriteToDigitalIORequest(System.Int32,System.Boolean)">
+            <summary>
+            Issue a request to turn digital IO on/off.
+            </summary>
+            <param name="pinNum"></param>
+            <param name="isOn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.IssueWriteToAnalogIORequest(System.Int32,System.Double)">
+            <summary>
+            Issue a request to write to analog pin.
+            </summary>
+            <param name="pinNum"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.InitializeCommunication">
+            <summary>
+            Initializes the Communication object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.DropCommunication">
+            <summary>
+            Disconnects and resets the Communication object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.ResetCommunication">
+            <summary>
+            If there was a running Communication protocol, drop it and restart it again.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.InitializeRobotCursors(Machina.Point,Machina.Rotation,Machina.Joints,System.Int32,System.Int32,Machina.MotionType,Machina.ReferenceCS)">
+            <summary>
+            Initializes all instances of robotCursors with base information
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.SaveStringListToFile(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Saves a string List to a file.
+            </summary>
+            <param name="lines"></param>
+            <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Control.TickWriteCursor">
+            <summary>
+            Triggers a thread to send instructions to the connected device if applicable. 
+            </summary>
+        </member>
+        <member name="M:Machina.Control.RunActionsBlockInController(System.Boolean,System.Boolean)">
+            <summary>
+            Cretes a program with the first block of Actions in the cursor, uploads it to the controller
+            and runs it. 
+            </summary>
+        </member>
+        <member name="M:Machina.Control.DebugBanner">
+            <summary>
+            Printlines a "DEBUG" ASCII banner... ;)
+            </summary>
+        </member>
+        <member name="T:Machina.Library">
+            <summary>
+            A class to store static descriptions of robot manipulators.
+            </summary>
+        </member>
+        <member name="T:Machina.Compiler">
+            <summary>
+            A class that features methods to translate high-level robot actions into
+            platform-specific programs. 
+            </summary>
+        </member>
+        <member name="F:Machina.Compiler.ADD_ACTION_ID">
+            <summary>
+            Add a trailing action id to each declaration?
+            </summary>
+        </member>
+        <member name="F:Machina.Compiler.ADD_ACTION_STRING">
+            <summary>
+            Add a trailing human representation of the action after
+            </summary>
+        </member>
+        <member name="F:Machina.Compiler.commentCharacter">
+            <summary>
+            Character used for comments by the compiler
+            </summary>
+        </member>
+        <member name="M:Machina.Compiler.#ctor(System.String)">
+            <summary>
+            A constructor that takes several parameters particular to each compiler type
+            </summary>
+            <param name="commentChar"></param>
+        </member>
+        <member name="M:Machina.Compiler.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using a brand-specific RobotCursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.CompilerHuman">
+            <summary>
+            A quick compiler for human-readable instructions.
+            </summary>
+        </member>
+        <member name="F:Machina.CompilerABB.PredefinedZones">
+            <summary>
+            A Set of RAPID's predefined zone values. 
+            </summary>
+        </member>
+        <member name="M:Machina.CompilerABB.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native RAPID Laguage.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetUNSAFERobTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an RAPID robtarget representation of the current state of the cursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetJointTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an RAPID jointtarget representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetSpeedValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of cursor speed.
+            </summary>
+            <param name="speed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetZoneValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representatiton of cursor zone.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of a Tool object.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native UR Script.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetPoseTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an UR pose representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetJointTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a UR joint representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a UR representation of a Tool object.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native KUKA Robot Language.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetPositionTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL FRAME representation of the current state of the cursor.
+            Note POS also accept T and S parameters for unambiguous arm configuration def. @TODO: implement?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetAxisTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL AXIS joint representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL representation of a Tool object
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.ControlMode">
+            <summary>
+            Represents the type of control that will be performed over the real/virtual robot.
+            </summary>
+        </member>
+        <member name="F:Machina.ControlMode.Offline">
+            <summary>
+            Not connected to any controller. Useful for robot code generation and export.
+            </summary>
+        </member>
+        <member name="F:Machina.ControlMode.Execute">
+            <summary>
+            Online connection to a controller, the library will upload complete programs 
+            and run them. Provides robust and fluid movement, useful on real-time 
+            interactivity where response time is not a priority. 
+            </summary>
+        </member>
+        <member name="F:Machina.ControlMode.Stream">
+            <summary>
+            Online connection to a controller, the library will stream individual targets
+            at run time as they get priority. Provides the closest approximation to real-time
+            interaction, useful on situations where low latency is required.
+            </summary>
+        </member>
+        <member name="T:Machina.RunMode">
+            <summary>
+            Defines the different modes a program can be ran.
+            </summary>
+        </member>
+        <member name="T:Machina.ReferenceCS">
+            <summary>
+            Defines which reference coordinate system to use for transform actions.
+            </summary>
+        </member>
+        <member name="T:Machina.MotionType">
+            <summary>
+            Defines which type of motion to use for translation actions.;
+            </summary>
+        </member>
+        <member name="T:Machina.Robot">
+            <summary>
+            The core Class in Machina. Represents a state and action-based virtual robot, 
+            and exposes the public API for robot manipulation and control.
+            </summary>
+        </member>
+        <member name="F:Machina.Robot.Build">
+            <summary>
+            Build number.
+            </summary>
+        </member>
+        <member name="F:Machina.Robot.Version">
+            <summary>
+            Version number.
+            </summary>
+        </member>
+        <member name="P:Machina.Robot.Name">
+            <summary>
+            A nickname for this Robot.
+            </summary>
+        </member>
+        <member name="F:Machina.Robot.c">
+            <summary>
+            The main Control object, acts as an interface to all classes that
+            manage robot control.
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.#ctor(System.String,System.String)">
+            <summary>
+            Base constructor.
+            </summary>
+            <param name="name">A name for this Robot</param>
+            <param name="make"></param>
+        </member>
+        <member name="M:Machina.Robot.Mode(Machina.ControlMode)">
+            <summary>
+            Sets the control mode the robot will operate under.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Mode(System.String)">
+            <summary>
+            Sets the control mode the robot will operate under.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RunMode(Machina.RunMode)">
+            <summary>
+            Sets the cycle the robot will run program in (Once or Loop).
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RunMode(System.String)">
+            <summary>
+            Sets the cycle the robot will run program in (Once or Loop).
+            </summary>
+            <param name="mode"></param>
+        </member>
+        <member name="M:Machina.Robot.Connect(System.Int32)">
+            <summary>
+            Scans the network for robotic devices, real or virtual, and performs all necessary 
+            operations to connect to it. This is necessary for 'online' modes such as 'execute' and 'stream.'
+            </summary>
+            <param name="mode">If multiple devices are connected, choose this id from the list.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Connect">
+            <summary>
+            Performs all necessary operations to connect to the first robot device found on the network, real or virtual.
+            This is necessary for 'online' modes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Disconnect">
+            <summary>
+            Performs all necessary instructions to disconnect from and dispose a robot device, real or virtual. 
+            This is necessary before leaving current execution thread.
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.GetIP">
+            <summary>
+            Returns a string representation of the IP of the currently connected robot device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.LoadProgram(System.String)">
+            <summary>
+            Loads a program to the robot from a local file.
+            </summary>
+            <param name="filepath">Full absolute filepath including root, directory structure, filename and extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.LoadProgram(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a program to the robot from a string list of code.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Start">
+            <summary>
+            Starts execution of the current module/s in the controller.
+            @TODO: The behavior of this method will change depending based on Off/Online mode
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.Stop">
+            <summary>
+            Immediately stops execution of the current program/s in the connected robot. 
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.GetCurrentPosition">
+            <summary>
+            Returns a Point representation of the Robot's TCP position in mm and World coordinates.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation representation of the Robot's TCP orientation in quaternions.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetCurrentJoints">
+            <summary>
+            Returns a Joint object representing the current angular rotations of the robot's 6 axes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Export">
+            <summary>
+            Create a program with all the buffered actions and return it as a string List.
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Export(System.Boolean,System.Boolean)">
+            <summary>
+            Create a program with all the buffered actions and return it as a string List.
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Export(System.String)">
+            <summary>
+            Create a program with all the buffered actions and save it to a file. 
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Export(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Create a program with all the buffered actions and save it to a file. 
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="filepath"></param>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Execute">
+            <summary>
+            In 'execute' mode, flushes all pending actions, creates a program, 
+            uploads it to the controller and runs it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.SetIOName(System.String,System.Int32,System.Boolean)">
+            <summary>
+            ABB IOs must have a name corresponding to their definition in the controller. This function is useful to give them
+            a custom name that matches the controller's, and is used in code generation.
+            </summary>
+            <param name="ioName"></param>
+            <param name="pinNumber"></param>
+            <param name="isDigital"></param>
+        </member>
+        <member name="M:Machina.Robot.Speed">
+            <summary>
+            Gets the current speed setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Speed(System.Int32)">
+            <summary>
+            Increase the default velocity new actions will be run at.
+            </summary>
+            <param name="speedInc"></param>
+        </member>
+        <member name="M:Machina.Robot.SpeedTo(System.Int32)">
+            <summary>
+            Sets the default velocity new actions will be run at.
+            </summary>
+            <param name="speed"></param>
+        </member>
+        <member name="M:Machina.Robot.Zone">
+            <summary>
+            Gets the current zone setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Zone(System.Int32)">
+            <summary>
+            Increase the default zone value new actions will be given.
+            </summary>
+            <param name="zoneInc"></param>
+        </member>
+        <member name="M:Machina.Robot.ZoneTo(System.Int32)">
+            <summary>
+            Sets the default zone value new actions will be given.
+            </summary>
+            <param name="zone"></param>
+        </member>
+        <member name="M:Machina.Robot.Precision(System.Int32)">
+            <summary>
+            Increase the default precision value new actions will be given. 
+            Precision is measured as the radius of the smooth interpolation
+            between motion targets. This is refered to as "Zone", "Approximate
+            Positioning" or "Blending Radius" in different platforms. 
+            </summary>
+            <param name="smoothingRadius">Smoothing radius increment in mm</param>
+        </member>
+        <member name="M:Machina.Robot.PrecisionTo(System.Int32)">
+            <summary>
+            Set the default precision value new actions will be given. 
+            Precision is measured as the radius of the smooth interpolation
+            between motion targets. This is refered to as "Zone", "Approximate
+            Positioning" or "Blending Radius" in different platforms. 
+            </summary>
+            <param name="radius">Smoothing radius in mm</param>
+        </member>
+        <member name="M:Machina.Robot.Motion">
+            <summary>
+            Gets the current MotionType setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Motion(Machina.MotionType)">
+            <summary>
+            Sets the motion type (linear, joint...) for future issued actions.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Machina.Robot.Motion(System.String)">
+            <summary>
+            Sets the motion type (linear, joint...) for future issued actions.
+            </summary>
+            <param name="type">"linear", "joint" or "joints"</param>
+        </member>
+        <member name="M:Machina.Robot.Coordinates">
+            <summary>
+            Gets current ReferenceCS setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Coordinates(Machina.ReferenceCS)">
+            <summary>
+            Sets the reference system used for relative transformations.
+            </summary>
+            <param name="refcs"></param>
+        </member>
+        <member name="M:Machina.Robot.Coordinates(System.String)">
+            <summary>
+            Sets the reference system used for relative transformations ("local", "global", etc.)
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Machina.Robot.PushSettings">
+            <summary>
+            Buffers current state settings (speed, zone, motion type...), and opens up for 
+            temporary settings changes to be reverted by PopSettings().
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.PopSettings">
+            <summary>
+            Reverts the state settings (speed, zone, motion type...) to the previously buffered
+            state by PushSettings().
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.Do(Machina.Action)">
+            <summary>
+            Applies an Action object to this robot. 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Move(Machina.Vector)">
+            <summary>
+            Issue a relative movement action request on current coordinate system.
+            </summary>
+            <param name="direction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Move(System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a relative movement action request on current coordinate system.
+            </summary>
+            <param name="incX"></param>
+            <param name="incY"></param>
+            <param name="incZ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.MoveTo(Machina.Point)">
+            <summary>
+            Issue an absolute movement action request.
+            </summary>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.MoveTo(System.Double,System.Double,System.Double)">
+            <summary>
+            Issue an absolute movement action request.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Rotate(Machina.Rotation)">
+            <summary>
+            Issue a RELATIVE rotation action request according to the current reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Rotate(Machina.Vector,System.Double)">
+            <summary>
+            Issue a RELATIVE rotation action request according to the current reference system.
+            </summary>
+            <param name="vector"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Rotate(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a RELATIVE rotation action request according to the current reference system.
+            </summary>
+            <param name="rotVecX"></param>
+            <param name="rotVecY"></param>
+            <param name="rotVecZ"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RotateTo(Machina.Rotation)">
+            <summary>
+            Issue an ABSOLUTE reorientation request according to the current reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RotateTo(Machina.Orientation)">
+            <summary>
+            Issue an ABSOLUTE reorientation request according to the current reference system.
+            </summary>
+            <param name="cs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RotateTo(Machina.Vector,Machina.Vector)">
+            <summary>
+            Issue an ABSOLUTE reorientation request according to the current reference system.
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.RotateTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue an ABSOLUTE reorientation request according to the current reference system.
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Transform(Machina.Vector,Machina.Rotation)">
+            <summary>
+            Issue a compound RELATIVE local Translation + Rotation request
+            according to the current reference system.
+            Note that, if using local coordinates, order of actions will matter.  // TODO: wouldn't they matter too if the are in global coordinates?
+            </summary>
+            <param name="direction"></param>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Transform(Machina.Rotation,Machina.Vector)">
+            <summary>
+            Issue a compound RELATIVE local Rotation + Translation request
+            according to the current reference system.
+            Note that, if using local coordinates, order of actions will matter. // TODO: wouldn't they matter too if the are in global coordinates?
+            </summary>
+            <param name="rotation"></param>
+            <param name="direction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.TransformTo(Machina.Point,Machina.Orientation)">
+            <summary>
+            Issue a compound ABSOLUTE global Translation + Rotation request
+            according to the current reference system.
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.TransformTo(Machina.Orientation,Machina.Point)">
+            <summary>
+            Issue a compound ABSOLUTE global Translation + Rotation request
+            according to the current reference system.
+            </summary>
+            <param name="rotation"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Joints(Machina.Joints)">
+            <summary>
+            Issue a request to increment the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="incJoints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Joints(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a request to increment the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="incJ1"></param>
+            <param name="incJ2"></param>
+            <param name="incJ3"></param>
+            <param name="incJ4"></param>
+            <param name="incJ5"></param>
+            <param name="incJ6"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.JointsTo(Machina.Joints)">
+            <summary>
+            Issue a request to set the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.JointsTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a request to set the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Wait(System.Int64)">
+            <summary>
+            Issue a request to wait idle before moving to next action. 
+            </summary>
+            <param name="timeMillis">Time expressed in milliseconds</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Message(System.String)">
+            <summary>
+            Send a string message to the device, to be displayed based on device's capacities.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Comment(System.String)">
+            <summary>
+            Display an internal comment in the compilation code. 
+            Useful for internal annotations, reminders, etc. 
+            </summary>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Attach(Machina.Tool)">
+            <summary>
+            Attach a Tool to the flange of this Robot.
+            From this moment, all Actions like Move or Rotate will refer
+            to the Tool Center Point (TCP).
+            </summary>
+            <param name="tool"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Detach">
+            <summary>
+            Detach all Tools from the flange of this Robot.
+            From this moment, all Actions like Move or Rotate will refer
+            to the Flange Center Point (FCP).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.WriteDigital(System.Int32,System.Boolean)">
+            <summary>
+            Writes to the digital IO pin.
+            </summary>
+            <param name="pinNumber"></param>
+            <param name="isOn"></param>
+        </member>
+        <member name="M:Machina.Robot.WriteAnalog(System.Int32,System.Double)">
+            <summary>
+            Writes to the analog IO pin.
+            </summary>
+            <param name="pinNumber"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Machina.Robot.ReadDigital(System.Int32)">
+            <summary>
+            Reads from the digital IO pin.
+            </summary>
+            <param name="pinNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.ReadAnalog(System.Int32)">
+            <summary>
+            Reads from the analog IO pin.
+            </summary>
+            <param name="pinNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.TurnOn(System.Int32)">
+            <summary>
+            Turn digital IO on. Is alias for `WriteDigital(pinNumber, true)`
+            </summary>
+            <param name="pinNumber"></param>
+        </member>
+        <member name="M:Machina.Robot.TurnOff(System.Int32)">
+            <summary>
+            Turn digital IO off. Is alias for `WriteDigital(pinNumber, false)`
+            </summary>
+            <param name="pinNumber"></param>
+        </member>
+        <member name="M:Machina.Robot.GetPosition">
+            <summary>
+            Returns a Point represnting the current location of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetRotation">
+            <summary>
+            Return a Rotation object representing the current rotation of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetOrientation">
+            <summary>
+            Return a Orientation object representing the current orientation of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetJoints">
+            <summary>
+            Returns a Joint object representing the rotations in the robot axes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.GetTool">
+            <summary>
+            Returns the Tool object currently attached to this Robot, null if none.
+            </summary>
+            <returns>The Tool object currently attached to this Robot, null if none.</returns>
+        </member>
+        <member name="M:Machina.Robot.DebugDump">
+            <summary>
+            Dumps a bunch of information to the console about the controller, the main task, etc.
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.DebugBuffer">
+            <summary>
+            Dumps a list of the remaining buffered actions.
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.DebugRobotCursors">
+            <summary>
+            Dumps the state of the internal RobotPointers
+            </summary>
+        </member>
+        <member name="M:Machina.Robot.DebugSettingsBuffer">
+            <summary>
+            Dumps current Settings values
+            </summary>
+        </member>
+        <member name="T:Machina.RobotCursor">
+            <summary>
+            Represents an abstraction of the state of a robotic device. 
+            Keeps track of things such as position, orientation, joint configuration,
+            current speed, zone, etc.
+            Useful as virtual representation of a simulated or controlled robot actuator. 
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.parentControl">
+            <summary>
+            Who manages this Cursor?
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.child">
+            <summary>
+            Specified RobotCursor instance will be issued all Actions 
+            released from this one. 
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.compiler">
+            <summary>
+            Robot program compilers now belong to the RobotCursor. 
+            It makes it easier to attach the right device-specific type, 
+            and to use the cursor's information to generate the program. 
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.settingsBuffer">
+            <summary>
+            A buffer that stores Push and PopSettings() states.
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.actionBuffer">
+            <summary>
+            Manages pending and released Actions, plus blocks. 
+            </summary>
+        </member>
+        <member name="F:Machina.RobotCursor.actionBufferLock">
+            <summary>
+            A lock for buffer manipulation operations. 
+            </summary>
+        </member>
+        <member name="M:Machina.RobotCursor.#ctor(Machina.Control,System.String,System.Boolean)">
+            <summary>
+            Main constructor.
+            </summary>
+            <param name="name"></param>
+            <param name="applyImmediately"></param>
+        </member>
+        <member name="M:Machina.RobotCursor.Initialize(Machina.Vector,Machina.Rotation,Machina.Joints,System.Int32,System.Int32,Machina.MotionType,Machina.ReferenceCS)">
+            <summary>
+            Minimum information necessary to initialize a robot object.
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.SetChild(Machina.RobotCursor)">
+            <summary>
+            Set specified RobotCursor as child to this one.
+            </summary>
+            <param name="childCursor"></param>
+        </member>
+        <member name="F:Machina.RobotCursor.ActionsMap">
+            <summary>
+            A dict that maps Action types to the cursor's applicable method.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </summary>
+        </member>
+        <member name="M:Machina.RobotCursor.Issue(Machina.Action)">
+            <summary>
+            Add an action to this cursor's buffer, to be released whenever assigned priority.
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyNextAction">
+            <summary>
+            Applies next single action pending in the buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.QueueActions">
+            <summary>
+            Requests all un-blocked pending Actions in the buffer to be flagged
+            as a block. 
+            </summary>
+        </member>
+        <member name="M:Machina.RobotCursor.AreActionsPending">
+            <summary>
+            Are there Actions pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.Apply(Machina.Action)">
+            <summary>
+            Applies the directives of an Action to this cursor. 
+            </summary>
+            <remarks>
+            While this Dictionary dispatch pattern is a bit convoluted, it is faster than dynamic casting, 
+            more stable and allows for compiler-time checks and non-error fallback.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </remarks>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ProgramFromBuffer(System.Boolean,System.Boolean)">
+            <summary>
+            Return a device-specific program with all the Actions pending in the buffer.
+            </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ProgramFromBlock(System.Boolean,System.Boolean)">
+            <summary>
+            Return a device-specific program with the next block of Actions pending in the buffer.
+            </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionSpeed)">
+            <summary>
+            Apply Speed Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionZone)">
+            <summary>
+            Apply Zone Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionMotion)">
+            <summary>
+            Apply Motion Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionCoordinates)">
+            <summary>
+            Apply ReferenceCS Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionPushPop)">
+            <summary>
+            Apply a Push or Pop Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionTranslation)">
+            <summary>
+            Apply Translation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionRotation)">
+            <summary>
+            Apply Rotation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionTransformation)">
+            <summary>
+            Apply Transformation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionJoints)">
+            <summary>
+            Apply Joints Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionMessage)">
+            <summary>
+            Apply Message Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionWait)">
+            <summary>
+            Apply Wait Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionComment)">
+            <summary>
+            Apply Comment Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionAttach)">
+            <summary>
+            Apply Attach Tool Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionDetach)">
+            <summary>
+            Apply Detach Tool action
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionIODigital)">
+            <summary>
+            Apply ActionIODigital write action to this cursor.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionIOAnalog)">
+            <summary>
+            Apply ActionIOAnalog write action to this cursor. 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.Settings">
+            <summary>
+            A class representing a Setting state, to be un/buffered.
+            </summary>
+        </member>
+        <member name="T:Machina.Solver">
+            <summary>
+            A class featuring FK/IK solvers. 
+            </summary>
+            <ref>Based on MARVIN</ref>
+        </member>
+        <member name="T:Machina.StreamQueue">
+            <summary>
+            A queue manager for 'stream' mode and Frame objects
+            </summary>
+        </member>
+        <member name="T:Machina.Tool">
+            <summary>
+            Represents a tool object that can be attached to the end effector of the robot.
+            This class is public and will be used directly by the user, so careful design of the API
+            vs. internal methods will be relevant. 
+            </summary>
+        </member>
+        <member name="M:Machina.Tool.#ctor(System.String,Machina.Point,Machina.Orientation)">
+            <summary>
+            Create a new Tool object by defining the Position and Orientation of the 
+            Tool Center Point (TCP) relative to the Tool's base coordinate system. 
+            In other words, if the Tool gets attached to the robot flange in 
+            XYZ [0, 0, 0], where is the tooltip and how is it oriented?
+            </summary>
+            <param name="TCPPosition"></param>
+            <param name="TCPOrientation"></param>
+        </member>
+        <member name="M:Machina.Tool.#ctor(System.String,Machina.Point,Machina.Orientation,System.Double,Machina.Point)">
+            <summary>
+            Create a new Tool object by defining the Position and Orientation of the 
+            Tool Center Point (TCP), its weight in Kg and its center of gravity.
+            </summary>
+            <param name="name"></param>
+            <param name="TCPPosition"></param>
+            <param name="TCPOrientation"></param>
+            <param name="weightKg"></param>
+            <param name="centerOfGRavity"></param>
+        </member>
+        <member name="T:Machina.Util">
+            <summary>
+            Utility static methods
+            </summary>
+        </member>
+        <member name="M:Machina.Util.Remap(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Remaps a value from source to target numerical domains.
+            </summary>
+            <param name="val"></param>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="newMin"></param>
+            <param name="newMax"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

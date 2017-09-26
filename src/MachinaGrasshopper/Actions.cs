@@ -28,11 +28,11 @@ namespace MachinaGrasshopper
     //  ██║ ╚═╝ ██║╚██████╔╝   ██║   ██║╚██████╔╝██║ ╚████║
     //  ╚═╝     ╚═╝ ╚═════╝    ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
     //                                                     
-    public class Motion : GH_Component
+    public class MotionType : GH_Component
     {
-        public Motion() : base(
-            "Motion", 
-            "Motion",
+        public MotionType() : base(
+            "MotionType",
+            "MotionType",
             "Sets the current type of motion to be applied to future translation actions. This can be \"linear\" (default) for straight line movements in euclidean space, or \"joint\" for smooth interpolation between joint angles. NOTE: \"joint\" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!", 
             "Machina", 
             "Actions") { }
@@ -56,21 +56,21 @@ namespace MachinaGrasshopper
 
             if (!DA.GetData(0, ref type)) return;
 
-            MotionType t = MotionType.Undefined;
+            Machina.MotionType t = Machina.MotionType.Undefined;
 
             type = type.ToLower();
             if (type.Equals("linear"))
             {
-                t = MotionType.Linear;
+                t = Machina.MotionType.Linear;
             }
             else if (type.Equals("joint"))
             {
-                t = MotionType.Joint;
+                t = Machina.MotionType.Joint;
             }
 
-            if (t == MotionType.Undefined)
+            if (t == Machina.MotionType.Undefined)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\"");
+                base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\"");
                 return;
             }
 

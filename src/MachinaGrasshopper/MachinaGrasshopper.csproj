@@ -67,9 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Programs.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="Robots.cs" />
     <Compile Include="Actions.cs" />
-    <Compile Include="ExportCode.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

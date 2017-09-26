@@ -20,11 +20,11 @@ namespace MachinaGrasshopper
     
 
 
-    public class Create : GH_Component
+    public class CreateRobot : GH_Component
     {
-        public Create() : base(
-            "Create",
-            "Create",
+        public CreateRobot() : base(
+            "CreateRobot",
+            "CreateRobot",
             "Create a new Robot object.", 
             "Machina", 
             "Robots") { }

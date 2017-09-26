@@ -530,7 +530,7 @@ namespace MachinaGrasshopper
             pManager.AddVectorParameter("Direction", "V", "Translation vector", GH_ParamAccess.item, Vector3d.Zero);
             pManager.AddVectorParameter("Axis", "V", "Rotation axis (positive rotation direction is defined by the right-hand rule).", GH_ParamAccess.item, Vector3d.XAxis);
             pManager.AddNumberParameter("Angle", "A", "Rotation angle in degrees", GH_ParamAccess.item, 0);
-            pManager.AddBooleanParameter("TranslationFirst", "T", "Apply translation first? Note that when performing relative transformations, the R+T versus T+R order matters.", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("TranslationFirst", "t", "Apply translation first? Note that when performing relative transformations, the R+T versus T+R order matters.", GH_ParamAccess.item, true);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -917,7 +917,7 @@ namespace MachinaGrasshopper
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddIntegerParameter("DPin", "N", "Digital pin number", GH_ParamAccess.item, 1);
-            pManager.AddBooleanParameter("On", "B", "Turn on?", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("On", "o", "Turn on?", GH_ParamAccess.item, false);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

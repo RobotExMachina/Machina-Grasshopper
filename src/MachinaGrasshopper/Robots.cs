@@ -99,7 +99,7 @@ namespace MachinaGrasshopper
             pManager.AddGenericParameter("Robot", "R", "Robot to change the io name to", GH_ParamAccess.item);
             pManager.AddTextParameter("Name", "T", "New IO name", GH_ParamAccess.item, "Digital_IO_1");
             pManager.AddIntegerParameter("Pin", "N", "Pin number", GH_ParamAccess.item, 1);
-            pManager.AddBooleanParameter("Digital", "B", "Is this a digital pin?", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("Digital", "d", "Is this a digital pin?", GH_ParamAccess.item, true);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

@@ -31,8 +31,8 @@ namespace MachinaGrasshopper
     public class MotionType : GH_Component
     {
         public MotionType() : base(
-            "Motion Type",  // the name that shows up on the tab, on yellow bar on toolip
-            "MotionType",  // the name that shows up on the non-icon component and in parenthesis after the main name on the yellow bar on tooltip
+            "MotionType",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
+            "MotionType",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
             "Sets the current type of motion to be applied to future translation actions. This can be \"linear\" (default) for straight line movements in euclidean space, or \"joint\" for smooth interpolation between joint angles. NOTE: \"joint\" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!", 
             "Machina", 
             "Actions") { }
@@ -42,12 +42,12 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MotionType", "T", "\"linear\" or \"joint\"", GH_ParamAccess.item, "linear");
+            pManager.AddTextParameter("Type", "T", "\"linear\" or \"joint\"", GH_ParamAccess.item, "linear");
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("MotionType Action", "A", "MotionType Action", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Action", "A", "MotionType Action", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -70,7 +70,7 @@ namespace MachinaGrasshopper
 
             if (t == Machina.MotionType.Undefined)
             {
-                base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\"");
+                base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\" as String.");
                 return;
             }
 
@@ -363,7 +363,7 @@ namespace MachinaGrasshopper
     public class Move : GH_Component
     {
         public Move() : base(
-            "Move Action",
+            "Move",
             "Move",
             "Moves the device along a speficied vector relative to its current position.",
             "Machina",
@@ -375,12 +375,12 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddVectorParameter("Direction", "V", "Translation vector", GH_ParamAccess.item, Vector3d.Zero);
+            pManager.AddVectorParameter("Vector", "V", "Translation vector", GH_ParamAccess.item, Vector3d.Zero);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Move Action", "A", "Move Action", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Action", "A", "Move Action", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -396,7 +396,7 @@ namespace MachinaGrasshopper
     public class MoveTo : GH_Component
     {
         public MoveTo() : base(
-            "MoveTo Action",
+            "MoveTo",
             "MoveTo",
             "Moves the device to an absolute position in global coordinates.",
             "Machina",
@@ -408,12 +408,12 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Location", "P", "Target position", GH_ParamAccess.item, Point3d.Origin);
+            pManager.AddPointParameter("Point", "P", "Target position", GH_ParamAccess.item, Point3d.Origin);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("MoveTo Action", "A", "MoveTo Action", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Action", "A", "MoveTo Action", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -916,8 +916,8 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DPin", "N", "Digital pin number", GH_ParamAccess.item, 1);
-            pManager.AddBooleanParameter("On", "o", "Turn on?", GH_ParamAccess.item, false);
+            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
+            pManager.AddBooleanParameter("On", "ON", "Turn on?", GH_ParamAccess.item, false);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -952,7 +952,7 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("APin", "N", "Analog pin number", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("AnalogPinNumber", "N", "Analog pin number", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("Value", "V", "Value to send to pin", GH_ParamAccess.item, 0);
         }
 
@@ -988,7 +988,7 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DPin", "N", "Digital pin number", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -1021,7 +1021,7 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("APin", "N", "Analog pin number", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

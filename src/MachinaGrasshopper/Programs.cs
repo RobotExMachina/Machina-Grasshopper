@@ -19,9 +19,7 @@ namespace MachinaGrasshopper
     /// <summary>
     /// Program generation and visualization components go here.
     /// </summary>
-
-
-
+    
     public class DisplayProgram : GH_Component
     {
         public DisplayProgram() : base(

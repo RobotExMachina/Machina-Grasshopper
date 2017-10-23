@@ -77,7 +77,7 @@ namespace MachinaGrasshopper
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Code", "C", "Device-specific program code", GH_ParamAccess.item);
+            pManager.AddTextParameter("Code", "C", "Device-specific program code", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -107,7 +107,7 @@ namespace MachinaGrasshopper
             }
             string code = writer.ToString();
 
-            DA.SetDataList(0, code);
+            DA.SetData(0, code);
         }
     }
 

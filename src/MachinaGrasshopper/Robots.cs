@@ -20,11 +20,11 @@ namespace MachinaGrasshopper
     
 
 
-    public class CreateRobot : GH_Component
+    public class RobotCreate : GH_Component
     {
-        public CreateRobot() : base(
-            "CreateRobot",
-            "CreateRobot",
+        public RobotCreate() : base(
+            "Create Robot",
+            "Create",
             "Create a new Robot object.", 
             "Machina", 
             "Robots") { }
@@ -34,13 +34,13 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "T", "A name for this Robot", GH_ParamAccess.item, "MachinaRobot");
-            pManager.AddTextParameter("Brand", "B", "Input \"ABB\", \"UR\", \"KUKA\", or \"HUMAN\" (if you only need a human-readable representation of the actions of this Robot...)", GH_ParamAccess.item, "HUMAN");
+            pManager.AddTextParameter("Name", "Name", "A name for this Robot", GH_ParamAccess.item, "MachinaRobot");
+            pManager.AddTextParameter("Brand", "Brand", "Input \"ABB\", \"UR\", \"KUKA\", or \"HUMAN\" (if you only need a human-readable representation of the actions of this Robot...)", GH_ParamAccess.item, "HUMAN");
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot", "R", "Your brand new Machina Robot object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot", "Robot", "Your brand new Machina Robot object", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

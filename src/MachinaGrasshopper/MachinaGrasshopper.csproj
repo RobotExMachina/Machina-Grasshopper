@@ -68,11 +68,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Programs.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tools.cs" />
     <Compile Include="Robots.cs" />
     <Compile Include="Actions.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\icon_Action.Coordinates_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.Motion_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.PopSettings_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.PrecisionTo_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.Precision_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.PushSettings_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.SpeedTo_resize.png" />
+    <Content Include="Resources\Icons\icon_Action.Speed_resize.png" />
+    <Content Include="Resources\Icons\icon_Robot.Create_resize.png" />
+    <Content Include="Resources\Icons\icon_Robot.SetIOName_resize.png" />
+    <Content Include="Resources\Icons\icon_Robot.Version_resize.png" />
+    <Content Include="Resources\Icons\icon_Tool.Create_resize.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,6 +6,18 @@ namespace MachinaGrasshopper
 {
     public class MachinaGrasshopperInfo : GH_AssemblyInfo
     {
+        /// <summary>
+        /// Quick and dirty version tracking.
+        /// </summary>
+        /// <returns></returns>
+        public static string MachinaGrasshopperAPIVersion()
+        {
+            return "0.4.1";
+        }
+
+
+        // Standard GHInfo overrides
+
         public override string Name
         {
             get
@@ -42,7 +54,7 @@ namespace MachinaGrasshopper
             get
             {
                 //Return a string identifying you or your company.
-                return "";
+                return "Jose Luis Garcia del Castillo";
             }
         }
         public override string AuthorContact
@@ -50,7 +62,15 @@ namespace MachinaGrasshopper
             get
             {
                 //Return a string representing your preferred contact details.
-                return "";
+                return "personal@garciadelcastillo.es";
+            }
+        }
+
+        public override string Version
+        {
+            get
+            {
+                return MachinaGrasshopperAPIVersion();
             }
         }
     }

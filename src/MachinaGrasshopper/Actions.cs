@@ -6,7 +6,6 @@ using Machina;
 
 namespace MachinaGrasshopper
 {
-
     //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
     //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
     //  ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
@@ -369,7 +368,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("1969ae91-3dad-4af2-991b-b23e60724873");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -402,7 +401,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("c90a1258-1dd2-4d14-ab13-8dc53a47b547");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -443,7 +442,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("db2e3c56-5973-4f07-8d6a-ba31c659704d");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -479,7 +478,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("9410b629-1016-486f-8464-85ecfd9500f7");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -521,7 +520,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("81226a72-37d6-4dad-a7a3-711adb51b26e");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -567,7 +566,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("7bf2965f-7fa6-4cf0-84ac-4948b777b478");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -613,7 +612,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("15ea7b44-c5d8-470b-9edb-867cc4c0b1aa");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -661,7 +660,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("5b9bc63f-a0f1-4d66-b6a6-679c38ed8014");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -716,7 +715,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("4ec5c686-0ca9-4b60-a99e-8eaf4fe594ac");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -756,7 +755,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("2675e57a-5b6f-441a-9f94-69bb155b7b59");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -798,7 +797,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("a3fc9af6-04ab-49e9-a0fe-d224f4e7e9bf");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -839,7 +838,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
         public override Guid ComponentGuid => new Guid("5598bf85-6887-40b4-a29b-efff6af0864f");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -875,7 +874,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
         public override Guid ComponentGuid => new Guid("f3195b55-742a-429f-bf66-94fce5497bc9");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -910,7 +909,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("a08ed4f1-1913-4f32-8d43-0c98fd1e5bd4");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -946,7 +945,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("ace7ecb7-2a7a-4a39-b181-73d00c412b82");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -982,7 +981,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("8bd5bc0d-249e-4744-8530-cf8fced77492");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -1015,7 +1014,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("15d234aa-2f63-488e-a95e-cc89ffcca3b6");
         protected override System.Drawing.Bitmap Icon => null;
 

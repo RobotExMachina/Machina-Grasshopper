@@ -23,8 +23,8 @@ namespace MachinaGrasshopper
     public class RobotCreate : GH_Component
     {
         public RobotCreate() : base(
-            "Create Robot",
-            "Create",
+            "CreateRobot",
+            "CreateRobot",
             "Create a new Robot object.", 
             "Machina", 
             "Robots") { }
@@ -60,7 +60,7 @@ namespace MachinaGrasshopper
         public Version() : base(
             "Version",
             "Version",
-            "Checks version and build numbers for the core Machina library.",
+            "Checks version and build numbers for the components of Machina library.",
             "Machina",
             "Robots")
         { }
@@ -72,12 +72,14 @@ namespace MachinaGrasshopper
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Version", "V", "Version and build number", GH_ParamAccess.item);
+            pManager.AddTextParameter("Core", "C", "Version and build number of Machina's core library", GH_ParamAccess.item);
+            pManager.AddTextParameter("GrasshopperAPI", "GH", "Version of Machina's Grasshopper API", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             DA.SetData(0, Machina.Robot.Version);
+            DA.SetData(1, MachinaGrasshopper.MachinaGrasshopperInfo.MachinaGrasshopperAPIVersion());
         }
     }
 

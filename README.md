@@ -5,10 +5,12 @@
 Thanks for downloading Machina for Grasshopper, a [Machina](https://github.com/garciadelcastillo/Machina)-based [Grasshopper](http://www.grasshopper3d.com/) package for robot control.  
 
 ## Installation (Expert)
-Just as with any other Grasshopper plugin, just drop the main .gha and .dll files in Grasshopper's Components library. Make sure to right-click on both files and unblock them if necessary. Also, if running Windows 10, make sure you have extracted the files from the .zip file with something other than Window's native extracter, such as [7Zip](http://www.7-zip.org/), [WinRAR](https://www.rarlab.com/) or similar (see below for reasons).
+Download the [latest release](https://github.com/garciadelcastillo/Machina-Grasshopper/releases). Just as with any other Grasshopper plugin, just drop the main .gha and .dll files in Grasshopper's Components library. Make sure to right-click on both files and unblock them if necessary. Also, if running Windows 10, make sure you have extracted the files from the .zip file with something other than Window's native extracter, such as [7Zip](http://www.7-zip.org/), [WinRAR](https://www.rarlab.com/) or similar (see below for reasons).
 
 ## Installation (Beginner)
 In order to install Machina for Grasshopper, you need to follow the following steps. 
+
+- Go to the [releases](https://github.com/garciadelcastillo/Machina-Grasshopper/releases) section and download the latest version of the distributable.
 
 - Extract the contents of the `MachinaGrasshopper_vX.X.X.zip` file somewhere in your computer: if you are running Windows 10, make sure extract the files from the .zip file with something other than Window's native shell extracter (the one you use when double clicking on the file or right-clicking and choosing `Extract`), such as [7Zip](http://www.7-zip.org/), [WinRAR](https://www.rarlab.com/) or similar. Failure to do so may cause Window's security settings to internally flag the .dll file as downloaded-from-internet-suspicious, and block it forever. 
 

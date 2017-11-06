@@ -9,7 +9,6 @@
 ```
 
 ## TODO
-- [ ] Add sample files
 - [ ] Add placeholder icons: https://www.flaticon.com/authors/freepik ?
 
 
@@ -26,6 +25,7 @@
     + [x] Input nickname: one or two-letter initials of input name. Components are rather simple and with little inputs, we probably don't need to force long nicknames and can match GH's style
     + [x] Outputs: same
 - [x] Think of levels and categories to subdivide Actions tab in
+- [x] Add sample files
 
 ## v0.4.0
 - [x] Improve sample files

@@ -63,9 +63,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_Coordinates_resize {
+        internal static System.Drawing.Bitmap Action_Attach {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.Coordinates_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Attach", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_Motion_resize {
+        internal static System.Drawing.Bitmap Action_Axes {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.Motion_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Axes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_PopSettings_resize {
+        internal static System.Drawing.Bitmap Action_Detach {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.PopSettings_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Detach", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_Precision_resize {
+        internal static System.Drawing.Bitmap Action_Move {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.Precision_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Move", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_PrecisionTo_resize {
+        internal static System.Drawing.Bitmap Action_Precision {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.PrecisionTo_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Precision", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_PushSettings_resize {
+        internal static System.Drawing.Bitmap Action_Rotate {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.PushSettings_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Rotate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,59 +123,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_Speed_resize {
+        internal static System.Drawing.Bitmap Action_Speed {
             get {
-                object obj = ResourceManager.GetObject("icon_Action.Speed_resize", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_Action_SpeedTo_resize {
-            get {
-                object obj = ResourceManager.GetObject("icon_Action.SpeedTo_resize", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_Robot_Create_resize {
-            get {
-                object obj = ResourceManager.GetObject("icon_Robot.Create_resize", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_Robot_SetIOName_resize {
-            get {
-                object obj = ResourceManager.GetObject("icon_Robot.SetIOName_resize", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_Robot_Version_resize {
-            get {
-                object obj = ResourceManager.GetObject("icon_Robot.Version_resize", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_Tool_Create_resize {
-            get {
-                object obj = ResourceManager.GetObject("icon_Tool.Create_resize", resourceCulture);
+                object obj = ResourceManager.GetObject("Action.Speed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

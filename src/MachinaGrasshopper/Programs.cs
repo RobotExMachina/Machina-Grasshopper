@@ -28,7 +28,7 @@ namespace MachinaGrasshopper
             "Returns a human-readable representation of a list of Actions.", 
             "Machina", 
             "Programs") { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("4f53f8c0-014b-4fd2-b764-71e9e49cf67d");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -61,7 +61,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Programs")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("8355fbed-7aa0-4a29-bd9a-c8dca15f2bfb");
         protected override System.Drawing.Bitmap Icon => null;
 

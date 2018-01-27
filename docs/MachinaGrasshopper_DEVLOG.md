@@ -10,12 +10,12 @@
 
 # TODO
 - [ ] Wrap Machina types as parameters deriving from GH_Goo
-
+- [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
 
 # REVISIONS
 ## v.0.5.0
-- [x] Update core to 0.5.0
-- [ ] Hide all pre-0.5.0 components
+- [x] Update Machina core to 0.5.0
+- [x] Hide all pre-0.5.0 components
 - [ ] Generate new components with new GuiD, incorporating the abs/rel option 
 
 ## v.0.4.1

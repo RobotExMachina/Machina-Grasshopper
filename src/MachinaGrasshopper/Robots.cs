@@ -28,7 +28,7 @@ namespace MachinaGrasshopper
             "Create a new Robot object.", 
             "Machina", 
             "Robots") { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("b33bbc79-be3f-4d92-b7dd-317fc04bf9ee");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -64,7 +64,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Robots")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("eb166123-3876-44a3-b2d0-d8bb3146a561");
         protected override System.Drawing.Bitmap Icon => null;
 
@@ -92,7 +92,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Robots")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("7c3fe2f8-bc12-4eaa-92c1-27a6729504ac");
         protected override System.Drawing.Bitmap Icon => null;
 

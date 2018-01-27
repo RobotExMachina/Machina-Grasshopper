@@ -17,8 +17,7 @@ namespace MachinaGrasshopper
     /// <summary>
     /// Tool-related components go here.
     /// </summary>
-
-
+    
 
     public class CreateTool : GH_Component
     {
@@ -28,7 +27,7 @@ namespace MachinaGrasshopper
             "Create a new Tool object.", 
             "Machina", 
             "Tools") { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("19e1c38a-94f8-41b6-b5a5-0a549fdf0123");
         protected override System.Drawing.Bitmap Icon => null;
 

@@ -28,9 +28,9 @@
             An Action to change the current speed setting.
             </summary>
         </member>
-        <member name="T:Machina.ActionZone">
+        <member name="T:Machina.ActionPrecision">
             <summary>
-            An Action to change current zone setting.
+            An Action to change current precision settings.
             </summary>
         </member>
         <member name="T:Machina.ActionMotion">
@@ -45,24 +45,13 @@
         </member>
         <member name="T:Machina.ActionPushPop">
             <summary>
-            An Action to Push or Pop current device settings (such as speed, zone, etc.)
+            An Action to Push or Pop current device settings (such as speed, precision, etc.)
             </summary>
         </member>
         <member name="T:Machina.ActionTranslation">
             <summary>
             An action representing a Translation transform in along a guiding vector.
             </summary>
-        </member>
-        <member name="M:Machina.ActionTranslation.#ctor(Machina.Vector,System.Boolean)">
-            <summary>
-            Full constructor.
-            </summary>
-            <param name="world"></param>
-            <param name="trans"></param>
-            <param name="relTrans"></param>
-            <param name="speed"></param>
-            <param name="zone"></param>
-            <param name="mType"></param>
         </member>
         <member name="T:Machina.ActionRotation">
             <summary>
@@ -74,7 +63,7 @@
             An Action representing a combined Translation and Rotation Transformation.
             </summary>
         </member>
-        <member name="T:Machina.ActionJoints">
+        <member name="T:Machina.ActionAxes">
             <summary>
             An Action representing the raw angular values of the device's joint rotations.
             </summary>
@@ -113,6 +102,21 @@
         <member name="T:Machina.ActionIOAnalog">
             <summary>
             Writes a value to analog pin #.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionTemperature">
+            <summary>
+            Sets the temperature of the 3D printer part, and optionally waits for the part to reach the temp to resume eexecution.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionExtrusion">
+            <summary>
+            Turns extrusion on/off in 3D printers.
+            </summary>
+        </member>
+        <member name="T:Machina.ActionExtrusionRate">
+            <summary>
+            Sets the extrusion rate in 3D printers in mm of filament per mm of lineal travel.
             </summary>
         </member>
         <member name="T:Machina.ActionBuffer">
@@ -214,6 +218,178 @@
         <member name="M:Machina.ActionBuffer.LogBufferedActions">
             <summary>
             Writes a description of each pending Action to the Console.
+            </summary>
+        </member>
+        <member name="T:Machina.CompilerZMORPH">
+            <summary>
+            A compiler for ZMorph 3D printers. 
+            </summary>
+        </member>
+        <member name="M:Machina.CompilerZMORPH.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native RAPID Laguage.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerZMORPH.GetPositionTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a simple XYZ position.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerZMORPH.GetExtrusionTargetValue(Machina.RobotCursor)">
+            <summary>
+            Computes how much the cursor has moved in this action, and returns how much
+            filament it should extrude based on extrusion rate.
+            </summary>
+            <param name="cursor"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerZMORPH.StartCodeBoilerplate(Machina.RobotCursor)">
+            <summary>
+            Dumps a bunch of initilazation boilerplate
+            </summary>
+            <param name="cursor"></param>
+        </member>
+        <member name="M:Machina.CompilerZMORPH.EndCodeBoilerplate(Machina.RobotCursor)">
+            <summary>
+            Dumps a bunch of termination boilerplate
+            </summary>
+            <param name="cursor"></param>
+        </member>
+        <member name="T:Machina.CompilerKUKA">
+            <summary>
+            A compiler for KUKA 6-axis industrial robotic arms.
+            </summary>
+        </member>
+        <member name="M:Machina.CompilerKUKA.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native KUKA Robot Language.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetPositionTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL FRAME representation of the current state of the cursor.
+            Note POS also accept T and S parameters for unambiguous arm configuration def. @TODO: implement?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetAxisTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL AXIS joint representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerKUKA.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a KRL representation of a Tool object
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.CompilerUR">
+            <summary>
+            A compiler for Universal Robots 6-axis robotic arms.
+            </summary>
+        </member>
+        <member name="M:Machina.CompilerUR.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native UR Script.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetPoseTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an UR pose representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetJointTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns a UR joint representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerUR.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a UR representation of a Tool object.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.CompilerABB">
+            <summary>
+            A compiler for ABB 6-axis industrial robotic arms.
+            </summary>
+        </member>
+        <member name="F:Machina.CompilerABB.PredefinedZones">
+            <summary>
+            A Set of RAPID's predefined zone values. 
+            </summary>
+        </member>
+        <member name="M:Machina.CompilerABB.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native RAPID Laguage.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetUNSAFERobTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an RAPID robtarget representation of the current state of the cursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetJointTargetValue(Machina.RobotCursor)">
+            <summary>
+            Returns an RAPID jointtarget representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetSpeedValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of cursor speed.
+            </summary>
+            <param name="speed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetZoneValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representatiton of cursor zone.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.CompilerABB.GetToolValue(Machina.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of a Tool object.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Machina.CompilerHuman">
+            <summary>
+            A quick compiler for human-readable instructions.
             </summary>
         </member>
         <member name="T:Machina.AxisAngle">
@@ -391,7 +567,7 @@
             following right-hand rule orientations. Useful for spatial and rotational orientation operations. 
             </summary>
         </member>
-        <member name="F:Machina.Orientation.Q">
+        <member name="P:Machina.Orientation.WorldXY">
              NOTE: just as rotation, this class is just a wrapper around the underlying 
              rotational elements that represent Orientation in space.
              The main purpose of this class it to be an intuitive way of representing Orientation 
@@ -402,6 +578,19 @@
              and typical visual outputs will be main Vectors, Rotation Matrices or Euler Angles 
              (even though all internal computation is based on Quaternion algebra). 
             
+            <summary>
+            Get an Orientation matching the World XY plane.
+            </summary>
+        </member>
+        <member name="P:Machina.Orientation.WorldXZ">
+            <summary>
+            Get an Orientation matching the World XZ plane.
+            </summary>
+        </member>
+        <member name="P:Machina.Orientation.WorldYZ">
+            <summary>
+            Get an Orientation matching the World YZ plane.
+            </summary>
         </member>
         <member name="P:Machina.Orientation.XAxis">
             <summary>
@@ -536,23 +725,23 @@
             Euler Angles (Yaw-Pitch-Roll).
             </summary>
         </member>
-        <member name="F:Machina.Rotation.GlobalXYZ">
+        <member name="P:Machina.Rotation.GlobalXYZ">
             <summary>
             An empty Rotation representing the orientation of the global XYZ coordinate system.
             </summary>
         </member>
-        <member name="F:Machina.Rotation.FlippedAroundX">
+        <member name="P:Machina.Rotation.FlippedAroundX">
             <summary>
             A Rotation of 180 degs around the X axis.
             </summary>
         </member>
-        <member name="F:Machina.Rotation.FlippedAroundY">
+        <member name="P:Machina.Rotation.FlippedAroundY">
             <summary>
             A Rotation of 180 degs around the Y axis. 
             This is the most common orientation of the coordiante system of the flange of a robot in 'home' position.
             </summary>
         </member>
-        <member name="F:Machina.Rotation.FlippedAroundZ">
+        <member name="P:Machina.Rotation.FlippedAroundZ">
             <summary>
             A Rotation of 180 degs around the Z axis. 
             </summary>
@@ -662,13 +851,30 @@
             <summary>
             Combine the effect of two Rotations. 
             Please note that rotations will be applied in the order specified by the arguments
-            in intrinsic coordinates, i.e. r1, then r2 over the new LOCAL transformed coordinate system.
+            in intrinsic coordinates (post-multiply), i.e. r1, then r2 over the new LOCAL transformed coordinate system.
             This means that, if you want to rotate a Rotation A with another Rotation B in GLOBAL coordinates, 
             you will need to pre-multiply the rotations as in: Combine(B, A).
             </summary>
             <param name="r1"></param>
             <param name="r2"></param>
             <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.Global(Machina.Rotation,Machina.Rotation)">
+            <summary>
+            Rotate r1 over r2 in GLOBAL coordinates. 
+            This is an alias for Rotation.Combine(r2, r1), see Rotation.Combine() for more details.
+            @TODO: optimize, can probably do this with a direct Quaternion pre-multiplication.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Rotation.Local(Machina.Rotation,Machina.Rotation)">
+            <summary>
+            Rotate r1 with r2 in LOCAL coordinates. 
+            This is an alias for Rotation.Combine(r1, r2), see Rotation.Combine() for more details.
+            @TODO: optimize, can probably do this with a direct Quaternion post-multiplication.
+            </summary>
         </member>
         <member name="M:Machina.Rotation.Inverse(Machina.Rotation)">
             <summary>
@@ -728,6 +934,11 @@
             Represents a three dimensional point. 
             This is just a cosmetic alias for Vectors in the Public API... Users may have a better
             time at first understanding position as Points and direction as Vectors...?
+            </summary>
+        </member>
+        <member name="P:Machina.Point.Origin">
+            <summary>
+            Gets a Point at (0, 0, 0).
             </summary>
         </member>
         <member name="P:Machina.Point.X">
@@ -892,6 +1103,13 @@
             </summary>
             <param name="vec"></param>
             <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Vector.DistanceTo(Machina.Vector)">
+            <summary>
+            Returns the euclidean distance from this Vector to another.
+            </summary>
+            <param name="other"></param>
             <returns></returns>
         </member>
         <member name="F:Machina.Vector.XAxis">
@@ -1938,7 +2156,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Communication.SetRunMode(Machina.RunMode)">
+        <member name="M:Machina.Communication.SetRunMode(Machina.CycleType)">
             <summary>
             Sets the execution mode on the device to once or loop (useful for ControlMode.Execute)
             </summary>
@@ -2032,7 +2250,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.CommunicationABB.SetRunMode(Machina.RunMode)">
+        <member name="M:Machina.CommunicationABB.SetRunMode(Machina.CycleType)">
             <summary>
             Sets the Rapid ExecutionCycle to Once, Forever or None.
             </summary>
@@ -2325,7 +2543,7 @@
             @TODO rethink this
             </summary>
         </member>
-        <member name="M:Machina.Control.SetControlMode(Machina.ControlMode)">
+        <member name="M:Machina.Control.SetControlMode(Machina.ControlType)">
             <summary>
             Sets current Control Mode and establishes communication if applicable.
             </summary>
@@ -2338,14 +2556,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.SetRunMode(Machina.RunMode)">
+        <member name="M:Machina.Control.SetRunMode(Machina.CycleType)">
             <summary>
             Sets current RunMode. 
             </summary>
             <param name="mode"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.GetRunMode(Machina.RunMode)">
+        <member name="M:Machina.Control.GetRunMode(Machina.CycleType)">
             <summary>
             Returns current RunMode.
             </summary>
@@ -2416,7 +2634,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.GetCurrentJoints">
+        <member name="M:Machina.Control.getCurrentAxes">
             <summary>
             Returns a Joints object representing the rotations of the 6 axes of this robot.
             </summary>
@@ -2457,9 +2675,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.GetCurrentZoneSetting">
+        <member name="M:Machina.Control.GetCurrentPrecisionSettings">
             <summary>
-            Gets current zone setting.
+            Gets current precision setting.
             </summary>
             <returns></returns>
         </member>
@@ -2492,39 +2710,26 @@
             <summary>
             Issue a Translation action request that falls back on the state of current settings.
             </summary>
-            <param name="world"></param>
             <param name="trans"></param>
             <param name="relative"></param>
-            <param name="speed"></param>
-            <param name="zone"></param>
-            <param name="mType"></param>
             <returns></returns>
         </member>
         <member name="M:Machina.Control.IssueRotationRequest(Machina.Rotation,System.Boolean)">
             <summary>
             Issue a Rotation action request with fully customized parameters.
             </summary>
-            <param name="world"></param>
             <param name="rot"></param>
             <param name="relative"></param>
-            <param name="speed"></param>
-            <param name="zone"></param>
-            <param name="mType"></param>
             <returns></returns>
         </member>
         <member name="M:Machina.Control.IssueTransformationRequest(Machina.Vector,Machina.Rotation,System.Boolean,System.Boolean)">
             <summary>
             Issue a Translation + Rotation action request with fully customized parameters.
             </summary>
-            <param name="worldTrans"></param>
             <param name="trans"></param>
-            <param name="relTrans"></param>
-            <param name="worldRot"></param>
             <param name="rot"></param>
-            <param name="relRot"></param>
-            <param name="speed"></param>
-            <param name="zone"></param>
-            <param name="mType"></param>
+            <param name="rel"></param>
+            <param name="translationFirst"></param>
             <returns></returns>
         </member>
         <member name="M:Machina.Control.IssueJointsRequest(Machina.Joints,System.Boolean)">
@@ -2587,6 +2792,14 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Machina.Control.IssueInitializationRequest(System.Boolean)">
+            <summary>
+            Issue a request to add common initialization/termination procedures on the device, 
+            like homing, calibration, fans, etc.
+            </summary>
+            <param name="initiate"></param>
+            <returns></returns>
+        </member>
         <member name="M:Machina.Control.InitializeCommunication">
             <summary>
             Initializes the Communication object.
@@ -2645,9 +2858,10 @@
         </member>
         <member name="T:Machina.Compiler">
             <summary>
-            A class that features methods to translate high-level robot actions into
+            An abstract class that features methods to translate high-level robot actions into
             platform-specific programs. 
             </summary>
+            
         </member>
         <member name="F:Machina.Compiler.ADD_ACTION_ID">
             <summary>
@@ -2656,10 +2870,10 @@
         </member>
         <member name="F:Machina.Compiler.ADD_ACTION_STRING">
             <summary>
-            Add a trailing human representation of the action after
+            Add a trailing human representation of the action after the code line
             </summary>
         </member>
-        <member name="F:Machina.Compiler.commentCharacter">
+        <member name="F:Machina.Compiler.commChar">
             <summary>
             Character used for comments by the compiler
             </summary>
@@ -2668,7 +2882,7 @@
             <summary>
             A constructor that takes several parameters particular to each compiler type
             </summary>
-            <param name="commentChar"></param>
+            <param name="commentCharacter"></param>
         </member>
         <member name="M:Machina.Compiler.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
@@ -2680,146 +2894,33 @@
             <param name="writePointer"></param>
             <returns></returns>
         </member>
-        <member name="T:Machina.CompilerHuman">
-            <summary>
-            A quick compiler for human-readable instructions.
-            </summary>
-        </member>
-        <member name="F:Machina.CompilerABB.PredefinedZones">
-            <summary>
-            A Set of RAPID's predefined zone values. 
-            </summary>
-        </member>
-        <member name="M:Machina.CompilerABB.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            Creates a textual program representation of a set of Actions using native RAPID Laguage.
-            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
-            robot configuration and assumes the robot controller will figure out the correct one.
-            </summary>
-            <param name="programName"></param>
-            <param name="writePointer"></param>
-            <param name="block">Use actions in waiting queue or buffer?</param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerABB.GetUNSAFERobTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns an RAPID robtarget representation of the current state of the cursor.
-            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
-            robot configuration and assumes the robot controller will figure out the correct one.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerABB.GetJointTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns an RAPID jointtarget representation of the current state of the cursor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerABB.GetSpeedValue(Machina.RobotCursor)">
-            <summary>
-            Returns a RAPID representation of cursor speed.
-            </summary>
-            <param name="speed"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerABB.GetZoneValue(Machina.RobotCursor)">
-            <summary>
-            Returns a RAPID representatiton of cursor zone.
-            </summary>
-            <param name="cursor"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerABB.GetToolValue(Machina.RobotCursor)">
-            <summary>
-            Returns a RAPID representation of a Tool object.
-            </summary>
-            <param name="cursor"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerUR.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            Creates a textual program representation of a set of Actions using native UR Script.
-            </summary>
-            <param name="programName"></param>
-            <param name="writePointer"></param>
-            <param name="block">Use actions in waiting queue or buffer?</param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerUR.GetPoseTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns an UR pose representation of the current state of the cursor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerUR.GetJointTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns a UR joint representation of the current state of the cursor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerUR.GetToolValue(Machina.RobotCursor)">
-            <summary>
-            Returns a UR representation of a Tool object.
-            </summary>
-            <param name="cursor"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerKUKA.UNSAFEProgramFromBuffer(System.String,Machina.RobotCursor,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            Creates a textual program representation of a set of Actions using native KUKA Robot Language.
-            </summary>
-            <param name="programName"></param>
-            <param name="writePointer"></param>
-            <param name="block">Use actions in waiting queue or buffer?</param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerKUKA.GetPositionTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns a KRL FRAME representation of the current state of the cursor.
-            Note POS also accept T and S parameters for unambiguous arm configuration def. @TODO: implement?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerKUKA.GetAxisTargetValue(Machina.RobotCursor)">
-            <summary>
-            Returns a KRL AXIS joint representation of the current state of the cursor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.CompilerKUKA.GetToolValue(Machina.RobotCursor)">
-            <summary>
-            Returns a KRL representation of a Tool object
-            </summary>
-            <param name="cursor"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Machina.ControlMode">
+        <member name="T:Machina.ControlType">
             <summary>
             Represents the type of control that will be performed over the real/virtual robot.
             </summary>
         </member>
-        <member name="F:Machina.ControlMode.Offline">
+        <member name="F:Machina.ControlType.Offline">
             <summary>
             Not connected to any controller. Useful for robot code generation and export.
             </summary>
         </member>
-        <member name="F:Machina.ControlMode.Execute">
+        <member name="F:Machina.ControlType.Execute">
             <summary>
             Online connection to a controller, the library will upload complete programs 
             and run them. Provides robust and fluid movement, useful on real-time 
             interactivity where response time is not a priority. 
             </summary>
         </member>
-        <member name="F:Machina.ControlMode.Stream">
+        <member name="F:Machina.ControlType.Stream">
             <summary>
             Online connection to a controller, the library will stream individual targets
             at run time as they get priority. Provides the closest approximation to real-time
             interaction, useful on situations where low latency is required.
             </summary>
         </member>
-        <member name="T:Machina.RunMode">
+        <member name="T:Machina.CycleType">
             <summary>
-            Defines the different modes a program can be ran.
+            Defines the different cycle type modes a program can be ran.
             </summary>
         </member>
         <member name="T:Machina.ReferenceCS">
@@ -2829,7 +2930,19 @@
         </member>
         <member name="T:Machina.MotionType">
             <summary>
-            Defines which type of motion to use for translation actions.;
+            Defines which type of motion to use for translation actions.
+            </summary>
+        </member>
+        <member name="T:Machina.RobotType">
+            <summary>
+            Defines the type of robotic device.
+            </summary>
+        </member>
+        <member name="T:Machina.RobotPartType">
+            <summary>
+            An enum with different robotic parts, to be used as targets for execution operations, 
+            e.g. 3D printing, I/O, etc.
+            @TODO: temp, this should probably go somewhere else... 
             </summary>
         </member>
         <member name="T:Machina.Robot">
@@ -2864,34 +2977,37 @@
             Base constructor.
             </summary>
             <param name="name">A name for this Robot</param>
-            <param name="make"></param>
+            <param name="make">The robot make. This will determine which drivers/compilers are used to manage it.</param>
         </member>
-        <member name="M:Machina.Robot.Mode(Machina.ControlMode)">
+        <member name="M:Machina.Robot.IsBrand(System.String)">
+            What was this even for? Exposrt checks?
+        </member>
+        <member name="M:Machina.Robot.ControlMode(Machina.ControlType)">
             <summary>
             Sets the control mode the robot will operate under.
             </summary>
-            <param name="mode"></param>
+            <param name="controlType"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.Mode(System.String)">
+        <member name="M:Machina.Robot.ControlMode(System.String)">
             <summary>
-            Sets the control mode the robot will operate under.
+            Sets the control type the robot will operate under, like "offline", "execute" or "stream".
             </summary>
-            <param name="mode"></param>
+            <param name="controlType"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.RunMode(Machina.RunMode)">
-            <summary>
-            Sets the cycle the robot will run program in (Once or Loop).
-            </summary>
-            <param name="mode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.Robot.RunMode(System.String)">
+        <member name="M:Machina.Robot.CycleMode(Machina.CycleType)">
             <summary>
             Sets the cycle the robot will run program in (Once or Loop).
             </summary>
-            <param name="mode"></param>
+            <param name="cycleType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.CycleMode(System.String)">
+            <summary>
+            Sets the cycle the robot will run program in (Once or Loop).
+            </summary>
+            <param name="cycleType"></param>
         </member>
         <member name="M:Machina.Robot.Connect(System.Int32)">
             <summary>
@@ -2957,12 +3073,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.GetCurrentJoints">
-            <summary>
-            Returns a Joint object representing the current angular rotations of the robot's 6 axes.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Machina.Robot.Export">
             <summary>
             Create a program with all the buffered actions and return it as a string List.
@@ -2993,6 +3103,7 @@
             </summary>
             <param name="filepath"></param>
             <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <param name="humanComments">If true, a human-readable description will be added to each line of code</param>
             <returns></returns>
         </member>
         <member name="M:Machina.Robot.Execute">
@@ -3065,23 +3176,17 @@
             </summary>
             <param name="radius">Smoothing radius in mm</param>
         </member>
-        <member name="M:Machina.Robot.Motion">
-            <summary>
-            Gets the current MotionType setting.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Machina.Robot.Motion(Machina.MotionType)">
+        <member name="M:Machina.Robot.MotionMode(Machina.MotionType)">
             <summary>
             Sets the motion type (linear, joint...) for future issued actions.
             </summary>
-            <param name="type"></param>
+            <param name="motionType"></param>
         </member>
-        <member name="M:Machina.Robot.Motion(System.String)">
+        <member name="M:Machina.Robot.MotionMode(System.String)">
             <summary>
             Sets the motion type (linear, joint...) for future issued actions.
             </summary>
-            <param name="type">"linear", "joint" or "joints"</param>
+            <param name="motionType">"linear", "joint", etc."</param>
         </member>
         <member name="M:Machina.Robot.Coordinates">
             <summary>
@@ -3103,15 +3208,47 @@
         </member>
         <member name="M:Machina.Robot.PushSettings">
             <summary>
-            Buffers current state settings (speed, zone, motion type...), and opens up for 
+            Buffers current state settings (speed, precision, motion type...), and opens up for 
             temporary settings changes to be reverted by PopSettings().
             </summary>
         </member>
         <member name="M:Machina.Robot.PopSettings">
             <summary>
-            Reverts the state settings (speed, zone, motion type...) to the previously buffered
+            Reverts the state settings (speed, precision, motion type...) to the previously buffered
             state by PushSettings().
             </summary>
+        </member>
+        <member name="M:Machina.Robot.Temperature(System.Double,System.String,System.Boolean)">
+            <summary>
+            Increments the working temperature of one of the device's parts. Useful for 3D printing operations. 
+            </summary>
+            <param name="temp">Temperature increment in °C.</param>
+            <param name="devicePart">Device's part that will change temperature, e.g. "extruder", "bed", etc.</param>
+            <param name="waitToReachTemp">If true, execution will wait for the part to heat up and resume when reached the target.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.TemperatureTo(System.Double,System.String,System.Boolean)">
+            <summary>
+            Sets the working temperature of one of the device's parts. Useful for 3D printing operations. 
+            </summary>
+            <param name="temp">Temperature increment in °C.</param>
+            <param name="devicePart">Device's part that will change temperature, e.g. "extruder", "bed", etc.</param>
+            <param name="waitToReachTemp">If true, execution will wait for the part to heat up and resume when reached the target.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.ExtrusionRate(System.Double)">
+            <summary>
+            Increases the extrusion rate for 3D printers in mm of filament per mm of movement.
+            </summary>
+            <param name="rate">Increment of mm of filament per mm of movement.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.ExtrusionRateTo(System.Double)">
+            <summary>
+            Sets the extrusion rate for 3D printers in mm of filament per mm of movement.
+            </summary>
+            <param name="rate">mm of filament per mm of movement.</param>
+            <returns></returns>
         </member>
         <member name="M:Machina.Robot.Do(Machina.Action)">
             <summary>
@@ -3249,17 +3386,17 @@
             <param name="position"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.Joints(Machina.Joints)">
+        <member name="M:Machina.Robot.Axes(Machina.Joints)">
             <summary>
-            Issue a request to increment the angular values of the robot joint rotations.
+            Issue a request to increment the angular values of the robot joint axes rotations.
             Values expressed in degrees.
             </summary>
             <param name="incJoints"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.Joints(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Machina.Robot.Axes(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Issue a request to increment the angular values of the robot joint rotations.
+            Issue a request to increment the angular values of the robot joint axes rotations.
             Values expressed in degrees.
             </summary>
             <param name="incJ1"></param>
@@ -3270,17 +3407,18 @@
             <param name="incJ6"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.JointsTo(Machina.Joints)">
+        <member name="M:Machina.Robot.AxesTo(Machina.Joints)">
             <summary>
-            Issue a request to set the angular values of the robot joint rotations.
+            Issue a request to set the angular values of the robot joint axes rotations.
             Values expressed in degrees.
             </summary>
             <param name="joints"></param>
             <returns></returns>
+            
         </member>
-        <member name="M:Machina.Robot.JointsTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Machina.Robot.AxesTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Issue a request to set the angular values of the robot joint rotations.
+            Issue a request to set the angular values of the robot joint axes rotations.
             Values expressed in degrees.
             </summary>
             <param name="j1"></param>
@@ -3370,6 +3508,29 @@
             </summary>
             <param name="pinNumber"></param>
         </member>
+        <member name="M:Machina.Robot.Extrude(System.Boolean)">
+            <summary>
+            Turns extrusion in 3D printers on/off.
+            </summary>
+            <param name="extrude">True/false for on/off.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Initialize">
+            <summary>
+            Initialize this device for action. Initialization uses device-specific
+            common initialization routines, like homing and calibration, to set the 
+            device ready for typical procedures like 3D printing. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Robot.Terminate">
+            <summary>
+            Terminate this device. Termination uses device-specific
+            common termination routines, like cooling or turning fans off, to prepare
+            the device for idleness.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Machina.Robot.GetPosition">
             <summary>
             Returns a Point represnting the current location of the Tool Center Point
@@ -3391,7 +3552,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.GetJoints">
+        <member name="M:Machina.Robot.GetAxes">
             <summary>
             Returns a Joint object representing the rotations in the robot axes.
             </summary>
@@ -3486,12 +3647,6 @@
             </summary>
             <param name="childCursor"></param>
         </member>
-        <member name="F:Machina.RobotCursor.ActionsMap">
-            <summary>
-            A dict that maps Action types to the cursor's applicable method.
-            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
-            </summary>
-        </member>
         <member name="M:Machina.RobotCursor.Issue(Machina.Action)">
             <summary>
             Add an action to this cursor's buffer, to be released whenever assigned priority.
@@ -3516,18 +3671,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.RobotCursor.Apply(Machina.Action)">
-            <summary>
-            Applies the directives of an Action to this cursor. 
-            </summary>
-            <remarks>
-            While this Dictionary dispatch pattern is a bit convoluted, it is faster than dynamic casting, 
-            more stable and allows for compiler-time checks and non-error fallback.
-            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
-            </remarks>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
         <member name="M:Machina.RobotCursor.ProgramFromBuffer(System.Boolean,System.Boolean)">
             <summary>
             Return a device-specific program with all the Actions pending in the buffer.
@@ -3542,6 +3685,24 @@
             <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
+        <member name="F:Machina.RobotCursor.ActionsMap">
+            <summary>
+            A dict that maps Action types to the cursor's applicable method.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </summary>
+        </member>
+        <member name="M:Machina.RobotCursor.Apply(Machina.Action)">
+            <summary>
+            Applies the directives of an Action to this cursor. 
+            </summary>
+            <remarks>
+            While this Dictionary dispatch pattern is a bit convoluted, it is faster than dynamic casting, 
+            more stable and allows for compiler-time checks and non-error fallback.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </remarks>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
         <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionSpeed)">
             <summary>
             Apply Speed Action.
@@ -3549,7 +3710,7 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionZone)">
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionPrecision)">
             <summary>
             Apply Zone Action.
             </summary>
@@ -3598,7 +3759,7 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionJoints)">
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionAxes)">
             <summary>
             Apply Joints Action.
             </summary>
@@ -3654,6 +3815,39 @@
             <param name="action"></param>
             <returns></returns>
         </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionTemperature)">
+            <summary>
+            Apply ActionTemperature write action to this cursor.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionExtrusion)">
+            <summary>
+            Apply ActionExtrusion write action to this cursor.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionExtrusionRate)">
+            <summary>
+            Apply ActionExtrusionRate write action to this cursor. 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ApplyAction(Machina.ActionInitialization)">
+            <summary>
+            This is just to write start/end boilerplates for 3D printers. 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.RobotCursor.ComputeExtrudedLength">
+            <summary>
+            Update the current extrudedLength.
+            </summary>
+        </member>
         <member name="T:Machina.Settings">
             <summary>
             A class representing a Setting state, to be un/buffered.
@@ -3675,6 +3869,11 @@
             Represents a tool object that can be attached to the end effector of the robot.
             This class is public and will be used directly by the user, so careful design of the API
             vs. internal methods will be relevant. 
+            </summary>
+        </member>
+        <member name="P:Machina.Tool.Unset">
+            <summary>
+            Gets a Tool object representing no tool attached. 
             </summary>
         </member>
         <member name="M:Machina.Tool.#ctor(System.String,Machina.Point,Machina.Orientation)">

@@ -8,13 +8,15 @@
  
 ```
 
-## TODO
-- [ ] Add placeholder icons: https://www.flaticon.com/authors/freepik ?
+# TODO
+- [ ] Wrap Machina types as parameters deriving from GH_Goo
 
 
-
----
 # REVISIONS
+## v.0.5.0
+- [x] Update core to 0.5.0
+- [ ] Hide all pre-0.5.0 components
+- [ ] Generate new components with new GuiD, incorporating the abs/rel option 
 
 ## v.0.4.1
 - [x] Add 3D Printing sample

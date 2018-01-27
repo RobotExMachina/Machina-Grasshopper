@@ -90,7 +90,8 @@ namespace MachinaGrasshopper
             if (!DA.GetData(2, ref inline)) return;
             if (!DA.GetData(3, ref comments)) return;
 
-            bot.Mode(Machina.ControlMode.Offline);
+            //bot.Mode(Machina.ControlMode.Offline);
+            bot.ControlMode(ControlType.Offline);
 
             foreach (Machina.Action a in actions)
             {

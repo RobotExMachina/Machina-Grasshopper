@@ -1,8 +1,10 @@
 ﻿using System;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using Machina;
+using System.Windows.Forms;
 
 namespace MachinaGrasshopper
 {
@@ -16,7 +18,7 @@ namespace MachinaGrasshopper
     /// <summary>
     /// All Action-generator components
     /// </summary>
-
+    
 
 
 
@@ -37,7 +39,7 @@ namespace MachinaGrasshopper
             "Actions") { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_MotionType;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -153,7 +155,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("5ce2951b-fdee-4d67-ab2b-bb97204bfdc7");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Speed;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -186,7 +188,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("3067745a-9183-4f51-96af-95efec967888");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Speed;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -233,7 +235,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("eaadd1fc-caa9-442b-af5e-273bc3961b73");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Precision;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -251,7 +253,7 @@ namespace MachinaGrasshopper
 
             if (!DA.GetData(0, ref radiusInc)) return;
 
-            DA.SetData(0, new ActionZone((int)Math.Round(radiusInc), true));
+            DA.SetData(0, new ActionPrecision((int)Math.Round(radiusInc), true));
         }
     }
 
@@ -266,7 +268,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("f7127638-e4bc-4cd1-904d-ad301bd63d9a");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Precision;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -284,7 +286,7 @@ namespace MachinaGrasshopper
 
             if (!DA.GetData(0, ref radius)) return;
 
-            DA.SetData(0, new ActionZone((int)Math.Round(radius), false));
+            DA.SetData(0, new ActionPrecision((int)Math.Round(radius), false));
         }
     }
 
@@ -308,7 +310,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("f60026ed-e66f-4cba-8592-5d3efc9362bf");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_PushSettings;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager) { }
            
@@ -334,7 +336,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("82a53cd1-c33c-4cfa-907c-94288058130e");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_PopSettings;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager) { }
 
@@ -359,18 +361,88 @@ namespace MachinaGrasshopper
     //  ██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ███████╗
     //  ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝
     //                                       
+
     public class Move : GH_Component
     {
         public Move() : base(
+            "Move",
+            "Move",
+            "Moves the device to an absolute location or along a speficied vector relative to its current position.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddPointParameter("Target", "T", "Target Point or Translation vector", GH_ParamAccess.item);
+
+            this.UpdateMessage();
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Move Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            Point3d p = Point3d.Unset;
+
+            if (!DA.GetData(0, ref p)) return;
+            if (p == null) return;
+            
+            DA.SetData(0, new ActionTranslation(new Machina.Vector(p.X, p.Y, p.Z), !this.absolute));
+
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Solution computation foobar #{id++}");
+        }
+
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalComponentMenuItems(menu);
+
+            checkbox = Menu_AppendItem(menu, "Absolute Action", AbsoluteToggle, null, true, this.absolute);
+            checkbox.ToolTipText = "Absolute Action tooltip";
+        }
+        
+        ToolStripMenuItem checkbox;
+        bool absolute = true;
+        int id = 1;
+
+        protected void AbsoluteToggle(Object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+
+            if (item == null) return;
+
+            //item.Checked = !item.Checked;
+            this.absolute = !this.absolute;  // no need for the Check (and I don't even think it worked), the WPF element is linked to the variable
+            
+            this.UpdateMessage();
+            this.ExpireSolution(true);
+        }
+
+        protected void UpdateMessage()
+        {
+            this.Message = this.absolute ? "Absolute" : "Relative";
+        }
+        
+    }
+
+    public class MoveObsolete : GH_Component
+    {
+        public MoveObsolete() : base(
             "Move",
             "Move",
             "Moves the device along a speficied vector relative to its current position.",
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("1969ae91-3dad-4af2-991b-b23e60724873");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Move;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -392,18 +464,18 @@ namespace MachinaGrasshopper
         }
     }
 
-    public class MoveTo : GH_Component
+    public class MoveToObsolete : GH_Component
     {
-        public MoveTo() : base(
+        public MoveToObsolete() : base(
             "MoveTo",
             "MoveTo",
             "Moves the device to an absolute position in global coordinates.",
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("c90a1258-1dd2-4d14-ab13-8dc53a47b547");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Move;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -444,7 +516,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("db2e3c56-5973-4f07-8d6a-ba31c659704d");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Rotate;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -480,7 +552,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("9410b629-1016-486f-8464-85ecfd9500f7");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Rotate;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -522,7 +594,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("81226a72-37d6-4dad-a7a3-711adb51b26e");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Transform;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -568,7 +640,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("7bf2965f-7fa6-4cf0-84ac-4948b777b478");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Transform;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -614,7 +686,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("15ea7b44-c5d8-470b-9edb-867cc4c0b1aa");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Axes;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Axes;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -647,7 +719,7 @@ namespace MachinaGrasshopper
             if (!DA.GetData(4, ref a5inc)) return;
             if (!DA.GetData(5, ref a6inc)) return;
 
-            DA.SetData(0, new ActionJoints(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true));
+            DA.SetData(0, new ActionAxes(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true));
         }
     }
 
@@ -662,7 +734,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("5b9bc63f-a0f1-4d66-b6a6-679c38ed8014");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Axes;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Axes;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -695,7 +767,7 @@ namespace MachinaGrasshopper
             if (!DA.GetData(4, ref a5)) return;
             if (!DA.GetData(5, ref a6)) return;
 
-            DA.SetData(0, new ActionJoints(new Joints(a1, a2, a3, a4, a5, a6), false));
+            DA.SetData(0, new ActionAxes(new Joints(a1, a2, a3, a4, a5, a6), false));
         }
     }
 
@@ -717,7 +789,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("4ec5c686-0ca9-4b60-a99e-8eaf4fe594ac");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Wait;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -757,7 +829,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("2675e57a-5b6f-441a-9f94-69bb155b7b59");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Message;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -799,7 +871,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("a3fc9af6-04ab-49e9-a0fe-d224f4e7e9bf");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Comment;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -840,7 +912,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.quarternary;
         public override Guid ComponentGuid => new Guid("5598bf85-6887-40b4-a29b-efff6af0864f");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Attach;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Attach;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -876,7 +948,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.quarternary;
         public override Guid ComponentGuid => new Guid("f3195b55-742a-429f-bf66-94fce5497bc9");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Detach;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Detach;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager) { }  // no info needed
 
@@ -911,7 +983,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("a08ed4f1-1913-4f32-8d43-0c98fd1e5bd4");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_WriteDigital;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -947,7 +1019,7 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
         public override Guid ComponentGuid => new Guid("ace7ecb7-2a7a-4a39-b181-73d00c412b82");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_WriteAnalog;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {

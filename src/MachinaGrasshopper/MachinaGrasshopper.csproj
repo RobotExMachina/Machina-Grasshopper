@@ -86,13 +86,33 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\Action.Attach.png" />
-    <Content Include="Resources\Icons\Action.Axes.png" />
-    <Content Include="Resources\Icons\Action.Detach.png" />
-    <Content Include="Resources\Icons\Action.Move.png" />
-    <Content Include="Resources\Icons\Action.Precision.png" />
-    <Content Include="Resources\Icons\Action.Rotate.png" />
-    <Content Include="Resources\Icons\Action.Speed.png" />
+    <Content Include="Resources\Icons\Actions.ActionMode.png" />
+    <Content Include="Resources\Icons\Actions.Attach.png" />
+    <Content Include="Resources\Icons\Actions.Axes.png" />
+    <Content Include="Resources\Icons\Actions.Comment.png" />
+    <Content Include="Resources\Icons\Actions.Detach.png" />
+    <Content Include="Resources\Icons\Actions.Extrude.png" />
+    <Content Include="Resources\Icons\Actions.FeedRate.png" />
+    <Content Include="Resources\Icons\Actions.Message.png" />
+    <Content Include="Resources\Icons\Actions.MotionType.png" />
+    <Content Include="Resources\Icons\Actions.Move.png" />
+    <Content Include="Resources\Icons\Actions.PopSettings.png" />
+    <Content Include="Resources\Icons\Actions.Precision.png" />
+    <Content Include="Resources\Icons\Actions.PushSettings.png" />
+    <Content Include="Resources\Icons\Actions.Rotate.png" />
+    <Content Include="Resources\Icons\Actions.Speed.png" />
+    <Content Include="Resources\Icons\Actions.Temperature.png" />
+    <Content Include="Resources\Icons\Actions.Transform.png" />
+    <Content Include="Resources\Icons\Actions.Wait.png" />
+    <Content Include="Resources\Icons\Actions.WriteAnalog.png" />
+    <Content Include="Resources\Icons\Actions.WriteDigital.png" />
+    <Content Include="Resources\Icons\Programs.CompileProgram.png" />
+    <Content Include="Resources\Icons\Programs.DisplayProgram.png" />
+    <Content Include="Resources\Icons\Programs.WriteToFile.png" />
+    <Content Include="Resources\Icons\Robots.Create.png" />
+    <Content Include="Resources\Icons\Robots.SetIOName.png" />
+    <Content Include="Resources\Icons\Robots.Version.png" />
+    <Content Include="Resources\Icons\Tools.Create.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

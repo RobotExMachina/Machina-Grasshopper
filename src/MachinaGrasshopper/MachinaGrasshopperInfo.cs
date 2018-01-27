@@ -12,7 +12,7 @@ namespace MachinaGrasshopper
         /// <returns></returns>
         public static string MachinaGrasshopperAPIVersion()
         {
-            return "0.4.1";
+            return "0.5.0";
         }
 
 

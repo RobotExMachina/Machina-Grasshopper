@@ -19,8 +19,7 @@ namespace MachinaGrasshopper
     /// All Action-generator components
     /// </summary>
 
-
-
+        
 
     //  ███╗   ███╗ ██████╗ ██╗   ██╗███████╗
     //  ████╗ ████║██╔═══██╗██║   ██║██╔════╝
@@ -29,7 +28,7 @@ namespace MachinaGrasshopper
     //  ██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ███████╗
     //  ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝
     //                                       
-    public class Move : GH_Component//, IGH_VariableParameterComponent
+    public class Move : GH_Component
     {
         /// <summary>
         /// Relative Action?
@@ -168,51 +167,252 @@ namespace MachinaGrasshopper
                 param.Description = "Target Point";
             }
         }
-
         
-        // THIS IS FOR COMPONENTS WHERE THE USER CAN ADD PARAMETERS MANUALY (ZOOM IN AND STUFF) 
-
-        //public bool CanInsertParameter(GH_ParameterSide side, int index)
-        //{
-        //    // Users cannot manually add params
-        //    return false;
-        //}
-
-        //public bool CanRemoveParameter(GH_ParameterSide side, int index)
-        //{
-        //    // Users cannot manually remove params
-        //    return false;
-        //}
-
-        //public IGH_Param CreateParameter(GH_ParameterSide side, int index)
-        //{
-        //    //throw new NotImplementedException();
-        //    //this.Params.RegisterInputParam()
-        //    var p = new Grasshopper.Kernel.Parameters.Param_Point();
-        //    p.Name = "P";
-        //    p.NickName = "Point";
-        //    p.Description = "fooabrbaz";
-        //    p.Access = GH_ParamAccess.item;
-        //    this.Params.RegisterInputParam(p, index);
-        //    return null;
-        //}
-
-        //public bool DestroyParameter(GH_ParameterSide side, int index)
-        //{
-        //    //throw new NotImplementedException();
-        //    return true;
-        //}
-
-        //public void VariableParameterMaintenance()
-        //{
-        //    //throw new NotImplementedException();
-        //}
     }
 
 
 
 
 
+    //  ██████╗  ██████╗ ████████╗ █████╗ ████████╗███████╗
+    //  ██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+    //  ██████╔╝██║   ██║   ██║   ███████║   ██║   █████╗  
+    //  ██╔══██╗██║   ██║   ██║   ██╔══██║   ██║   ██╔══╝  
+    //  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ███████╗
+    //  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+    //                                                     
+    public class Rotate : GH_Component
+    {
+        /// <summary>
+        /// Relative Action?
+        /// </summary>
+        private bool relative = false;
+
+        public Rotate() : base(
+            "Rotate",
+            "Rotate",
+            "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("c48d908d-3e0d-4600-90de-1330b9dc7973");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddPlaneParameter("Plane", "P", "Target spatial orientation", GH_ParamAccess.item);
+
+            Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
+            this.UpdateMessage();
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            if (this.relative)
+            {
+                Vector3d v = Vector3d.Zero;
+                double ang = 0;
+
+                if (!DA.GetData(0, ref v)) return;
+                if (!DA.GetData(1, ref ang)) return;
+
+                DA.SetData(0, new ActionRotation(new Rotation(v.X, v.Y, v.Z, ang), true));
+            }
+            else
+            {
+                Plane pl = Plane.Unset;
+
+                if (!DA.GetData(0, ref pl)) return;
+
+                DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+            }
+        }
+
+
+        /// <summary>
+        /// Add the Rel/Abs option tag.
+        /// </summary>
+        /// <param name="menu"></param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalComponentMenuItems(menu);
+
+            var checkbox = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.relative);
+            checkbox.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
+        }
+
+        /// <summary>
+        /// Event handler for the menu item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void AbsoluteToggle(Object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item == null) return;
+
+            //item.Checked = !item.Checked;  // no need for the Check (and I don't even think it worked), the WPF element is linked to the variable
+            this.relative = !this.relative;
+
+            // Update (and redraw? this component
+            this.UpdateInputParameters();
+            this.UpdateMessage();
+            this.ExpireSolution(true);
+        }
+
+        /// <summary>
+        /// Update the message tab under the component
+        /// </summary>
+        protected void UpdateMessage() => this.Message = this.relative ? "Relative" : "Absolute";
+
+        /// <summary>
+        /// This was really helpful: https://discourse.mcneel.com/t/replicating-explode-tree-bang-component-in-ghpython/39221/15
+        /// </summary>
+        protected void UpdateInputParameters()
+        {
+            // Will we have list problems here? 
+            //this.Params.Input.ForEach(param => this.Params.UnregisterInputParameter(param, true));  
+
+            for (var i = this.Params.Input.Count - 1; i >= 0; i--)
+            {
+                var param = this.Params.Input[i];
+                this.Params.UnregisterInputParameter(param, true);  // what is isolate?
+            }
+
+
+            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Remainign params: " + this.Params.Input.Count);
+
+            if (this.relative)
+            {
+                var vec = new Grasshopper.Kernel.Parameters.Param_Vector();
+                vec.Access = GH_ParamAccess.item;
+                this.Params.RegisterInputParam(vec);
+
+                var ang = new Grasshopper.Kernel.Parameters.Param_Number();
+                ang.Access = GH_ParamAccess.item;
+                this.Params.RegisterInputParam(ang);
+            } 
+            else
+            {
+                var pln = new Grasshopper.Kernel.Parameters.Param_Plane();
+                pln.Access = GH_ParamAccess.item;
+                this.Params.RegisterInputParam(pln);
+            }
+
+            this.Params.OnParametersChanged();
+            this.UpdateInputNames();
+        }
+
+        /// <summary>
+        /// Takes care of updating the input to the correct name
+        /// </summary>
+        protected void UpdateInputNames()
+        {
+            if (this.relative)
+            {
+                var vec = this.Params.Input[0];
+                vec.Name = "Axis";
+                vec.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Axis" : "V";
+                vec.Description = "Rotation axis, with positive rotation direction is defined by the right-hand rule.";
+
+                var ang = this.Params.Input[1];
+                ang.Name = "Angle";
+                ang.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Angle" : "A";
+                ang.Description = "Rotation angle in degrees";
+            }
+            else
+            {
+                var pln = this.Params.Input[0];
+                pln.Name = "Plane";
+                pln.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Plane" : "Pl";
+                pln.Description = "Target spatial orientation";
+            }
+        }
+
+        /// <summary>
+        /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
+        /// </summary>
+        private void OnCanvasFullNamesChanged() => UpdateInputNames();
+    }
+
+
+
+
+
+    //public class Rotate : GH_Component
+    //{
+    //    public Rotate() : base(
+    //        "Rotate",
+    //        "Rotate",
+    //        "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
+    //        "Machina",
+    //        "Actions")
+    //    { }
+    //    public override GH_Exposure Exposure => GH_Exposure.primary;
+    //    public override Guid ComponentGuid => new Guid("db2e3c56-5973-4f07-8d6a-ba31c659704d");
+    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+
+    //    protected override void RegisterInputParams(GH_InputParamManager pManager)
+    //    {
+    //        pManager.AddVectorParameter("Axis", "V", "Rotation axis (positive rotation direction is defined by the right-hand rule).", GH_ParamAccess.item, Vector3d.XAxis);
+    //        pManager.AddNumberParameter("Angle", "A", "Rotation angle in degrees", GH_ParamAccess.item, 0);
+    //    }
+
+    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+    //    {
+    //        pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
+    //    }
+
+    //    protected override void SolveInstance(IGH_DataAccess DA)
+    //    {
+    //        Vector3d v = Vector3d.Zero;
+    //        double ang = 0;
+
+    //        if (!DA.GetData(0, ref v)) return;
+    //        if (!DA.GetData(1, ref ang)) return;
+
+    //        DA.SetData(0, new ActionRotation(new Rotation(v.X, v.Y, v.Z, ang), true));
+    //    }
+    //}
+
+    //public class RotateTo : GH_Component
+    //{
+    //    public RotateTo() : base(
+    //        "RotateTo",
+    //        "RotateTo",
+    //        "Rotate the devices to an absolute orientation defined by the two main X and Y axes of specified Plane.",
+    //        "Machina",
+    //        "Actions")
+    //    { }
+    //    public override GH_Exposure Exposure => GH_Exposure.hidden;
+    //    public override Guid ComponentGuid => new Guid("9410b629-1016-486f-8464-85ecfd9500f7");
+    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+
+    //    protected override void RegisterInputParams(GH_InputParamManager pManager)
+    //    {
+    //        pManager.AddPlaneParameter("Plane", "P", "Target spatial orientation", GH_ParamAccess.item, Plane.WorldXY);
+    //    }
+
+    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+    //    {
+    //        pManager.AddGenericParameter("Action", "A", "RotateTo Action", GH_ParamAccess.item);
+    //    }
+
+    //    protected override void SolveInstance(IGH_DataAccess DA)
+    //    {
+    //        Plane pl = Plane.Unset;
+
+    //        if (!DA.GetData(0, ref pl)) return;
+
+    //        DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+    //    }
+    //}
 
 
 

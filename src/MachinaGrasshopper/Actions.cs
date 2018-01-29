@@ -29,8 +29,13 @@ namespace MachinaGrasshopper
     //  ██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ███████╗
     //  ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝
     //                                       
-    public class Move : GH_Component
+    public class Move : GH_Component//, IGH_VariableParameterComponent
     {
+        /// <summary>
+        /// Relative Action?
+        /// </summary>
+        private bool relative = false;
+        
         public Move() : base(
             "Move",
             "Move",
@@ -44,11 +49,13 @@ namespace MachinaGrasshopper
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Target", "T", "Target Point or Translation vector", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
 
+            // Do some tricks with the names of the mutable input (is this the right place to put this?)
+            Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
             this.UpdateMessage();
         }
-
+        
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Action", "A", "Move Action", GH_ParamAccess.item);
@@ -99,35 +106,107 @@ namespace MachinaGrasshopper
             }
 
         }
-
+        
+        /// <summary>
+        /// Add the Rel/Abs option tag
+        /// </summary>
+        /// <param name="menu"></param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);
 
-            checkbox = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.relative);
+            var checkbox = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.relative);
             checkbox.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
         }
 
-        ToolStripMenuItem checkbox;
-        bool relative = false;
-
+        /// <summary>
+        /// Event handler for the menu item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void AbsoluteToggle(Object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (item == null) return;
 
             //item.Checked = !item.Checked;  // no need for the Check (and I don't even think it worked), the WPF element is linked to the variable
-            this.relative = !this.relative;  
-
+            this.relative = !this.relative;
+            
+            // Update (and redraw? this component
+            this.UpdateInputNames();
             this.UpdateMessage();
             this.ExpireSolution(true);
         }
 
-        protected void UpdateMessage()
+        /// <summary>
+        /// Update the message tab under the component
+        /// </summary>
+        protected void UpdateMessage() => this.Message = this.relative ? "Relative" : "Absolute";
+
+        /// <summary>
+        /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
+        /// </summary>
+        private void OnCanvasFullNamesChanged() => UpdateInputNames();
+
+        /// <summary>
+        /// Takes care of updating the input to the correct name
+        /// </summary>
+        protected void UpdateInputNames()
         {
-            this.Message = this.relative ? "Relative" : "Absolute";
+            // Since the input is Generic, no need to do Parameter changes, just change its face
+            var param = this.Params.Input[0];
+            if (this.relative)
+            {
+                param.Name = "Vector";
+                param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
+                param.Description = "Translation Vector";
+            }
+            else
+            {
+                param.Name = "Point";
+                param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
+                param.Description = "Target Point";
+            }
         }
 
+        
+        // THIS IS FOR COMPONENTS WHERE THE USER CAN ADD PARAMETERS MANUALY (ZOOM IN AND STUFF) 
+
+        //public bool CanInsertParameter(GH_ParameterSide side, int index)
+        //{
+        //    // Users cannot manually add params
+        //    return false;
+        //}
+
+        //public bool CanRemoveParameter(GH_ParameterSide side, int index)
+        //{
+        //    // Users cannot manually remove params
+        //    return false;
+        //}
+
+        //public IGH_Param CreateParameter(GH_ParameterSide side, int index)
+        //{
+        //    //throw new NotImplementedException();
+        //    //this.Params.RegisterInputParam()
+        //    var p = new Grasshopper.Kernel.Parameters.Param_Point();
+        //    p.Name = "P";
+        //    p.NickName = "Point";
+        //    p.Description = "fooabrbaz";
+        //    p.Access = GH_ParamAccess.item;
+        //    this.Params.RegisterInputParam(p, index);
+        //    return null;
+        //}
+
+        //public bool DestroyParameter(GH_ParameterSide side, int index)
+        //{
+        //    //throw new NotImplementedException();
+        //    return true;
+        //}
+
+        //public void VariableParameterMaintenance()
+        //{
+        //    //throw new NotImplementedException();
+        //}
     }
 
 

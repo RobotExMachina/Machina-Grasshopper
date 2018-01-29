@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graveyard\Graveyard.cs" />
+    <Compile Include="MACHINA_MutableInputParamManager.cs" />
     <Compile Include="Programs.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -93,7 +94,6 @@
     <Content Include="Resources\Icons\Actions.Comment.png" />
     <Content Include="Resources\Icons\Actions.Detach.png" />
     <Content Include="Resources\Icons\Actions.Extrude.png" />
-    <Content Include="Resources\Icons\Actions.FeedRate.png" />
     <Content Include="Resources\Icons\Actions.Message.png" />
     <Content Include="Resources\Icons\Actions.MotionType.png" />
     <Content Include="Resources\Icons\Actions.Move.png" />

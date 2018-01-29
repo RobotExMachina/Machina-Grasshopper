@@ -5,6 +5,10 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using Machina;
 using System.Windows.Forms;
+using Grasshopper.Kernel.Parameters;
+using GH_IO.Serialization;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace MachinaGrasshopper
 {
@@ -19,142 +23,234 @@ namespace MachinaGrasshopper
     /// All Action-generator components
     /// </summary>
 
-        
 
-    //  ███╗   ███╗ ██████╗ ██╗   ██╗███████╗
-    //  ████╗ ████║██╔═══██╗██║   ██║██╔════╝
-    //  ██╔████╔██║██║   ██║██║   ██║█████╗  
-    //  ██║╚██╔╝██║██║   ██║╚██╗ ██╔╝██╔══╝  
-    //  ██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ███████╗
-    //  ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝
-    //                                       
-    public class Move : GH_Component
+
+    public abstract class GH_MiddleWare : GH_Component
     {
-        /// <summary>
-        /// Relative Action?
-        /// </summary>
-        private bool relative = false;
-        
-        public Move() : base(
-            "Move",
-            "Move",
+        public abstract bool Foo { get; }
+
+        public GH_MiddleWare(string s1, string s2, string s3, string s4, string s5) : base(s1, s2, s3, s4, s5) { }
+
+
+    }
+
+    public class NewMove : GH_MiddleWare
+    {
+
+        // This will be the base names that will be used on the component's description on the ribbon
+        public NewMove() : base(
+            "NewMove",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
+            "NewMove",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
             "Moves the device to an absolute location or along a speficied vector relative to its current position.",
             "Machina",
             "Actions")
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
-        public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
+        public override Guid ComponentGuid => new Guid("882d97de-6b55-468d-83f3-cbd03d62336f");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_PopSettings;
+        
+        public override bool Foo { get { return true;} }
 
+        
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
-
-            // Do some tricks with the names of the mutable input (is this the right place to put this?)
-            Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
-            this.UpdateMessage();
+            pManager.AddTextParameter("msg", "M", "create a msg", GH_ParamAccess.item);
         }
-        
+
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Action", "A", "Move Action", GH_ParamAccess.item);
+            pManager.AddTextParameter("greeting", "S", "the msg", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            object obj = null;
+            string name = "";
+            if (!DA.GetData(0, ref name)) return;
 
-            if (!DA.GetData(0, ref obj)) return;
-            if (obj == null) return;
-           
-            // Be verbose about data types
-            if (obj is GH_Point)
-            {
-                if (this.relative)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Point in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Point as a Vector for relative motion.");
-                }
-                GH_Point p = obj as GH_Point;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.relative));
-            }
-
-            else if (obj is GH_Plane)
-            {
-                if (this.relative)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Plane in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Plane's origin Point as a Vector for relative motion.");
-                }
-                GH_Plane p = obj as GH_Plane;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.OriginX, p.Value.OriginY, p.Value.OriginZ), this.relative));
-            }
-
-            else if (obj is GH_Vector)
-            {
-                if (!this.relative)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Vector in Absolute mode, did you mean to work in Relative mode instead? This Move action will take the Vector's coordinates as the target Point for absolute motion.");
-                }
-                GH_Vector p = obj as GH_Vector;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.relative));
-            }
-
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"ERROR: Can't take {obj.GetType()} as argument for a Move action; please use Point, Vector or Plane.");
-                //DA.SetData(0, null);  // not necessary
-            }
-
+            DA.SetData(0, $"Hello {name}!");
         }
-        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public abstract class MACHINA_AbsRelMutableComponent : GH_Component
+    {
         /// <summary>
-        /// Add the Rel/Abs option tag
+        /// Bounce construction one level up.
         /// </summary>
-        /// <param name="menu"></param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            base.AppendAdditionalComponentMenuItems(menu);
-
-            var checkbox = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.relative);
-            checkbox.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
-        }
+        public MACHINA_AbsRelMutableComponent(string name, string nickname, string description, string categories, string subCategory) :
+            base(name, nickname, description, categories, subCategory)
+        { }
 
         /// <summary>
-        /// Event handler for the menu item.
+        /// Relative Action?
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void AbsoluteToggle(Object sender, EventArgs e)
+        public bool Relative
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            if (item == null) return;
+            get { return m_relative; }
+            set
+            {
+                m_relative = value;
+                this.Message = m_relative ? "Absolute" : "Relative";
+                this.UpdateComponentNames();
+                this.UpdateInputParameters();
+                //this.UpdateInputNames();  // comes with updateInputParameters
+                this.ExpireSolution(true);
+            }
+        }
+        private bool m_relative = false;
 
-            //item.Checked = !item.Checked;  // no need for the Check (and I don't even think it worked), the WPF element is linked to the variable
-            this.relative = !this.relative;
-            
-            // Update (and redraw? this component
+        public MACHINA_MutableInputParamManager mpManager = new MACHINA_MutableInputParamManager();
+
+
+
+
+        /// <summary>
+        /// This was quite helpful: https://discourse.mcneel.com/t/replicating-explode-tree-bang-component-in-ghpython/39221/15
+        /// </summary>
+        protected void UpdateInputParameters()
+        {
+            //for (var i = this.Params.Input.Count - 1; i >= 0; i--)
+            //{
+            //    var param = this.Params.Input[i];
+            //    this.Params.UnregisterInputParameter(param, true);  // what is isolate?
+            //}
+
+            //if (this.Relative)
+            //{
+            //    var vec = new Grasshopper.Kernel.Parameters.Param_Vector();
+            //    vec.Access = GH_ParamAccess.item;
+            //    this.Params.RegisterInputParam(vec);
+
+            //    var ang = new Grasshopper.Kernel.Parameters.Param_Number();
+            //    ang.Access = GH_ParamAccess.item;
+            //    this.Params.RegisterInputParam(ang);
+            //}
+            //else
+            //{
+            //    var pln = new Grasshopper.Kernel.Parameters.Param_Plane();
+            //    pln.Access = GH_ParamAccess.item;
+            //    this.Params.RegisterInputParam(pln);
+
+            //}
+
+            //this.Params.OnParametersChanged();
+            //this.UpdateInputNames();
+
+
+
+
+
+
+
+            //// If shallow mutation, skip to just changing names
+            //if (!this.ShallowInputMutation)
+            //{
+            //    this.UnregisterAllInputs();
+
+            //    var inputs = mpManager.inputs[this.Relative];
+            //    foreach (var input in inputs)
+            //    {
+            //        try
+            //        {
+            //            // Wow, this is abstract... https://stackoverflow.com/a/3255716/1934487 and https://stackoverflow.com/a/142362/1934487
+            //            ConstructorInfo ctor = input.dataType.GetConstructor(Type.EmptyTypes);
+            //            var p = ctor.Invoke(new object[0]) as IGH_Param;  // or null instead of new object[0]?
+            //            p.Access = input.access;
+            //            this.Params.RegisterInputParam(p);  // is p taken as IGH_Param or as its subclass due to ctor?
+            //        }
+            //        catch
+            //        {
+            //            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong when registering inputs...");
+            //        }
+
+            //    }
+
+            //    this.Params.OnParametersChanged();
+            //}
+
+
+
+
+
+
             this.UpdateInputNames();
-            this.UpdateMessage();
-            this.ExpireSolution(true);
         }
 
-        /// <summary>
-        /// Update the message tab under the component
-        /// </summary>
-        protected void UpdateMessage() => this.Message = this.relative ? "Relative" : "Absolute";
+        protected void UnregisterAllInputs()
+        {
+            for (var i = this.Params.Input.Count - 1; i > -0; i++)
+            {
+                var param = this.Params.Input[i];
+                this.Params.UnregisterInputParameter(param, true);  // what is isolate??
+            }
+        }
+
 
         /// <summary>
-        /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
-        /// </summary>
-        private void OnCanvasFullNamesChanged() => UpdateInputNames();
-
-        /// <summary>
-        /// Takes care of updating the input to the correct name
+        /// Takes care of updating the input parameters' names according to the current abs/rel state.
         /// </summary>
         protected void UpdateInputNames()
         {
+            //if (this.Relative)
+            //{
+            //    var vec = this.Params.Input[0];
+            //    vec.Name = "Axis";
+            //    vec.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Axis" : "V";
+            //    vec.Description = "Rotation axis, with positive rotation direction is defined by the right-hand rule.";
+
+            //    var ang = this.Params.Input[1];
+            //    ang.Name = "Angle";
+            //    ang.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Angle" : "A";
+            //    ang.Description = "Rotation angle in degrees";
+            //}
+            //else
+            //{
+            //    var pln = this.Params.Input[0];
+            //    pln.Name = "Plane";
+            //    pln.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Plane" : "Pl";
+            //    pln.Description = "Target spatial orientation";
+            //}
+
+
+
+
+
+
+            //if (this.Params.Input.Count != mpManager.inputs[this.Relative].Count)
+            //    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong with UpdateInputNames");
+
+            //IGH_Param p;
+            //int it = 0;
+            //foreach (var pProps in mpManager.inputs[this.Relative])
+            //{
+            //    p = this.Params.Input[it];
+            //    p.Name = pProps.name;
+            //    p.NickName = Grasshopper.CentralSettings.CanvasFullNames ? pProps.name : pProps.nickname;  // Workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
+            //    p.Description = pProps.description;
+            //}
+
+
             // Since the input is Generic, no need to do Parameter changes, just change its face
             var param = this.Params.Input[0];
-            if (this.relative)
+            if (this.Relative)
             {
                 param.Name = "Vector";
                 param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
@@ -166,86 +262,331 @@ namespace MachinaGrasshopper
                 param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
                 param.Description = "Target Point";
             }
+
         }
-        
+
+        /// <summary>
+        /// Takes care of updating the component name on the document to match the Core API depending on abs/rel state.
+        /// </summary>
+        protected void UpdateComponentNames()
+        {
+            //// Since the input is Generic, no need to do Parameter changes, just change its face
+            //var param = this.Params.Input[0];
+            //if (this.Relative)
+            //{
+            //    param.Name = "Vector";
+            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
+            //    param.Description = "Translation Vector";
+
+            //    // Change the face of the component name to match the Core library
+            //    this.Name = "Move";
+            //    this.NickName = "Move";
+            //}
+            //else
+            //{
+            //    param.Name = "Point";
+            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
+            //    param.Description = "Target Point";
+
+            //    this.Name = "MoveTo";
+            //    this.NickName = "MoveTo";
+            //}
+
+
+
+
+
+            //var label = mpManager.componentNames[this.Relative];
+
+            //if (label != null)
+            //{
+            //    this.Name = label.name;
+            //    this.NickName = label.nickname;
+            //    this.Description = label.description;
+            //}
+
+
+
+
+
+            if (this.Relative)
+            {
+                this.Name = "Move";
+                this.NickName = "Move";
+            }
+            else
+            {
+                this.Name = "MoveTo";
+                this.NickName = "MoveTo";
+            }
+
+        }
+
     }
 
 
 
 
 
-    //  ██████╗  ██████╗ ████████╗ █████╗ ████████╗███████╗
-    //  ██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
-    //  ██████╔╝██║   ██║   ██║   ███████║   ██║   █████╗  
-    //  ██╔══██╗██║   ██║   ██║   ██╔══██║   ██║   ██╔══╝  
-    //  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ███████╗
-    //  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-    //                                                     
-    public class Rotate : GH_Component
+
+
+
+
+
+
+
+
+
+
+    //  ███╗   ███╗ ██████╗ ██╗   ██╗███████╗
+    //  ████╗ ████║██╔═══██╗██║   ██║██╔════╝
+    //  ██╔████╔██║██║   ██║██║   ██║█████╗  
+    //  ██║╚██╔╝██║██║   ██║╚██╗ ██╔╝██╔══╝  
+    //  ██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ███████╗
+    //  ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝
+    //                                       
+    public class Move : MACHINA_AbsRelMutableComponent
     {
+
         /// <summary>
         /// Relative Action?
         /// </summary>
-        private bool relative = false;
+        //private bool relative = false;  // moved to base class
 
-        public Rotate() : base(
-            "Rotate",
-            "Rotate",
-            "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
+        // This will be the base names that will be used on the component's description on the ribbon
+        public Move() : base(
+            "Move",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
+            "Move",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
+            "Moves the device to an absolute location or along a speficied vector relative to its current position.",
             "Machina",
             "Actions")
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
-        public override Guid ComponentGuid => new Guid("c48d908d-3e0d-4600-90de-1330b9dc7973");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+        public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_WriteDigital;
+
+        protected void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
+        {
+            // Relative
+            mpManager.AddComponentNames(false, "MoveTo", "MoveTo", "Moves the device to an absolute location.");
+            mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
+
+            // Absolute
+            mpManager.AddComponentNames(true, "Move", "Move", "Moves the device along a speficied vector relative to its current position.");
+            mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
+
+        }
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Target spatial orientation", GH_ParamAccess.item);
+            // Let the user fill in the data
+            this.RegisterMutableInputParams(this.mpManager);
 
+            //// If the inputs mutate shallowy (no real param replacement), check they share count and types
+            //if (this.ShallowInputMutation)
+            //{
+            //    if (mpManager.inputs[true].Count != mpManager.inputs[false].Count)
+            //        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same number of inputs in both modes.");
+
+            //    for (var i = 0; i < mpManager.inputs[true].Count; i++)
+            //    {
+            //        if (mpManager.inputs[true][i].dataType != mpManager.inputs[false][i].dataType)
+            //            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same types in both modes.");
+            //    }
+            //}
+
+            //// Add each parameter using the mapped function from pManager
+            //foreach (var input in mpManager.inputs[this.Relative]) AddParameterFunctionMap[input.dataType](pManager, input);
+
+
+
+
+            pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
+
+            // Do some tricks with the names of the mutable input (is this the right place to put this?)
             Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
-            this.UpdateMessage();
+
+            //this.UpdateComponentNames();  // this makes the component read MoveTo on the catergory tab
+            this.Relative = false;
         }
+
+        //protected bool ShallowInputMutation => true;  // parameters will not change (and wires not disconnected), only change the names
+
+        //protected override void RegisterInputParams(GH_InputParamManager pManager)
+        //{
+        //    pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
+
+        //    // Do some tricks with the names of the mutable input (is this the right place to put this?)
+        //    Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
+
+        //    //this.UpdateComponentNames();  // this makes the component read MoveTo on the catergory tab
+        //    this.Relative = false;
+        //}
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Action", "A", "Move Action", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            if (this.relative)
+            object obj = null;
+
+            if (!DA.GetData(0, ref obj)) return;
+            if (obj == null) return;
+
+            // Be verbose about data types
+            if (obj is GH_Point)
             {
-                Vector3d v = Vector3d.Zero;
-                double ang = 0;
-
-                if (!DA.GetData(0, ref v)) return;
-                if (!DA.GetData(1, ref ang)) return;
-
-                DA.SetData(0, new ActionRotation(new Machina.Rotation(v.X, v.Y, v.Z, ang), true));
+                if (this.Relative)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Point in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Point as a Vector for relative motion.");
+                }
+                GH_Point p = obj as GH_Point;
+                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
             }
+
+            else if (obj is GH_Plane)
+            {
+                if (this.Relative)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Plane in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Plane's origin Point as a Vector for relative motion.");
+                }
+                GH_Plane p = obj as GH_Plane;
+                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.OriginX, p.Value.OriginY, p.Value.OriginZ), this.Relative));
+            }
+
+            else if (obj is GH_Vector)
+            {
+                if (!this.Relative)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Vector in Absolute mode, did you mean to work in Relative mode instead? This Move action will take the Vector's coordinates as the target Point for absolute motion.");
+                }
+                GH_Vector p = obj as GH_Vector;
+                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
+            }
+
             else
             {
-                Plane pl = Plane.Unset;
-
-                if (!DA.GetData(0, ref pl)) return;
-
-                DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"ERROR: Can't take {obj.GetType()} as argument for a Move action; please use Point, Vector or Plane.");
+                //DA.SetData(0, null);  // not necessary
             }
+
+            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Hi there! {this.RunCount}");
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        
+
+        // Serialize the Relative attribute for correct
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Relative", Relative);
+            return base.Write(writer);
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            Relative = reader.GetBoolean("Relative");
+            return base.Read(reader);
+        }
+
+        //protected abstract void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager);
+
+        //protected abstract bool ShallowInputMutation { get; }
+
+
+        //protected static readonly Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>> AddParameterFunctionMap =
+        //    new Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>>()
+        //{
+        //    //{ typeof (),                        (pm, p) => pm.AddAngleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Arc),               (pm, p) => pm.AddArcParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Boolean),           (pm, p) => pm.AddBooleanParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Box),               (pm, p) => pm.AddBoxParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Brep),              (pm, p) => pm.AddBrepParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Circle),            (pm, p) => pm.AddCircleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Colour),            (pm, p) => pm.AddColourParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Complex),           (pm, p) => pm.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Culture),           (pm, p) => pm.AddCultureParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Curve),             (pm, p) => pm.AddCurveParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Field),             (pm, p) => pm.AddFieldParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_GenericObject),     (pm, p) => pm.AddGenericParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Geometry),          (pm, p) => pm.AddGeometryParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Group),             (pm, p) => pm.AddGroupParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Integer),           (pm, p) => pm.AddIntegerParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Interval2D),        (pm, p) => pm.AddInterval2DParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Interval),          (pm, p) => pm.AddIntervalParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Line),              (pm, p) => pm.AddLineParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Matrix),            (pm, p) => pm.AddMatrixParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_MeshFace),          (pm, p) => pm.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Mesh),              (pm, p) => pm.AddMeshParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Number),            (pm, p) => pm.AddNumberParameter(p.name, p.nickname, p.description, p.access) },
+        //    //{ typeof (),                        (pm, p) => pm.AddParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_FilePath),          (pm, p) => pm.AddPathParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Plane),             (pm, p) => pm.AddPlaneParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Point),             (pm, p) => pm.AddPointParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Rectangle),         (pm, p) => pm.AddRectangleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_ScriptVariable),    (pm, p) => pm.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Surface),           (pm, p) => pm.AddSurfaceParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_String),            (pm, p) => pm.AddTextParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Time),              (pm, p) => pm.AddTimeParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Time),              (pm, p) => pm.AddTransformParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Vector),            (pm, p) => pm.AddVectorParameter(p.name, p.nickname, p.description, p.access) }
+        //};
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
         /// <summary>
-        /// Add the Rel/Abs option tag.
+        /// Trigger change in the face of the component name to match the Machina Core API. 
+        /// </summary>
+        /// <param name="document"></param>
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            this.UpdateComponentNames();
+        }
+
+
+
+        /// <summary>
+        /// Add the Rel/Abs option tag. Is executed on first right-click on the component.
         /// </summary>
         /// <param name="menu"></param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);
 
-            var checkbox = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.relative);
-            checkbox.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
+            var item = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.Relative);
+            item.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
         }
+
 
         /// <summary>
         /// Event handler for the menu item.
@@ -257,86 +598,101 @@ namespace MachinaGrasshopper
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (item == null) return;
 
-            //item.Checked = !item.Checked;  // no need for the Check (and I don't even think it worked), the WPF element is linked to the variable
-            this.relative = !this.relative;
-
-            // Update (and redraw? this component
-            this.UpdateInputParameters();
-            this.UpdateMessage();
-            this.ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Update the message tab under the component
-        /// </summary>
-        protected void UpdateMessage() => this.Message = this.relative ? "Relative" : "Absolute";
-
-        /// <summary>
-        /// This was really helpful: https://discourse.mcneel.com/t/replicating-explode-tree-bang-component-in-ghpython/39221/15
-        /// </summary>
-        protected void UpdateInputParameters()
-        {
-            for (var i = this.Params.Input.Count - 1; i >= 0; i--)
-            {
-                var param = this.Params.Input[i];
-                this.Params.UnregisterInputParameter(param, true);  // what is isolate?
-            }
-
-
-            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Remainign params: " + this.Params.Input.Count);
-
-            if (this.relative)
-            {
-                var vec = new Grasshopper.Kernel.Parameters.Param_Vector();
-                vec.Access = GH_ParamAccess.item;
-                this.Params.RegisterInputParam(vec);
-
-                var ang = new Grasshopper.Kernel.Parameters.Param_Number();
-                ang.Access = GH_ParamAccess.item;
-                this.Params.RegisterInputParam(ang);
-            } 
-            else
-            {
-                var pln = new Grasshopper.Kernel.Parameters.Param_Plane();
-                pln.Access = GH_ParamAccess.item;
-                this.Params.RegisterInputParam(pln);
-            }
-
-            this.Params.OnParametersChanged();
-            this.UpdateInputNames();
-        }
-
-        /// <summary>
-        /// Takes care of updating the input to the correct name
-        /// </summary>
-        protected void UpdateInputNames()
-        {
-            if (this.relative)
-            {
-                var vec = this.Params.Input[0];
-                vec.Name = "Axis";
-                vec.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Axis" : "V";
-                vec.Description = "Rotation axis, with positive rotation direction is defined by the right-hand rule.";
-
-                var ang = this.Params.Input[1];
-                ang.Name = "Angle";
-                ang.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Angle" : "A";
-                ang.Description = "Rotation angle in degrees";
-            }
-            else
-            {
-                var pln = this.Params.Input[0];
-                pln.Name = "Plane";
-                pln.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Plane" : "Pl";
-                pln.Description = "Target spatial orientation";
-            }
+            this.RecordUndoEvent("Relative");
+            this.Relative = !this.Relative;
         }
 
         /// <summary>
         /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
         /// </summary>
-        private void OnCanvasFullNamesChanged() => UpdateInputNames();
+        private void OnCanvasFullNamesChanged() => this.UpdateInputNames();
     }
+
+
+
+
+
+    ////  ██████╗  ██████╗ ████████╗ █████╗ ████████╗███████╗
+    ////  ██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+    ////  ██████╔╝██║   ██║   ██║   ███████║   ██║   █████╗  
+    ////  ██╔══██╗██║   ██║   ██║   ██╔══██║   ██║   ██╔══╝  
+    ////  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ███████╗
+    ////  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+    ////                                                     
+    //public class Rotate : MACHINA_AbsRelMutableComponent
+    //{
+    //    /// <summary>
+    //    /// Relative Action?
+    //    /// </summary>
+    //    //private bool relative = false;
+
+
+    //    public Rotate() : base(
+    //        "Rotate",
+    //        "Rotate",
+    //        "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
+    //        "Machina",
+    //        "Actions")
+    //    { }
+    //    public override GH_Exposure Exposure => GH_Exposure.primary;
+    //    public override Guid ComponentGuid => new Guid("c48d908d-3e0d-4600-90de-1330b9dc7973");
+    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+
+    //    protected override void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
+    //    {
+    //        // Relative
+    //        mpManager.AddComponentNames(false, "RotateTo", "RotateTo", "Rotates the device to a specified orientation.");
+    //        mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "Pl", "Target spatial orientation.", GH_ParamAccess.item);
+
+    //        // Absolute
+    //        mpManager.AddComponentNames(true, "Rotate", "Rotate", "Rotates the device a specified angle in degrees along the specified vector.");
+    //        mpManager.AddParameter(true, typeof(Param_Vector), "Axis", "V", "Rotation axis, with positive rotation direction is defined by the right-hand rule.", GH_ParamAccess.item);
+    //        mpManager.AddParameter(true, typeof(Param_Number), "Angle", "A", "Rotation angle in degrees.", GH_ParamAccess.item);
+
+    //    }
+
+    //    protected override bool ShallowInputMutation() => false;  // parameters will not change (and wires not disconnected), only change the names
+
+    //    //protected override void RegisterInputParams(GH_InputParamManager pManager)
+    //    //{
+    //    //    pManager.AddPlaneParameter("Plane", "P", "Target spatial orientation", GH_ParamAccess.item);
+
+    //    //    Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
+    //    //    this.UpdateMessage();
+    //    //}
+
+    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+    //    {
+    //        pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
+    //    }
+
+    //    protected override void SolveInstance(IGH_DataAccess DA)
+    //    {
+    //        if (this.Relative)
+    //        {
+    //            Vector3d v = Vector3d.Zero;
+    //            double ang = 0;
+
+    //            if (!DA.GetData(0, ref v)) return;
+    //            if (!DA.GetData(1, ref ang)) return;
+
+    //            DA.SetData(0, new ActionRotation(new Machina.Rotation(v.X, v.Y, v.Z, ang), true));
+    //        }
+    //        else
+    //        {
+    //            Plane pl = Plane.Unset;
+
+    //            if (!DA.GetData(0, ref pl)) return;
+
+    //            DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+    //        }
+    //    }
+
+
+
+
+
+    //}
 
 
 
@@ -422,7 +778,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_MotionType;
 

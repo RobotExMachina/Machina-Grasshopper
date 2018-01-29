@@ -15,8 +15,8 @@ namespace MachinaGrasshopper
         public MACHINA_MutableInputParamManager()
         {
             inputs = new Dictionary<bool, List<MACHINA_InputParameteProperties>>();
-            componentNames = new Dictionary<bool, MACHINA_ComponentNames>();
             this.ClearInputParams();
+            componentNames = new Dictionary<bool, MACHINA_ComponentNames>();
         }
         
         public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access)

@@ -296,29 +296,29 @@ namespace MachinaGrasshopper
 
 
 
-            //var label = mpManager.componentNames[this.Relative];
+            var label = mpManager.componentNames[this.Relative];
 
-            //if (label != null)
+            if (label != null)
+            {
+                this.Name = label.name;
+                this.NickName = label.nickname;
+                this.Description = label.description;
+            }
+
+
+
+
+
+            //if (this.Relative)
             //{
-            //    this.Name = label.name;
-            //    this.NickName = label.nickname;
-            //    this.Description = label.description;
+            //    this.Name = "Move";
+            //    this.NickName = "Move";
             //}
-
-
-
-
-
-            if (this.Relative)
-            {
-                this.Name = "Move";
-                this.NickName = "Move";
-            }
-            else
-            {
-                this.Name = "MoveTo";
-                this.NickName = "MoveTo";
-            }
+            //else
+            //{
+            //    this.Name = "MoveTo";
+            //    this.NickName = "MoveTo";
+            //}
 
         }
 
@@ -363,17 +363,17 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_WriteDigital;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
 
         protected void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
         {
             // Relative
             mpManager.AddComponentNames(false, "MoveTo", "MoveTo", "Moves the device to an absolute location.");
-            mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
+            //mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
 
             // Absolute
             mpManager.AddComponentNames(true, "Move", "Move", "Moves the device along a speficied vector relative to its current position.");
-            mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
+            //mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
 
         }
 
@@ -403,6 +403,10 @@ namespace MachinaGrasshopper
 
             pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
 
+
+
+
+
             // Do some tricks with the names of the mutable input (is this the right place to put this?)
             Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
 
@@ -410,7 +414,7 @@ namespace MachinaGrasshopper
             this.Relative = false;
         }
 
-        //protected bool ShallowInputMutation => true;  // parameters will not change (and wires not disconnected), only change the names
+        protected bool ShallowInputMutation => true;  // parameters will not change (and wires not disconnected), only change the names
 
         //protected override void RegisterInputParams(GH_InputParamManager pManager)
         //{
@@ -512,43 +516,43 @@ namespace MachinaGrasshopper
         //protected abstract bool ShallowInputMutation { get; }
 
 
-        //protected static readonly Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>> AddParameterFunctionMap =
-        //    new Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>>()
-        //{
-        //    //{ typeof (),                        (pm, p) => pm.AddAngleParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Arc),               (pm, p) => pm.AddArcParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Boolean),           (pm, p) => pm.AddBooleanParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Box),               (pm, p) => pm.AddBoxParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Brep),              (pm, p) => pm.AddBrepParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Circle),            (pm, p) => pm.AddCircleParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Colour),            (pm, p) => pm.AddColourParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Complex),           (pm, p) => pm.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Culture),           (pm, p) => pm.AddCultureParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Curve),             (pm, p) => pm.AddCurveParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Field),             (pm, p) => pm.AddFieldParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_GenericObject),     (pm, p) => pm.AddGenericParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Geometry),          (pm, p) => pm.AddGeometryParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Group),             (pm, p) => pm.AddGroupParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Integer),           (pm, p) => pm.AddIntegerParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Interval2D),        (pm, p) => pm.AddInterval2DParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Interval),          (pm, p) => pm.AddIntervalParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Line),              (pm, p) => pm.AddLineParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Matrix),            (pm, p) => pm.AddMatrixParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_MeshFace),          (pm, p) => pm.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Mesh),              (pm, p) => pm.AddMeshParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Number),            (pm, p) => pm.AddNumberParameter(p.name, p.nickname, p.description, p.access) },
-        //    //{ typeof (),                        (pm, p) => pm.AddParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_FilePath),          (pm, p) => pm.AddPathParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Plane),             (pm, p) => pm.AddPlaneParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Point),             (pm, p) => pm.AddPointParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Rectangle),         (pm, p) => pm.AddRectangleParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_ScriptVariable),    (pm, p) => pm.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Surface),           (pm, p) => pm.AddSurfaceParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_String),            (pm, p) => pm.AddTextParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Time),              (pm, p) => pm.AddTimeParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Time),              (pm, p) => pm.AddTransformParameter(p.name, p.nickname, p.description, p.access) },
-        //    { typeof (Param_Vector),            (pm, p) => pm.AddVectorParameter(p.name, p.nickname, p.description, p.access) }
-        //};
+        protected static readonly Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>> AddParameterFunctionMap =
+            new Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>>()
+        {
+            //{ typeof (),                        (pm, p) => pm.AddAngleParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Arc),               (pm, p) => pm.AddArcParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Boolean),           (pm, p) => pm.AddBooleanParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Box),               (pm, p) => pm.AddBoxParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Brep),              (pm, p) => pm.AddBrepParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Circle),            (pm, p) => pm.AddCircleParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Colour),            (pm, p) => pm.AddColourParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Complex),           (pm, p) => pm.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Culture),           (pm, p) => pm.AddCultureParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Curve),             (pm, p) => pm.AddCurveParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Field),             (pm, p) => pm.AddFieldParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_GenericObject),     (pm, p) => pm.AddGenericParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Geometry),          (pm, p) => pm.AddGeometryParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Group),             (pm, p) => pm.AddGroupParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Integer),           (pm, p) => pm.AddIntegerParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Interval2D),        (pm, p) => pm.AddInterval2DParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Interval),          (pm, p) => pm.AddIntervalParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Line),              (pm, p) => pm.AddLineParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Matrix),            (pm, p) => pm.AddMatrixParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_MeshFace),          (pm, p) => pm.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Mesh),              (pm, p) => pm.AddMeshParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Number),            (pm, p) => pm.AddNumberParameter(p.name, p.nickname, p.description, p.access) },
+            //{ typeof (),                        (pm, p) => pm.AddParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_FilePath),          (pm, p) => pm.AddPathParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Plane),             (pm, p) => pm.AddPlaneParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Point),             (pm, p) => pm.AddPointParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Rectangle),         (pm, p) => pm.AddRectangleParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_ScriptVariable),    (pm, p) => pm.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Surface),           (pm, p) => pm.AddSurfaceParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_String),            (pm, p) => pm.AddTextParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Time),              (pm, p) => pm.AddTimeParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Time),              (pm, p) => pm.AddTransformParameter(p.name, p.nickname, p.description, p.access) },
+            { typeof (Param_Vector),            (pm, p) => pm.AddVectorParameter(p.name, p.nickname, p.description, p.access) }
+        };
 
 
 
@@ -556,7 +560,7 @@ namespace MachinaGrasshopper
 
 
 
-       
+
 
 
 

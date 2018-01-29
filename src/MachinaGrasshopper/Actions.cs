@@ -108,7 +108,8 @@ namespace MachinaGrasshopper
             set
             {
                 m_relative = value;
-                this.Message = m_relative ? "Absolute" : "Relative";
+                rel_ticks++;
+                this.Message = m_relative ? "Relative" : "Absolute";
                 this.UpdateComponentNames();
                 this.UpdateInputParameters();
                 //this.UpdateInputNames();  // comes with updateInputParameters
@@ -116,6 +117,9 @@ namespace MachinaGrasshopper
             }
         }
         private bool m_relative = false;
+        protected int rel_ticks = 0;
+
+        public List<string> debugMsgs = new List<string>();
 
         public MACHINA_MutableInputParamManager mpManager = new MACHINA_MutableInputParamManager();
 
@@ -237,31 +241,35 @@ namespace MachinaGrasshopper
             //if (this.Params.Input.Count != mpManager.inputs[this.Relative].Count)
             //    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong with UpdateInputNames");
 
-            //IGH_Param p;
-            //int it = 0;
-            //foreach (var pProps in mpManager.inputs[this.Relative])
+            debugMsgs.Add($"Starting name rev");
+            debugMsgs.Add($"input count {mpManager.inputs[this.Relative].Count}");
+            int it = 0;
+            foreach (var pProps in mpManager.inputs[this.Relative])
+            {
+                var p = this.Params.Input[it];
+                debugMsgs.Add($"adding {it} {p.Name}");
+                p.Name = pProps.name;
+                p.NickName = Grasshopper.CentralSettings.CanvasFullNames ? pProps.name : pProps.nickname;  // Workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
+                p.Description = pProps.description;
+                debugMsgs.Add($"Now {p.Name}");
+                it++;
+            }
+
+
+            //// Since the input is Generic, no need to do Parameter changes, just change its face
+            //var param = this.Params.Input[0];
+            //if (this.Relative)
             //{
-            //    p = this.Params.Input[it];
-            //    p.Name = pProps.name;
-            //    p.NickName = Grasshopper.CentralSettings.CanvasFullNames ? pProps.name : pProps.nickname;  // Workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
-            //    p.Description = pProps.description;
+            //    param.Name = "Vector";
+            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
+            //    param.Description = "Translation Vector";
             //}
-
-
-            // Since the input is Generic, no need to do Parameter changes, just change its face
-            var param = this.Params.Input[0];
-            if (this.Relative)
-            {
-                param.Name = "Vector";
-                param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
-                param.Description = "Translation Vector";
-            }
-            else
-            {
-                param.Name = "Point";
-                param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
-                param.Description = "Target Point";
-            }
+            //else
+            //{
+            //    param.Name = "Point";
+            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
+            //    param.Description = "Target Point";
+            //}
 
         }
 
@@ -270,32 +278,7 @@ namespace MachinaGrasshopper
         /// </summary>
         protected void UpdateComponentNames()
         {
-            //// Since the input is Generic, no need to do Parameter changes, just change its face
-            //var param = this.Params.Input[0];
-            //if (this.Relative)
-            //{
-            //    param.Name = "Vector";
-            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Vector" : "V";  // Only nicknames will show up after rename, so a little trick here
-            //    param.Description = "Translation Vector";
-
-            //    // Change the face of the component name to match the Core library
-            //    this.Name = "Move";
-            //    this.NickName = "Move";
-            //}
-            //else
-            //{
-            //    param.Name = "Point";
-            //    param.NickName = Grasshopper.CentralSettings.CanvasFullNames ? "Point" : "P";
-            //    param.Description = "Target Point";
-
-            //    this.Name = "MoveTo";
-            //    this.NickName = "MoveTo";
-            //}
-
-
-
-
-
+            
             var label = mpManager.componentNames[this.Relative];
 
             if (label != null)
@@ -304,22 +287,6 @@ namespace MachinaGrasshopper
                 this.NickName = label.nickname;
                 this.Description = label.description;
             }
-
-
-
-
-
-            //if (this.Relative)
-            //{
-            //    this.Name = "Move";
-            //    this.NickName = "Move";
-            //}
-            //else
-            //{
-            //    this.Name = "MoveTo";
-            //    this.NickName = "MoveTo";
-            //}
-
         }
 
     }
@@ -363,17 +330,17 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_ActionMode;
 
         protected void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
         {
             // Relative
             mpManager.AddComponentNames(false, "MoveTo", "MoveTo", "Moves the device to an absolute location.");
-            //mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
+            mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
 
             // Absolute
             mpManager.AddComponentNames(true, "Move", "Move", "Moves the device along a speficied vector relative to its current position.");
-            //mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
 
         }
 
@@ -476,7 +443,12 @@ namespace MachinaGrasshopper
                 //DA.SetData(0, null);  // not necessary
             }
 
-            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Hi there! {this.RunCount}");
+            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Hi there! {this.RunCount} ticks: {rel_ticks}");
+
+            foreach (string str in debugMsgs)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, str);
+            }
         }
 
 

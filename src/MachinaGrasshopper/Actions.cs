@@ -222,7 +222,7 @@ namespace MachinaGrasshopper
                 if (!DA.GetData(0, ref v)) return;
                 if (!DA.GetData(1, ref ang)) return;
 
-                DA.SetData(0, new ActionRotation(new Rotation(v.X, v.Y, v.Z, ang), true));
+                DA.SetData(0, new ActionRotation(new Machina.Rotation(v.X, v.Y, v.Z, ang), true));
             }
             else
             {
@@ -276,9 +276,6 @@ namespace MachinaGrasshopper
         /// </summary>
         protected void UpdateInputParameters()
         {
-            // Will we have list problems here? 
-            //this.Params.Input.ForEach(param => this.Params.UnregisterInputParameter(param, true));  
-
             for (var i = this.Params.Input.Count - 1; i >= 0; i--)
             {
                 var param = this.Params.Input[i];
@@ -340,81 +337,6 @@ namespace MachinaGrasshopper
         /// </summary>
         private void OnCanvasFullNamesChanged() => UpdateInputNames();
     }
-
-
-
-
-
-    //public class Rotate : GH_Component
-    //{
-    //    public Rotate() : base(
-    //        "Rotate",
-    //        "Rotate",
-    //        "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
-    //        "Machina",
-    //        "Actions")
-    //    { }
-    //    public override GH_Exposure Exposure => GH_Exposure.primary;
-    //    public override Guid ComponentGuid => new Guid("db2e3c56-5973-4f07-8d6a-ba31c659704d");
-    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
-
-    //    protected override void RegisterInputParams(GH_InputParamManager pManager)
-    //    {
-    //        pManager.AddVectorParameter("Axis", "V", "Rotation axis (positive rotation direction is defined by the right-hand rule).", GH_ParamAccess.item, Vector3d.XAxis);
-    //        pManager.AddNumberParameter("Angle", "A", "Rotation angle in degrees", GH_ParamAccess.item, 0);
-    //    }
-
-    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-    //    {
-    //        pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
-    //    }
-
-    //    protected override void SolveInstance(IGH_DataAccess DA)
-    //    {
-    //        Vector3d v = Vector3d.Zero;
-    //        double ang = 0;
-
-    //        if (!DA.GetData(0, ref v)) return;
-    //        if (!DA.GetData(1, ref ang)) return;
-
-    //        DA.SetData(0, new ActionRotation(new Rotation(v.X, v.Y, v.Z, ang), true));
-    //    }
-    //}
-
-    //public class RotateTo : GH_Component
-    //{
-    //    public RotateTo() : base(
-    //        "RotateTo",
-    //        "RotateTo",
-    //        "Rotate the devices to an absolute orientation defined by the two main X and Y axes of specified Plane.",
-    //        "Machina",
-    //        "Actions")
-    //    { }
-    //    public override GH_Exposure Exposure => GH_Exposure.hidden;
-    //    public override Guid ComponentGuid => new Guid("9410b629-1016-486f-8464-85ecfd9500f7");
-    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
-
-    //    protected override void RegisterInputParams(GH_InputParamManager pManager)
-    //    {
-    //        pManager.AddPlaneParameter("Plane", "P", "Target spatial orientation", GH_ParamAccess.item, Plane.WorldXY);
-    //    }
-
-    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-    //    {
-    //        pManager.AddGenericParameter("Action", "A", "RotateTo Action", GH_ParamAccess.item);
-    //    }
-
-    //    protected override void SolveInstance(IGH_DataAccess DA)
-    //    {
-    //        Plane pl = Plane.Unset;
-
-    //        if (!DA.GetData(0, ref pl)) return;
-
-    //        DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
-    //    }
-    //}
-
-
 
 
 

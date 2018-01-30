@@ -9,19 +9,19 @@ namespace MachinaGrasshopper
 {
     public class MACHINA_MutableInputParamManager
     {
-        public Dictionary<bool, List<MACHINA_InputParameteProperties>> inputs;
+        public Dictionary<bool, List<MACHINA_InputParameProps>> inputs;
         public Dictionary<bool, MACHINA_ComponentNames> componentNames;
 
         public MACHINA_MutableInputParamManager()
         {
-            inputs = new Dictionary<bool, List<MACHINA_InputParameteProperties>>();
+            inputs = new Dictionary<bool, List<MACHINA_InputParameProps>>();
             this.ClearInputParams();
             componentNames = new Dictionary<bool, MACHINA_ComponentNames>();
         }
         
         public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access)
         {
-            MACHINA_InputParameteProperties p = new MACHINA_InputParameteProperties(dataType, name, nickname, description, access);
+            MACHINA_InputParameProps p = new MACHINA_InputParameProps(dataType, name, nickname, description, access);
             inputs[relative].Add(p);
         }
 
@@ -33,25 +33,30 @@ namespace MachinaGrasshopper
 
         public void ClearInputParams()
         {
-            inputs[true] = new List<MACHINA_InputParameteProperties>();
-            inputs[false] = new List<MACHINA_InputParameteProperties>();
+            inputs[true] = new List<MACHINA_InputParameProps>();
+            inputs[false] = new List<MACHINA_InputParameProps>();
         }
         
     }
 
-    public class MACHINA_InputParameteProperties
+    public class MACHINA_InputParameProps
     {
         public Type dataType;
         public string name, nickname, description;
         public GH_ParamAccess access;
 
-        public MACHINA_InputParameteProperties(Type type, string name, string nickname, string description, GH_ParamAccess access)
+        public MACHINA_InputParameProps(Type type, string name, string nickname, string description, GH_ParamAccess access)
         {
             this.dataType = type;
             this.name = name;
             this.nickname = nickname;
             this.description = description;
             this.access = access;
+        }
+
+        public override string ToString()
+        {
+            return $"{name} {nickname} {description}";
         }
     }
 

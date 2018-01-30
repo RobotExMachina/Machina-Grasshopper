@@ -110,9 +110,10 @@ namespace MachinaGrasshopper
                 m_relative = value;
                 rel_ticks++;
                 this.Message = m_relative ? "Relative" : "Absolute";
+                //this.ClearRuntimeMessages();  // "failed ot collect data from input" messages stay, pointing at all inputs... it is confusing...
                 this.UpdateComponentNames();
                 this.UpdateInputParameters();
-                //this.UpdateInputNames();  // comes with updateInputParameters
+                //this.UpdateInputNames();  // comes with UpdateInputParameters()
                 this.ExpireSolution(true);
             }
         }
@@ -123,8 +124,113 @@ namespace MachinaGrasshopper
 
         public MACHINA_MutableInputParamManager mpManager = new MACHINA_MutableInputParamManager();
 
+        protected abstract bool ShallowInputMutation { get; }
+
+        protected abstract void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager);
 
 
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            // Let the user fill in the data
+            this.RegisterMutableInputParams(this.mpManager);
+
+            // If the inputs mutate shallowy (no real param replacement), check they share count and types
+            if (this.ShallowInputMutation)
+            {
+                if (mpManager.inputs[true].Count != mpManager.inputs[false].Count)
+                    //this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same number of inputs in both modes.");
+                    debugMsgs.Add("Components with shallow mutable inputs must have the same number of inputs in both modes.");
+
+                for (var i = 0; i < mpManager.inputs[true].Count; i++)
+                {
+                    if (mpManager.inputs[true][i].dataType != mpManager.inputs[false][i].dataType)
+                        //this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same types in both modes.");
+                        debugMsgs.Add("Components with shallow mutable inputs must have the same types in both modes.");
+                }
+            }
+
+            //// Add each parameter using the mapped function from pManager
+            //foreach (var input in mpManager.inputs[this.Relative]) AddParameterFunctionMap[input.dataType](pManager, input);
+
+            foreach (var p in mpManager.inputs[this.Relative])
+            {
+                debugMsgs.Add($"Adding this input: {p} {p.dataType}");
+
+                RegisterTypedParam(pManager, p);
+            }
+
+            //pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
+
+            // Do some tricks with the names of the mutable input (is this the right place to put this?)
+            Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
+
+            //this.UpdateComponentNames();  // this makes the component read MoveTo on the catergory tab
+            //this.Relative = false;  // this too, because it incorporates .UpdateComponentNames()
+            this.Message = this.Relative ? "Relative" : "Absolute";
+        }
+
+        //// This object MUST be static?? 
+        //static Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameProps, int>> AddParameterFunctionMap =
+        //    new Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameProps, int>>()
+        //{
+        //    //{ typeof (),                        (pm, p) => pm.AddAngleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Arc),               (pm, p) => pm.AddArcParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Boolean),           (pm, p) => pm.AddBooleanParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Box),               (pm, p) => pm.AddBoxParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Brep),              (pm, p) => pm.AddBrepParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Circle),            (pm, p) => pm.AddCircleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Colour),            (pm, p) => pm.AddColourParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Complex),           (pm, p) => pm.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Culture),           (pm, p) => pm.AddCultureParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Curve),             (pm, p) => pm.AddCurveParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Field),             (pm, p) => pm.AddFieldParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_GenericObject),     (pm, p) => pm.AddGenericParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Geometry),          (pm, p) => pm.AddGeometryParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Group),             (pm, p) => pm.AddGroupParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Integer),           (pm, p) => pm.AddIntegerParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Interval2D),        (pm, p) => pm.AddInterval2DParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Interval),          (pm, p) => pm.AddIntervalParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Line),              (pm, p) => pm.AddLineParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Matrix),            (pm, p) => pm.AddMatrixParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_MeshFace),          (pm, p) => pm.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Mesh),              (pm, p) => pm.AddMeshParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Number),            (pm, p) => pm.AddNumberParameter(p.name, p.nickname, p.description, p.access) },
+        //    //{ typeof (),                        (pm, p) => pm.AddParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_FilePath),          (pm, p) => pm.AddPathParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Plane),             (pm, p) => pm.AddPlaneParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Point),             (pm, p) => pm.AddPointParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Rectangle),         (pm, p) => pm.AddRectangleParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_ScriptVariable),    (pm, p) => pm.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Surface),           (pm, p) => pm.AddSurfaceParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_String),            (pm, p) => pm.AddTextParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Time),              (pm, p) => pm.AddTimeParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Time),              (pm, p) => pm.AddTransformParameter(p.name, p.nickname, p.description, p.access) },
+        //    { typeof (Param_Vector),            (pm, p) => pm.AddVectorParameter(p.name, p.nickname, p.description, p.access) }
+        //};
+
+        protected void RegisterTypedParam(GH_InputParamManager pManager, MACHINA_InputParameProps p)
+        {
+            //// Wanted to do this programmatically with a dictionary of delegates, but couldn't really make it work... :(
+            //AddParameterFunctionMap[input.dataType](pManager, input);
+
+            // I am so embarrased about having to do this... urgh X(
+            if (p.dataType == typeof(Param_Point)) pManager.AddPointParameter(p.name, p.nickname, p.description, p.access);
+            else if (p.dataType == typeof(Param_Vector)) pManager.AddVectorParameter(p.name, p.nickname, p.description, p.access);
+            else if (p.dataType == typeof(Param_GenericObject)) pManager.AddGenericParameter(p.name, p.nickname, p.description, p.access);
+            else if (p.dataType == typeof(Param_Number)) pManager.AddNumberParameter(p.name, p.nickname, p.description, p.access);
+            else if (p.dataType == typeof(Param_Plane)) pManager.AddPlaneParameter(p.name, p.nickname, p.description, p.access);
+        }
+
+
+        protected void UnregisterAllInputs()
+        {
+            for (var i = this.Params.Input.Count - 1; i >= 0; i--)
+            {
+                var param = this.Params.Input[i];
+                this.Params.UnregisterInputParameter(param, true);  // what is isolate??
+            }
+        }
+        
 
         /// <summary>
         /// This was quite helpful: https://discourse.mcneel.com/t/replicating-explode-tree-bang-component-in-ghpython/39221/15
@@ -159,53 +265,40 @@ namespace MachinaGrasshopper
             //this.UpdateInputNames();
 
 
+            
 
+            // If shallow mutation, skip to just changing names
+            if (!this.ShallowInputMutation)
+            {
+                this.UnregisterAllInputs();
 
+                var inputs = mpManager.inputs[this.Relative];
+                foreach (var input in inputs)
+                {
+                    try
+                    {
+                        // Wow, this is abstract... https://stackoverflow.com/a/3255716/1934487 and https://stackoverflow.com/a/142362/1934487
+                        ConstructorInfo ctor = input.dataType.GetConstructor(Type.EmptyTypes);
+                        var p = ctor.Invoke(new object[0]) as IGH_Param;  // or null instead of new object[0]?
+                        p.Access = input.access;
+                        this.Params.RegisterInputParam(p);  // is p taken as IGH_Param or as its subclass due to ctor?
+                    }
+                    catch
+                    {
+                        //this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong when registering inputs...");
+                        debugMsgs.Add("Something went wrong when registering inputs...");
+                    }
 
+                }
 
-
-            //// If shallow mutation, skip to just changing names
-            //if (!this.ShallowInputMutation)
-            //{
-            //    this.UnregisterAllInputs();
-
-            //    var inputs = mpManager.inputs[this.Relative];
-            //    foreach (var input in inputs)
-            //    {
-            //        try
-            //        {
-            //            // Wow, this is abstract... https://stackoverflow.com/a/3255716/1934487 and https://stackoverflow.com/a/142362/1934487
-            //            ConstructorInfo ctor = input.dataType.GetConstructor(Type.EmptyTypes);
-            //            var p = ctor.Invoke(new object[0]) as IGH_Param;  // or null instead of new object[0]?
-            //            p.Access = input.access;
-            //            this.Params.RegisterInputParam(p);  // is p taken as IGH_Param or as its subclass due to ctor?
-            //        }
-            //        catch
-            //        {
-            //            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong when registering inputs...");
-            //        }
-
-            //    }
-
-            //    this.Params.OnParametersChanged();
-            //}
-
-
-
-
-
+                this.Params.OnParametersChanged();
+            }
+             
 
             this.UpdateInputNames();
         }
 
-        protected void UnregisterAllInputs()
-        {
-            for (var i = this.Params.Input.Count - 1; i > -0; i++)
-            {
-                var param = this.Params.Input[i];
-                this.Params.UnregisterInputParameter(param, true);  // what is isolate??
-            }
-        }
+        
 
 
         /// <summary>
@@ -241,17 +334,17 @@ namespace MachinaGrasshopper
             //if (this.Params.Input.Count != mpManager.inputs[this.Relative].Count)
             //    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something went wrong with UpdateInputNames");
 
-            debugMsgs.Add($"Starting name rev");
-            debugMsgs.Add($"input count {mpManager.inputs[this.Relative].Count}");
+            //debugMsgs.Add($"Starting name rev");
+            //debugMsgs.Add($"input count {mpManager.inputs[this.Relative].Count}");
             int it = 0;
             foreach (var pProps in mpManager.inputs[this.Relative])
             {
                 var p = this.Params.Input[it];
-                debugMsgs.Add($"adding {it} {p.Name}");
+                //debugMsgs.Add($"adding {it} {p.Name}");
                 p.Name = pProps.name;
                 p.NickName = Grasshopper.CentralSettings.CanvasFullNames ? pProps.name : pProps.nickname;  // Workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
                 p.Description = pProps.description;
-                debugMsgs.Add($"Now {p.Name}");
+                //debugMsgs.Add($"Now {p.Name}");
                 it++;
             }
 
@@ -288,6 +381,64 @@ namespace MachinaGrasshopper
                 this.Description = label.description;
             }
         }
+
+        // Serialize the Relative attribute for correct
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Relative", Relative);
+            return base.Write(writer);
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            Relative = reader.GetBoolean("Relative");
+            return base.Read(reader);
+        }
+
+
+        /// <summary>
+        /// Trigger change in the face of the component name to match the Machina Core API. 
+        /// </summary>
+        /// <param name="document"></param>
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            this.UpdateComponentNames();
+        }
+
+
+
+        /// <summary>
+        /// Add the Rel/Abs option tag. Is executed on first right-click on the component.
+        /// </summary>
+        /// <param name="menu"></param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalComponentMenuItems(menu);
+
+            var item = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.Relative);
+            item.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
+        }
+
+
+        /// <summary>
+        /// Event handler for the menu item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void AbsoluteToggle(Object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item == null) return;
+
+            this.RecordUndoEvent("Relative");
+            this.Relative = !this.Relative;
+        }
+
+        /// <summary>
+        /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
+        /// </summary>
+        private void OnCanvasFullNamesChanged() => this.UpdateInputNames();
 
     }
 
@@ -330,9 +481,11 @@ namespace MachinaGrasshopper
         { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("b028192a-e2d1-449e-899d-a79a16a8de3e");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_ActionMode;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
 
-        protected void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
+        protected override bool ShallowInputMutation => true;  // parameters will not change (and wires not disconnect), only change the names
+
+        protected override void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
         {
             // Relative
             mpManager.AddComponentNames(false, "MoveTo", "MoveTo", "Moves the device to an absolute location.");
@@ -342,47 +495,18 @@ namespace MachinaGrasshopper
             mpManager.AddComponentNames(true, "Move", "Move", "Moves the device along a speficied vector relative to its current position.");
             mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
 
+            //// Relative
+            //mpManager.AddComponentNames(false, "RotateTo", "RotateTo", "Rotates the device to a specified orientation.");
+            //mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "Pl", "Target spatial orientation.", GH_ParamAccess.item);
+
+            //// Absolute
+            //mpManager.AddComponentNames(true, "Rotate", "Rotate", "Rotates the device a specified angle in degrees along the specified vector.");
+            //mpManager.AddParameter(true, typeof(Param_Vector), "Axis", "V", "Rotation axis, with positive rotation direction is defined by the right-hand rule.", GH_ParamAccess.item);
+            //mpManager.AddParameter(true, typeof(Param_Number), "Angle", "A", "Rotation angle in degrees.", GH_ParamAccess.item);
         }
 
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
-        {
-            // Let the user fill in the data
-            this.RegisterMutableInputParams(this.mpManager);
 
-            //// If the inputs mutate shallowy (no real param replacement), check they share count and types
-            //if (this.ShallowInputMutation)
-            //{
-            //    if (mpManager.inputs[true].Count != mpManager.inputs[false].Count)
-            //        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same number of inputs in both modes.");
-
-            //    for (var i = 0; i < mpManager.inputs[true].Count; i++)
-            //    {
-            //        if (mpManager.inputs[true][i].dataType != mpManager.inputs[false][i].dataType)
-            //            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Components with shallow mutable inputs must have the same types in both modes.");
-            //    }
-            //}
-
-            //// Add each parameter using the mapped function from pManager
-            //foreach (var input in mpManager.inputs[this.Relative]) AddParameterFunctionMap[input.dataType](pManager, input);
-
-
-
-
-            pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
-
-
-
-
-
-            // Do some tricks with the names of the mutable input (is this the right place to put this?)
-            Grasshopper.CentralSettings.CanvasFullNamesChanged += OnCanvasFullNamesChanged;
-
-            //this.UpdateComponentNames();  // this makes the component read MoveTo on the catergory tab
-            this.Relative = false;
-        }
-
-        protected bool ShallowInputMutation => true;  // parameters will not change (and wires not disconnected), only change the names
-
+        
         //protected override void RegisterInputParams(GH_InputParamManager pManager)
         //{
         //    pManager.AddGenericParameter("Point", "P", "Target Point", GH_ParamAccess.item);
@@ -401,6 +525,8 @@ namespace MachinaGrasshopper
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            this.ClearRuntimeMessages();
+
             object obj = null;
 
             if (!DA.GetData(0, ref obj)) return;
@@ -470,118 +596,7 @@ namespace MachinaGrasshopper
 
         
 
-        // Serialize the Relative attribute for correct
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Relative", Relative);
-            return base.Write(writer);
-        }
-
-        public override bool Read(GH_IReader reader)
-        {
-            Relative = reader.GetBoolean("Relative");
-            return base.Read(reader);
-        }
-
-        //protected abstract void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager);
-
-        //protected abstract bool ShallowInputMutation { get; }
-
-
-        protected static readonly Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>> AddParameterFunctionMap =
-            new Dictionary<Type, Func<GH_InputParamManager, MACHINA_InputParameteProperties, int>>()
-        {
-            //{ typeof (),                        (pm, p) => pm.AddAngleParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Arc),               (pm, p) => pm.AddArcParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Boolean),           (pm, p) => pm.AddBooleanParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Box),               (pm, p) => pm.AddBoxParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Brep),              (pm, p) => pm.AddBrepParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Circle),            (pm, p) => pm.AddCircleParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Colour),            (pm, p) => pm.AddColourParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Complex),           (pm, p) => pm.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Culture),           (pm, p) => pm.AddCultureParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Curve),             (pm, p) => pm.AddCurveParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Field),             (pm, p) => pm.AddFieldParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_GenericObject),     (pm, p) => pm.AddGenericParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Geometry),          (pm, p) => pm.AddGeometryParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Group),             (pm, p) => pm.AddGroupParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Integer),           (pm, p) => pm.AddIntegerParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Interval2D),        (pm, p) => pm.AddInterval2DParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Interval),          (pm, p) => pm.AddIntervalParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Line),              (pm, p) => pm.AddLineParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Matrix),            (pm, p) => pm.AddMatrixParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_MeshFace),          (pm, p) => pm.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Mesh),              (pm, p) => pm.AddMeshParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Number),            (pm, p) => pm.AddNumberParameter(p.name, p.nickname, p.description, p.access) },
-            //{ typeof (),                        (pm, p) => pm.AddParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_FilePath),          (pm, p) => pm.AddPathParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Plane),             (pm, p) => pm.AddPlaneParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Point),             (pm, p) => pm.AddPointParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Rectangle),         (pm, p) => pm.AddRectangleParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_ScriptVariable),    (pm, p) => pm.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Surface),           (pm, p) => pm.AddSurfaceParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_String),            (pm, p) => pm.AddTextParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Time),              (pm, p) => pm.AddTimeParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Time),              (pm, p) => pm.AddTransformParameter(p.name, p.nickname, p.description, p.access) },
-            { typeof (Param_Vector),            (pm, p) => pm.AddVectorParameter(p.name, p.nickname, p.description, p.access) }
-        };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        /// Trigger change in the face of the component name to match the Machina Core API. 
-        /// </summary>
-        /// <param name="document"></param>
-        public override void AddedToDocument(GH_Document document)
-        {
-            base.AddedToDocument(document);
-            this.UpdateComponentNames();
-        }
-
-
-
-        /// <summary>
-        /// Add the Rel/Abs option tag. Is executed on first right-click on the component.
-        /// </summary>
-        /// <param name="menu"></param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            base.AppendAdditionalComponentMenuItems(menu);
-
-            var item = Menu_AppendItem(menu, "Relative Action", AbsoluteToggle, null, true, this.Relative);
-            item.ToolTipText = "Should the input be taken as absolute coordinates or relative motion?";
-        }
-
-
-        /// <summary>
-        /// Event handler for the menu item.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void AbsoluteToggle(Object sender, EventArgs e)
-        {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            if (item == null) return;
-
-            this.RecordUndoEvent("Relative");
-            this.Relative = !this.Relative;
-        }
-
-        /// <summary>
-        /// A workaround to the nicknames problem: https://discourse.mcneel.com/t/changing-input-parameter-names-always-shows-nickname/54071/3
-        /// </summary>
-        private void OnCanvasFullNamesChanged() => this.UpdateInputNames();
+        
     }
 
 

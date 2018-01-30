@@ -25,51 +25,51 @@ namespace MachinaGrasshopper
 
 
 
-    public abstract class GH_MiddleWare : GH_Component
-    {
-        public abstract bool Foo { get; }
+    //public abstract class GH_MiddleWare : GH_Component
+    //{
+    //    public abstract bool Foo { get; }
 
-        public GH_MiddleWare(string s1, string s2, string s3, string s4, string s5) : base(s1, s2, s3, s4, s5) { }
+    //    public GH_MiddleWare(string s1, string s2, string s3, string s4, string s5) : base(s1, s2, s3, s4, s5) { }
 
 
-    }
+    //}
 
-    public class NewMove : GH_MiddleWare
-    {
+    //public class NewMove : GH_MiddleWare
+    //{
 
-        // This will be the base names that will be used on the component's description on the ribbon
-        public NewMove() : base(
-            "NewMove",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
-            "NewMove",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
-            "Moves the device to an absolute location or along a speficied vector relative to its current position.",
-            "Machina",
-            "Actions")
-        { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
-        public override Guid ComponentGuid => new Guid("882d97de-6b55-468d-83f3-cbd03d62336f");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_PopSettings;
+    //    // This will be the base names that will be used on the component's description on the ribbon
+    //    public NewMove() : base(
+    //        "NewMove",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
+    //        "NewMove",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
+    //        "Moves the device to an absolute location or along a speficied vector relative to its current position.",
+    //        "Machina",
+    //        "Actions")
+    //    { }
+    //    public override GH_Exposure Exposure => GH_Exposure.primary;
+    //    public override Guid ComponentGuid => new Guid("882d97de-6b55-468d-83f3-cbd03d62336f");
+    //    protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_PopSettings;
         
-        public override bool Foo { get { return true;} }
+    //    public override bool Foo { get { return true;} }
 
         
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
-        {
-            pManager.AddTextParameter("msg", "M", "create a msg", GH_ParamAccess.item);
-        }
+    //    protected override void RegisterInputParams(GH_InputParamManager pManager)
+    //    {
+    //        pManager.AddTextParameter("msg", "M", "create a msg", GH_ParamAccess.item);
+    //    }
 
-        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-        {
-            pManager.AddTextParameter("greeting", "S", "the msg", GH_ParamAccess.item);
-        }
+    //    protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+    //    {
+    //        pManager.AddTextParameter("greeting", "S", "the msg", GH_ParamAccess.item);
+    //    }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
-        {
-            string name = "";
-            if (!DA.GetData(0, ref name)) return;
+    //    protected override void SolveInstance(IGH_DataAccess DA)
+    //    {
+    //        string name = "";
+    //        if (!DA.GetData(0, ref name)) return;
 
-            DA.SetData(0, $"Hello {name}!");
-        }
-    }
+    //        DA.SetData(0, $"Hello {name}!");
+    //    }
+    //}
 
 
 
@@ -466,11 +466,6 @@ namespace MachinaGrasshopper
     public class Move : MACHINA_AbsRelMutableComponent
     {
 
-        /// <summary>
-        /// Relative Action?
-        /// </summary>
-        //private bool relative = false;  // moved to base class
-
         // This will be the base names that will be used on the component's description on the ribbon
         public Move() : base(
             "Move",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
@@ -576,29 +571,71 @@ namespace MachinaGrasshopper
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, str);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-        
-
-        
+                
     }
 
+    ////  ██████╗  ██████╗ ████████╗ █████╗ ████████╗███████╗
+    ////  ██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+    ////  ██████╔╝██║   ██║   ██║   ███████║   ██║   █████╗  
+    ////  ██╔══██╗██║   ██║   ██║   ██╔══██║   ██║   ██╔══╝  
+    ////  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ███████╗
+    ////  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+    ////        
+    public class Rotate : MACHINA_AbsRelMutableComponent
+    {
+
+        public Rotate() : base(
+            "Rotate",
+            "Rotate",
+            "Rotates the device to a specified orientation, or a specified angle in degrees along the specified vector.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("c48d908d-3e0d-4600-90de-1330b9dc7973");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+        protected override bool ShallowInputMutation => false;
+
+        protected override void RegisterMutableInputParams(MACHINA_MutableInputParamManager mpManager)
+        {
+            // Relative
+            mpManager.AddComponentNames(false, "RotateTo", "RotateTo", "Rotates the device to a specified orientation.");
+            mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "Pl", "Target spatial orientation.", GH_ParamAccess.item);
+
+            // Absolute
+            mpManager.AddComponentNames(true, "Rotate", "Rotate", "Rotates the device a specified angle in degrees along the specified vector.");
+            mpManager.AddParameter(true, typeof(Param_Vector), "Axis", "V", "Rotation axis, with positive rotation direction is defined by the right-hand rule.", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "Angle", "A", "Rotation angle in degrees.", GH_ParamAccess.item);
+
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Rotate Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            if (this.Relative)
+            {
+                Vector3d v = Vector3d.Zero;
+                double ang = 0;
+
+                if (!DA.GetData(0, ref v)) return;
+                if (!DA.GetData(1, ref ang)) return;
+
+                DA.SetData(0, new ActionRotation(new Machina.Rotation(v.X, v.Y, v.Z, ang), true));
+            }
+            else
+            {
+                Plane pl = Plane.Unset;
+
+                if (!DA.GetData(0, ref pl)) return;
+
+                DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+            }
+        }
+    }
 
 
 
@@ -769,7 +806,7 @@ namespace MachinaGrasshopper
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_MotionType;
 

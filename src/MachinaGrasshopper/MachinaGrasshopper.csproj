@@ -67,8 +67,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graveyard\Graveyard.cs" />
-    <Compile Include="MACHINA_MutableInputParamManager.cs" />
+    <Compile Include="Actions\Rotate.cs" />
+    <Compile Include="Actions\Move.cs" />
+    <Compile Include="MACHINAGH_Utils\GH_ComponentNames.cs" />
+    <Compile Include="MACHINAGH_Utils\GH_InputParamProps.cs" />
+    <Compile Include="MACHINAGH_Utils\GH_MutableComponent.cs" />
+    <Compile Include="MACHINAGH_Utils\GH_MutableInputParamManager.cs" />
+    <Compile Include="OtherStuff\Graveyard.cs" />
     <Compile Include="Programs.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -115,6 +120,7 @@
     <Content Include="Resources\Icons\Robots.Version.png" />
     <Content Include="Resources\Icons\Tools.Create.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

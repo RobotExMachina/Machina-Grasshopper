@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\MotionMode.cs" />
     <Compile Include="Actions\Rotate.cs" />
     <Compile Include="Actions\Move.cs" />
     <Compile Include="MACHINAGH_Utils\GH_ComponentNames.cs" />
@@ -100,6 +101,7 @@
     <Content Include="Resources\Icons\Actions.Detach.png" />
     <Content Include="Resources\Icons\Actions.Extrude.png" />
     <Content Include="Resources\Icons\Actions.Message.png" />
+    <Content Include="Resources\Icons\Actions.MotionMode.png" />
     <Content Include="Resources\Icons\Actions.MotionType.png" />
     <Content Include="Resources\Icons\Actions.Move.png" />
     <Content Include="Resources\Icons\Actions.PopSettings.png" />

@@ -22,7 +22,71 @@ namespace MachinaGrasshopper.Graveyard
     /// Components will be marked 'OLD' if the classname contains the string "obsolete" or the class
     /// has been decorated with the ObsoleteAttribute.
     /// </summary>
-    
+
+
+        
+
+
+    //  ███╗   ███╗ ██████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+    //  ████╗ ████║██╔═══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+    //  ██╔████╔██║██║   ██║   ██║   ██║██║   ██║██╔██╗ ██║
+    //  ██║╚██╔╝██║██║   ██║   ██║   ██║██║   ██║██║╚██╗██║
+    //  ██║ ╚═╝ ██║╚██████╔╝   ██║   ██║╚██████╔╝██║ ╚████║
+    //  ╚═╝     ╚═╝ ╚═════╝    ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    //                                                     
+    [Obsolete("Updated", false)]
+    public class MotionType : GH_Component
+    {
+        public MotionType() : base(
+            "MotionType",  // the name that shows up on the tab, on yellow bar on toolip, on component on 'Draw Full Names'
+            "MotionType",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
+            "Sets the current type of motion to be applied to future translation actions. This can be \"linear\" (default) for straight line movements in euclidean space, or \"joint\" for smooth interpolation between joint angles. NOTE: \"joint\" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_ActionMode;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddTextParameter("Type", "T", "\"linear\" or \"joint\"", GH_ParamAccess.item, "linear");
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "MotionType Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            string type = "";
+
+            if (!DA.GetData(0, ref type)) return;
+
+            Machina.MotionType t = Machina.MotionType.Undefined;
+
+            type = type.ToLower();
+            if (type.Equals("linear"))
+            {
+                t = Machina.MotionType.Linear;
+            }
+            else if (type.Equals("joint"))
+            {
+                t = Machina.MotionType.Joint;
+            }
+
+            if (t == Machina.MotionType.Undefined)
+            {
+                base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\" as String.");
+                return;
+            }
+
+            DA.SetData(0, new ActionMotion(t));
+        }
+    }
+
+
 
     [Obsolete("Updated", false)]
     public class Move : GH_Component

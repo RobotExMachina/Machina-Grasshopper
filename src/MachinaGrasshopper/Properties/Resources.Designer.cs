@@ -133,9 +133,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_MotionType {
+        internal static System.Drawing.Bitmap Actions_MotionMode {
             get {
-                object obj = ResourceManager.GetObject("Actions_MotionType", resourceCulture);
+                object obj = ResourceManager.GetObject("Actions_MotionMode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

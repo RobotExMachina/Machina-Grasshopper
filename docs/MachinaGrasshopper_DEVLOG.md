@@ -16,7 +16,11 @@
 ## v.0.5.0
 - [x] Update Machina core to 0.5.0
 - [x] Hide all pre-0.5.0 components
+- [x] Add GH_MutableComponent middleware class
+- [ ] Split component classes per file
 - [ ] Generate new components with new GuiD, incorporating the abs/rel option 
+
+
 
 ## v.0.4.1
 - [x] Add 3D Printing sample

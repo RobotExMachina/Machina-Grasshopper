@@ -102,7 +102,6 @@
     <Content Include="Resources\Icons\Actions.Extrude.png" />
     <Content Include="Resources\Icons\Actions.Message.png" />
     <Content Include="Resources\Icons\Actions.MotionMode.png" />
-    <Content Include="Resources\Icons\Actions.MotionType.png" />
     <Content Include="Resources\Icons\Actions.Move.png" />
     <Content Include="Resources\Icons\Actions.PopSettings.png" />
     <Content Include="Resources\Icons\Actions.Precision.png" />

@@ -61,7 +61,7 @@ namespace MachinaGrasshopper
         // Implement `Solveinstance` as usual
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            this.ClearRuntimeMessages();
+            //this.ClearRuntimeMessages();
 
             object obj = null;
 

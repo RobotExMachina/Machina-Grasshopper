@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\MotionMode.cs" />
+    <Compile Include="Actions\Axes.cs" />
     <Compile Include="Actions\Transform.cs" />
     <Compile Include="Actions\Rotate.cs" />
     <Compile Include="Actions\Move.cs" />

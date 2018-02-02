@@ -27,7 +27,7 @@ namespace MachinaGrasshopper
         public Transform() : base(
             "Transform",
             "Transform",
-            "Performs a compound relative rotation + translation transformation in a single action. Note that when performing relative transformations, the R+T versus T+R order matters.",
+            "Performs a compound transformation, composed of a translation and a rotation.",
             "Machina",
             "Actions")
         { }
@@ -36,14 +36,6 @@ namespace MachinaGrasshopper
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Transform;
 
         protected override bool ShallowInputMutation => false;
-
-        //protected override void RegisterInputParams(GH_InputParamManager pManager)
-        //{
-        //    pManager.AddVectorParameter("Direction", "V", "Translation vector", GH_ParamAccess.item, Vector3d.Zero);
-        //    pManager.AddVectorParameter("Axis", "V", "Rotation axis (positive rotation direction is defined by the right-hand rule).", GH_ParamAccess.item, Vector3d.XAxis);
-        //    pManager.AddNumberParameter("Angle", "A", "Rotation angle in degrees", GH_ParamAccess.item, 0);
-        //    pManager.AddBooleanParameter("TranslationFirst", "t", "Apply translation first? Note that when performing relative transformations, the R+T versus T+R order matters.", GH_ParamAccess.item, true);
-        //}
 
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {

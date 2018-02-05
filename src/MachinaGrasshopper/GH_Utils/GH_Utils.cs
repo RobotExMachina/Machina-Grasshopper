@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MachinaGrasshopper.GH_Utils
 {
-    public class GH_Utils
+    public class Helpers
     {
         public static string EnumerateList(string[] strings, string closing)
         {

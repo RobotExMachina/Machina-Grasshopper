@@ -67,6 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Extrude.cs" />
+    <Compile Include="Actions\ExtrusionRate.cs" />
     <Compile Include="Actions\Temperature.cs" />
     <Compile Include="Actions\WriteAnalog.cs" />
     <Compile Include="Actions\WriteDigital.cs" />

@@ -27,7 +27,7 @@ namespace MachinaGrasshopper.Actions
             "Machina",
             "Actions")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("e4b98069-260e-4c59-8a76-3dfe23f25111");
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Temperature;
 
@@ -75,7 +75,7 @@ namespace MachinaGrasshopper.Actions
             catch
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, 
-                    $"\"{part}\" is not a valid target part for temperature changes, please specify one of the following: {GH_Utils.GH_Utils.EnumerateList(Enum.GetNames(typeof(RobotPartType)), "or")}.");
+                    $"\"{part}\" is not a valid target part for temperature changes, please specify one of the following: {GH_Utils.Helpers.EnumerateList(Enum.GetNames(typeof(RobotPartType)), "or")}.");
                 return;
             }
             

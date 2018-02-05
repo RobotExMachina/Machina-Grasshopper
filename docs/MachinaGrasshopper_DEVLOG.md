@@ -19,9 +19,12 @@
 - [x] Add GH_MutableComponent middleware class
 - [x] Split component classes per file
 - [x] Generate new components with new GuiD, incorporating the abs/rel option 
-- [ ] Add `Temperature`, `Extrude` and `ExtrusionRate`
 - [x] Rename `CreateRobot` to `NewRobot` 
-
+- [x] Mutable components now accept default values
+- [x] Added namespaces to components
+- [x] Add `Temperature`
+- [x] Add `Extrude`
+- [x] Add `ExtrusionRate`
 
 
 ## v.0.4.1

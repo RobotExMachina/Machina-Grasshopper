@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Grasshopper.Kernel;
 using Machina;
 
-namespace MachinaGrasshopper
+namespace MachinaGrasshopper.Actions
 {
     //   █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗
     //  ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║  ██║

@@ -283,9 +283,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Robots_Create {
+        internal static System.Drawing.Bitmap Robots_New {
             get {
-                object obj = ResourceManager.GetObject("Robots_Create", resourceCulture);
+                object obj = ResourceManager.GetObject("Robots_New", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,9 +313,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Tools_Create {
+        internal static System.Drawing.Bitmap Tools_New {
             get {
-                object obj = ResourceManager.GetObject("Tools_Create", resourceCulture);
+                object obj = ResourceManager.GetObject("Tools_New", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -12,7 +12,7 @@ using GH_IO.Serialization;
 using Machina;
 using MachinaGrasshopper.MACHINAGH_Utils;
 
-namespace MachinaGrasshopper
+namespace MachinaGrasshopper.Actions
 {
 
     //  ███████╗██████╗ ███████╗███████╗██████╗ 

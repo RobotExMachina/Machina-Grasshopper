@@ -4,39 +4,33 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Machina;
 
-namespace MachinaGrasshopper
+namespace MachinaGrasshopper.Tools
 {
-    
-    //  ████████╗ ██████╗  ██████╗ ██╗     ███████╗
-    //  ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
-    //     ██║   ██║   ██║██║   ██║██║     ███████╗
-    //     ██║   ██║   ██║██║   ██║██║     ╚════██║
-    //     ██║   ╚██████╔╝╚██████╔╝███████╗███████║
-    //     ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-    //                                             
-    /// <summary>
-    /// Tool-related components go here.
-    /// </summary>
-    
-
-    public class CreateTool : GH_Component
+    //  ████████╗ ██████╗  ██████╗ ██╗        ███╗   ██╗███████╗██╗    ██╗
+    //  ╚══██╔══╝██╔═══██╗██╔═══██╗██║        ████╗  ██║██╔════╝██║    ██║
+    //     ██║   ██║   ██║██║   ██║██║        ██╔██╗ ██║█████╗  ██║ █╗ ██║
+    //     ██║   ██║   ██║██║   ██║██║        ██║╚██╗██║██╔══╝  ██║███╗██║
+    //     ██║   ╚██████╔╝╚██████╔╝███████╗██╗██║ ╚████║███████╗╚███╔███╔╝
+    //     ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝ 
+    //                                                                    
+    public class New : GH_Component
     {
-        public CreateTool() : base(
-            "CreateTool",
-            "CreateTool",
+        public New() : base(
+            "NewTool",
+            "NewTool",
             "Create a new Tool object.", 
             "Machina", 
             "Tools") { }
-        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("19e1c38a-94f8-41b6-b5a5-0a549fdf0123");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Tools_New;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "T", "Tool name", GH_ParamAccess.item, "MachinaTool");
+            pManager.AddTextParameter("Name", "T", "Tool name", GH_ParamAccess.item, "Tool Ex Machina");
             pManager.AddPlaneParameter("BasePlane", "BP", "Base Plane where the Tool will be attached to the Robot", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddPlaneParameter("TCPPlane", "TP", "Plane of the Tool Tip Center (TCP)", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddNumberParameter("Weight", "W", "Tool weight in Kg", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Weight", "W", "Tool weight in Kg", GH_ParamAccess.item, 1);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

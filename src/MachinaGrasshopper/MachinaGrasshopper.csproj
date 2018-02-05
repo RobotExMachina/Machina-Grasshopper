@@ -84,19 +84,23 @@
     <Compile Include="Actions\Rotate.cs" />
     <Compile Include="Actions\Move.cs" />
     <Compile Include="Actions\Wait.cs" />
-    <Compile Include="MACHINAGH_Utils\GH_ComponentNames.cs" />
-    <Compile Include="MACHINAGH_Utils\GH_InputParamProps.cs" />
-    <Compile Include="MACHINAGH_Utils\GH_MutableComponent.cs" />
-    <Compile Include="MACHINAGH_Utils\GH_MutableInputParamManager.cs" />
+    <Compile Include="GH_Utils\GH_ComponentNames.cs" />
+    <Compile Include="GH_Utils\GH_InputParamProps.cs" />
+    <Compile Include="GH_Utils\GH_MutableComponent.cs" />
+    <Compile Include="GH_Utils\GH_MutableInputParamManager.cs" />
     <Compile Include="OtherStuff\Graveyard.cs" />
     <Compile Include="Programs.cs" />
+    <Compile Include="Programs\CompileProgram.cs" />
+    <Compile Include="Programs\DisplayProgram.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tools.cs" />
-    <Compile Include="Robots.cs" />
+    <Compile Include="Robots\SetIOName.cs" />
+    <Compile Include="Robots\New.cs" />
+    <Compile Include="Robots\Version.cs" />
+    <Compile Include="Tools\New.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -113,6 +117,7 @@
     <Content Include="Resources\Icons\Actions.Comment.png" />
     <Content Include="Resources\Icons\Actions.Detach.png" />
     <Content Include="Resources\Icons\Actions.Extrude.png" />
+    <Content Include="Resources\Icons\Actions.ExtrusionRate.png" />
     <Content Include="Resources\Icons\Actions.Message.png" />
     <Content Include="Resources\Icons\Actions.MotionMode.png" />
     <Content Include="Resources\Icons\Actions.Move.png" />
@@ -129,10 +134,10 @@
     <Content Include="Resources\Icons\Programs.CompileProgram.png" />
     <Content Include="Resources\Icons\Programs.DisplayProgram.png" />
     <Content Include="Resources\Icons\Programs.WriteToFile.png" />
-    <Content Include="Resources\Icons\Robots.Create.png" />
+    <Content Include="Resources\Icons\Robots.New.png" />
     <Content Include="Resources\Icons\Robots.SetIOName.png" />
     <Content Include="Resources\Icons\Robots.Version.png" />
-    <Content Include="Resources\Icons\Tools.Create.png" />
+    <Content Include="Resources\Icons\Tools.New.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

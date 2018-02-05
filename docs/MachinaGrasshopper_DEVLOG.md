@@ -17,8 +17,10 @@
 - [x] Update Machina core to 0.5.0
 - [x] Hide all pre-0.5.0 components
 - [x] Add GH_MutableComponent middleware class
-- [ ] Split component classes per file
-- [ ] Generate new components with new GuiD, incorporating the abs/rel option 
+- [x] Split component classes per file
+- [x] Generate new components with new GuiD, incorporating the abs/rel option 
+- [ ] Add `Temperature`, `Extrude` and `ExtrusionRate`
+- [x] Rename `CreateRobot` to `NewRobot` 
 
 
 

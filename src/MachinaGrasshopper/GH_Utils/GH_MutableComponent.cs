@@ -8,9 +8,10 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
+using System.Drawing;
+using System.Globalization;
 
-
-namespace MachinaGrasshopper.MACHINAGH_Utils
+namespace MachinaGrasshopper.GH_Utils
 {
     //  ██████╗ ███████╗██╗         ██╗ █████╗ ██████╗ ███████╗                                   
     //  ██╔══██╗██╔════╝██║        ██╔╝██╔══██╗██╔══██╗██╔════╝                                   
@@ -170,42 +171,98 @@ namespace MachinaGrasshopper.MACHINAGH_Utils
         protected void RegisterTypedParam(GH_InputParamManager pManager, GH_InputParamProps p)
         {
             // I am so embarrased about having to do this... urgh X(
-            // Sorted by popularity order, estimated by my guts
-            if (p.dataType == typeof(Param_Number)) pManager.AddNumberParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Plane)) pManager.AddPlaneParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Point)) pManager.AddPointParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Vector)) pManager.AddVectorParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_String)) pManager.AddTextParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Boolean)) pManager.AddBooleanParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_GenericObject)) pManager.AddGenericParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Integer)) pManager.AddIntegerParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_FilePath)) pManager.AddPathParameter(p.name, p.nickname, p.description, p.access);
+            if (p.defaultValue == null)
+            {
+                try
+                {
+                    // Sorted by popularity order, estimated by my guts
+                    if (p.dataType == typeof(Param_Number)) pManager.AddNumberParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Plane)) pManager.AddPlaneParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Point)) pManager.AddPointParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Vector)) pManager.AddVectorParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_String)) pManager.AddTextParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Boolean)) pManager.AddBooleanParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_GenericObject)) pManager.AddGenericParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Integer)) pManager.AddIntegerParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_FilePath)) pManager.AddPathParameter(p.name, p.nickname, p.description, p.access);
 
-            // I don't think Machina uses any of these so far... 
-            else if (p.dataType == typeof(Param_Arc)) pManager.AddArcParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Box)) pManager.AddBoxParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Brep)) pManager.AddBrepParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Circle)) pManager.AddCircleParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Colour)) pManager.AddColourParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Complex)) pManager.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Culture)) pManager.AddCultureParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Curve)) pManager.AddCurveParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Field)) pManager.AddFieldParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Geometry)) pManager.AddGeometryParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Group)) pManager.AddGroupParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Interval2D)) pManager.AddInterval2DParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Interval)) pManager.AddIntervalParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Line)) pManager.AddLineParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Matrix)) pManager.AddMatrixParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_MeshFace)) pManager.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Mesh)) pManager.AddMeshParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Rectangle)) pManager.AddRectangleParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_ScriptVariable)) pManager.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Surface)) pManager.AddSurfaceParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Time)) pManager.AddTimeParameter(p.name, p.nickname, p.description, p.access);
-            else if (p.dataType == typeof(Param_Transform)) pManager.AddTransformParameter(p.name, p.nickname, p.description, p.access);
+                    // I don't think Machina uses any of these so far... 
+                    else if (p.dataType == typeof(Param_Arc)) pManager.AddArcParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Box)) pManager.AddBoxParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Brep)) pManager.AddBrepParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Circle)) pManager.AddCircleParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Colour)) pManager.AddColourParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Complex)) pManager.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Culture)) pManager.AddCultureParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Curve)) pManager.AddCurveParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Field)) pManager.AddFieldParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Geometry)) pManager.AddGeometryParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Group)) pManager.AddGroupParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Interval2D)) pManager.AddInterval2DParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Interval)) pManager.AddIntervalParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Line)) pManager.AddLineParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Matrix)) pManager.AddMatrixParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_MeshFace)) pManager.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Mesh)) pManager.AddMeshParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Rectangle)) pManager.AddRectangleParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_ScriptVariable)) pManager.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Surface)) pManager.AddSurfaceParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Time)) pManager.AddTimeParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Transform)) pManager.AddTransformParameter(p.name, p.nickname, p.description, p.access);
 
-            else this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot register parameter of type " + p.dataType);
+                    else this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot register parameter of type " + p.dataType);
+                }
+                catch
+                {
+                    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Something went wrong registering input parameter {p.dataType}");
+                }
+            } 
+            else
+            {
+                try
+                {
+                    // Sorted by popularity order, estimated by my guts
+                    if (p.dataType == typeof(Param_Number)) pManager.AddNumberParameter(p.name, p.nickname, p.description, p.access, (double) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Plane)) pManager.AddPlaneParameter(p.name, p.nickname, p.description, p.access, (Plane) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Point)) pManager.AddPointParameter(p.name, p.nickname, p.description, p.access, (Point3d) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Vector)) pManager.AddVectorParameter(p.name, p.nickname, p.description, p.access, (Vector3d) p.defaultValue);
+                    else if (p.dataType == typeof(Param_String)) pManager.AddTextParameter(p.name, p.nickname, p.description, p.access, (string) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Boolean)) pManager.AddBooleanParameter(p.name, p.nickname, p.description, p.access, (bool) p.defaultValue);
+                    else if (p.dataType == typeof(Param_GenericObject)) pManager.AddGenericParameter(p.name, p.nickname, p.description, p.access);  // generic objects don't accept default values...
+                    else if (p.dataType == typeof(Param_Integer)) pManager.AddIntegerParameter(p.name, p.nickname, p.description, p.access, (int)p.defaultValue);
+                    else if (p.dataType == typeof(Param_FilePath)) pManager.AddPathParameter(p.name, p.nickname, p.description, p.access);  // no def value accepted
+
+                    // I don't think Machina uses any of these so far... 
+                    else if (p.dataType == typeof(Param_Arc)) pManager.AddArcParameter(p.name, p.nickname, p.description, p.access, (Arc) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Box)) pManager.AddBoxParameter(p.name, p.nickname, p.description, p.access, (Box) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Brep)) pManager.AddBrepParameter(p.name, p.nickname, p.description, p.access);  // no def value accepted
+                    else if (p.dataType == typeof(Param_Circle)) pManager.AddCircleParameter(p.name, p.nickname, p.description, p.access, (Circle) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Colour)) pManager.AddColourParameter(p.name, p.nickname, p.description, p.access, (Color) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Complex)) pManager.AddComplexNumberParameter(p.name, p.nickname, p.description, p.access, (GH_ComplexNumber)p.defaultValue);
+                    else if (p.dataType == typeof(Param_Culture)) pManager.AddCultureParameter(p.name, p.nickname, p.description, p.access, (CultureInfo)p.defaultValue);
+                    else if (p.dataType == typeof(Param_Curve)) pManager.AddCurveParameter(p.name, p.nickname, p.description, p.access);  // no def value
+                    else if (p.dataType == typeof(Param_Field)) pManager.AddFieldParameter(p.name, p.nickname, p.description, p.access);  // no def val 
+                    else if (p.dataType == typeof(Param_Geometry)) pManager.AddGeometryParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Group)) pManager.AddGroupParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Interval2D)) pManager.AddInterval2DParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Interval)) pManager.AddIntervalParameter(p.name, p.nickname, p.description, p.access, (Interval) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Line)) pManager.AddLineParameter(p.name, p.nickname, p.description, p.access, (Line) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Matrix)) pManager.AddMatrixParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_MeshFace)) pManager.AddMeshFaceParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Mesh)) pManager.AddMeshParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Rectangle)) pManager.AddRectangleParameter(p.name, p.nickname, p.description, p.access, (Rectangle3d) p.defaultValue);
+                    else if (p.dataType == typeof(Param_ScriptVariable)) pManager.AddScriptVariableParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Surface)) pManager.AddSurfaceParameter(p.name, p.nickname, p.description, p.access);
+                    else if (p.dataType == typeof(Param_Time)) pManager.AddTimeParameter(p.name, p.nickname, p.description, p.access, (DateTime) p.defaultValue);
+                    else if (p.dataType == typeof(Param_Transform)) pManager.AddTransformParameter(p.name, p.nickname, p.description, p.access);
+
+                    else this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot register parameter of type " + p.dataType);
+                }
+                catch
+                {
+                    this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Something went wrong registering input parameter {p.dataType} with value {p.defaultValue}");
+                }
+            }
 
         }
 

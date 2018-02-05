@@ -9,7 +9,7 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
-namespace MachinaGrasshopper.MACHINAGH_Utils
+namespace MachinaGrasshopper.GH_Utils
 {
     /// <summary>
     /// A class to mimic the GH_InputParamManager class for mutable components.
@@ -38,7 +38,22 @@ namespace MachinaGrasshopper.MACHINAGH_Utils
         /// <param name="access">Access level</param>
         public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access)
         {
-            GH_InputParamProps p = new GH_InputParamProps(dataType, name, nickname, description, access);
+            this.AddParameter(relative, dataType, name, nickname, description, access, null);
+        }
+
+        /// <summary>
+        /// Adds a mutable input parameter to this component. 
+        /// </summary>
+        /// <param name="relative">Is this parameter for relative or absolute mode?</param>
+        /// <param name="dataType">GH_Param type, as in `typeof(Param_Plane)`</param>
+        /// <param name="name">Parameter name</param>
+        /// <param name="nickname">Parameter nickname</param>
+        /// <param name="description">Parameter description</param>
+        /// <param name="access">Access level</param>
+        /// <param name="defaultValue">Default value</param>
+        public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access, object defaultValue)
+        {
+            GH_InputParamProps p = new GH_InputParamProps(dataType, name, nickname, description, access, defaultValue);
             inputs[relative].Add(p);
         }
 

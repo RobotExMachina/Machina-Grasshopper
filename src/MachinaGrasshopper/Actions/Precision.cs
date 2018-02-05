@@ -10,7 +10,7 @@ using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
 using Machina;
-using MachinaGrasshopper.MACHINAGH_Utils;
+using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Actions
 {
@@ -44,7 +44,7 @@ namespace MachinaGrasshopper.Actions
 
             // Relative
             mpManager.AddComponentNames(true, "Precision", "Precision", "Increase the precision at which future actions will execute. Precision is measured as the radius of the smooth interpolation between motion targets. This is usually refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.");
-            mpManager.AddParameter(true, typeof(Param_Number), "RadiusInc", "R", "Radius increment in mm.", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "RadiusInc", "RInc", "Radius increment in mm.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

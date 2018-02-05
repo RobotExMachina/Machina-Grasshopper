@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MachinaGrasshopper.MACHINAGH_Utils
+namespace MachinaGrasshopper.GH_Utils
 {
     /// <summary>
     /// A class to store component names for mutability.

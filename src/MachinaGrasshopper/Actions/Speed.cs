@@ -10,7 +10,7 @@ using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
 using Machina;
-using MachinaGrasshopper.MACHINAGH_Utils;
+using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Actions
 {
@@ -55,11 +55,11 @@ namespace MachinaGrasshopper.Actions
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            double speedInc = 0;
+            double speed = 0;
 
-            if (!DA.GetData(0, ref speedInc)) return;
+            if (!DA.GetData(0, ref speed)) return;
 
-            DA.SetData(0, new ActionSpeed((int)Math.Round(speedInc), this.Relative));
+            DA.SetData(0, new ActionSpeed((int)Math.Round(speed), this.Relative));
         }
     }
 }

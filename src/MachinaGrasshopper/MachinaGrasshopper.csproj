@@ -67,11 +67,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\WriteAnalog.cs" />
+    <Compile Include="Actions\WriteDigital.cs" />
+    <Compile Include="Actions\Detach.cs" />
+    <Compile Include="Actions\Attach.cs" />
+    <Compile Include="Actions\Comment.cs" />
+    <Compile Include="Actions\Message.cs" />
     <Compile Include="Actions\MotionMode.cs" />
+    <Compile Include="Actions\Coordinates.cs" />
     <Compile Include="Actions\Axes.cs" />
+    <Compile Include="Actions\PopSettings.cs" />
+    <Compile Include="Actions\Precision.cs" />
+    <Compile Include="Actions\PushSettings.cs" />
+    <Compile Include="Actions\Speed.cs" />
     <Compile Include="Actions\Transform.cs" />
     <Compile Include="Actions\Rotate.cs" />
     <Compile Include="Actions\Move.cs" />
+    <Compile Include="Actions\Wait.cs" />
     <Compile Include="MACHINAGH_Utils\GH_ComponentNames.cs" />
     <Compile Include="MACHINAGH_Utils\GH_InputParamProps.cs" />
     <Compile Include="MACHINAGH_Utils\GH_MutableComponent.cs" />
@@ -85,7 +97,6 @@
     </Compile>
     <Compile Include="Tools.cs" />
     <Compile Include="Robots.cs" />
-    <Compile Include="Actions.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

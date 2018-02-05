@@ -39,11 +39,11 @@ namespace MachinaGrasshopper
 
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
-            // Relative
+            // Absolute
             mpManager.AddComponentNames(false, "RotateTo", "RotateTo", "Rotates the device to a specified orientation.");
             mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "Pl", "Target spatial orientation.", GH_ParamAccess.item);
 
-            // Absolute
+            // Relative
             mpManager.AddComponentNames(true, "Rotate", "Rotate", "Rotates the device a specified angle in degrees along the specified vector.");
             mpManager.AddParameter(true, typeof(Param_Vector), "Axis", "V", "Rotation axis, with positive rotation direction is defined by the right-hand rule.", GH_ParamAccess.item);
             mpManager.AddParameter(true, typeof(Param_Number), "Angle", "A", "Rotation angle in degrees.", GH_ParamAccess.item);

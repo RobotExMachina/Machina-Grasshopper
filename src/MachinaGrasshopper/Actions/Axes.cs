@@ -40,14 +40,7 @@ namespace MachinaGrasshopper
 
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
-            mpManager.AddComponentNames(true, "Axes", "Axes", "Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.");
-            mpManager.AddParameter(true, typeof(Param_Number), "A1Inc", "A1", "Rotational increment in degrees for Axis 1", GH_ParamAccess.item);
-            mpManager.AddParameter(true, typeof(Param_Number), "A2Inc", "A2", "Rotational increment in degrees for Axis 2", GH_ParamAccess.item);
-            mpManager.AddParameter(true, typeof(Param_Number), "A3Inc", "A3", "Rotational increment in degrees for Axis 3", GH_ParamAccess.item);
-            mpManager.AddParameter(true, typeof(Param_Number), "A4Inc", "A4", "Rotational increment in degrees for Axis 4", GH_ParamAccess.item);
-            mpManager.AddParameter(true, typeof(Param_Number), "A5Inc", "A5", "Rotational increment in degrees for Axis 5", GH_ParamAccess.item);
-            mpManager.AddParameter(true, typeof(Param_Number), "A6Inc", "A6", "Rotational increment in degrees for Axis 6", GH_ParamAccess.item);
-
+            // Absolute
             mpManager.AddComponentNames(false, "AxesTo", "AxesTo", "Set the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.");
             mpManager.AddParameter(false, typeof(Param_Number), "A1", "A1", "Angular value in degrees for Axis 1", GH_ParamAccess.item);
             mpManager.AddParameter(false, typeof(Param_Number), "A2", "A2", "Angular value in degrees for Axis 2", GH_ParamAccess.item);
@@ -55,6 +48,15 @@ namespace MachinaGrasshopper
             mpManager.AddParameter(false, typeof(Param_Number), "A4", "A4", "Angular value in degrees for Axis 4", GH_ParamAccess.item);
             mpManager.AddParameter(false, typeof(Param_Number), "A5", "A5", "Angular value in degrees for Axis 5", GH_ParamAccess.item);
             mpManager.AddParameter(false, typeof(Param_Number), "A6", "A6", "Angular value in degrees for Axis 6", GH_ParamAccess.item);
+
+            // Relative
+            mpManager.AddComponentNames(true, "Axes", "Axes", "Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.");
+            mpManager.AddParameter(true, typeof(Param_Number), "A1Inc", "A1", "Rotational increment in degrees for Axis 1", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "A2Inc", "A2", "Rotational increment in degrees for Axis 2", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "A3Inc", "A3", "Rotational increment in degrees for Axis 3", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "A4Inc", "A4", "Rotational increment in degrees for Axis 4", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "A5Inc", "A5", "Rotational increment in degrees for Axis 5", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "A6Inc", "A6", "Rotational increment in degrees for Axis 6", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

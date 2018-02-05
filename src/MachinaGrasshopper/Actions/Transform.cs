@@ -39,16 +39,16 @@ namespace MachinaGrasshopper
 
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
+            // Absolute
+            mpManager.AddComponentNames(false, "TransformTo", "TransformTo", "Performs a compound absolute transformation to target Plane. The device's new absolute position and orientation will be those of the plane.");
+            mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "P", "Target Plane to transform to", GH_ParamAccess.item);
+
             // Relative
             mpManager.AddComponentNames(true, "Transform", "Transform", "Performs a compound relative transformation as a rotation + translation. Note that when performing relative transformations, the R+T versus T+R order matters.");
             mpManager.AddParameter(true, typeof(Param_Vector), "Direction", "TV", "Translation vector.", GH_ParamAccess.item);
             mpManager.AddParameter(true, typeof(Param_Vector), "Axis", "RV", "Rotation axis.", GH_ParamAccess.item);
             mpManager.AddParameter(true, typeof(Param_Number), "Angle", "A", "Rotation angle in degrees.", GH_ParamAccess.item);
             mpManager.AddParameter(true, typeof(Param_Vector), "Translation First", "t", "Apply translation first? Note that when performing relative transformations, the R+T versus T+R order matters.", GH_ParamAccess.item);
-            
-            // Absolute
-            mpManager.AddComponentNames(false, "TransformTo", "TransformTo", "Performs a compound absolute transformation to target Plane. The device's new absolute position and orientation will be those of the plane.");
-            mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "P", "Target Plane to transform to", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

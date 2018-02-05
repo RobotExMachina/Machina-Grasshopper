@@ -24,7 +24,236 @@ namespace MachinaGrasshopper.Graveyard
     /// </summary>
 
 
-        
+    //  ██╗    ██╗ ██████╗ 
+    //  ██║   ██╔╝██╔═══██╗
+    //  ██║  ██╔╝ ██║   ██║
+    //  ██║ ██╔╝  ██║   ██║
+    //  ██║██╔╝   ╚██████╔╝
+    //  ╚═╝╚═╝     ╚═════╝ 
+    //                     
+    [Obsolete("Deprecated", false)]
+    public class TurnOn : GH_Component
+    {
+        public TurnOn() : base(
+            "TurnOn",
+            "TurnOn",
+            "Turn digital output on. Alias for `WriteDigital(ioNum, true)`",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("8bd5bc0d-249e-4744-8530-cf8fced77492");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "TurnOn Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+
+            if (!DA.GetData(0, ref id)) return;
+
+            DA.SetData(0, new ActionIODigital(id, true));
+        }
+    }
+    [Obsolete("Deprecated", false)]
+    public class TurnOff : GH_Component
+    {
+        public TurnOff() : base(
+            "TurnOff",
+            "TurnOff",
+            "Turn digital output off. Alias for `WriteDigital(ioNum, false)`",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("15d234aa-2f63-488e-a95e-cc89ffcca3b6");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "TurnOff Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            int id = 1;
+
+            if (!DA.GetData(0, ref id)) return;
+
+            DA.SetData(0, new ActionIODigital(id, false));
+        }
+    }
+
+
+
+    //  ██████╗ ██████╗ ███████╗ ██████╗██╗███████╗██╗ ██████╗ ███╗   ██╗
+    //  ██╔══██╗██╔══██╗██╔════╝██╔════╝██║██╔════╝██║██╔═══██╗████╗  ██║
+    //  ██████╔╝██████╔╝█████╗  ██║     ██║███████╗██║██║   ██║██╔██╗ ██║
+    //  ██╔═══╝ ██╔══██╗██╔══╝  ██║     ██║╚════██║██║██║   ██║██║╚██╗██║
+    //  ██║     ██║  ██║███████╗╚██████╗██║███████║██║╚██████╔╝██║ ╚████║
+    //  ╚═╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    //                                                                   
+    [Obsolete("Updated", false)]
+    public class Precision : GH_Component
+    {
+        public Precision() : base(
+            "Precision",
+            "Precision",
+            "Increase the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("eaadd1fc-caa9-442b-af5e-273bc3961b73");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("RadiusIncrement", "RI", "Smoothing radius increment in mm", GH_ParamAccess.item, 0);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Precision Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double radiusInc = 0;
+
+            if (!DA.GetData(0, ref radiusInc)) return;
+
+            DA.SetData(0, new ActionPrecision((int)Math.Round(radiusInc), true));
+        }
+    }
+
+    [Obsolete("Updated", false)]
+    public class PrecisionTo : GH_Component
+    {
+        public PrecisionTo() : base(
+            "PrecisionTo",
+            "PrecisionTo",
+            "Set the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("f7127638-e4bc-4cd1-904d-ad301bd63d9a");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("Radius", "R", "Smoothing radius value in mm", GH_ParamAccess.item, 5);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "PrecisionTo Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double radius = 0;
+
+            if (!DA.GetData(0, ref radius)) return;
+
+            DA.SetData(0, new ActionPrecision((int)Math.Round(radius), false));
+        }
+    }
+
+
+    //  ███████╗██████╗ ███████╗███████╗██████╗ 
+    //  ██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗
+    //  ███████╗██████╔╝█████╗  █████╗  ██║  ██║
+    //  ╚════██║██╔═══╝ ██╔══╝  ██╔══╝  ██║  ██║
+    //  ███████║██║     ███████╗███████╗██████╔╝
+    //  ╚══════╝╚═╝     ╚══════╝╚══════╝╚═════╝ 
+    //
+    [Obsolete("Updated", false)]
+    public class Speed : GH_Component
+    {
+        public Speed() : base(
+            "Speed",
+            "Speed",
+            "Increases the speed in mm/s at which future transformation actions will run.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("5ce2951b-fdee-4d67-ab2b-bb97204bfdc7");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("SpeedIncrement", "SI", "Speed increment in mm/s", GH_ParamAccess.item, 0);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "Speed Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double speedInc = 0;
+
+            if (!DA.GetData(0, ref speedInc)) return;
+
+            DA.SetData(0, new ActionSpeed((int)Math.Round(speedInc), true));
+        }
+    }
+    [Obsolete("Updated", false)]
+    public class SpeedTo : GH_Component
+    {
+        public SpeedTo() : base(
+            "SpeedTo",
+            "SpeedTo",
+            "Sets the speed in mm/s at which future transformation actions will run.",
+            "Machina",
+            "Actions")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("3067745a-9183-4f51-96af-95efec967888");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddNumberParameter("Speed", "S", "Speed value in mm/s", GH_ParamAccess.item, 20);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "SpeedTo Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            double speed = 0;
+
+            if (!DA.GetData(0, ref speed)) return;
+
+            if (speed < 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The value of the speed cannot be negative");
+            }
+
+            DA.SetData(0, new ActionSpeed((int)Math.Round(speed), false));
+        }
+    }
 
 
     //  ███╗   ███╗ ██████╗ ████████╗██╗ ██████╗ ███╗   ██╗

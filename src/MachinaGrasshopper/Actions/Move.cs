@@ -43,11 +43,11 @@ namespace MachinaGrasshopper
         // For mutable components, register parameters using `RegisterMutableInputParams()` instead
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
-            // Relative
+            // Absolute
             mpManager.AddComponentNames(false, "MoveTo", "MoveTo", "Moves the device to an absolute location.");
             mpManager.AddParameter(false, typeof(Param_GenericObject), "Point", "P", "Target Point.", GH_ParamAccess.item);
 
-            // Absolute
+            // Relative
             mpManager.AddComponentNames(true, "Move", "Move", "Moves the device along a speficied vector relative to its current position.");
             mpManager.AddParameter(true, typeof(Param_GenericObject), "Vector", "V", "Translation Vector.", GH_ParamAccess.item);
         }

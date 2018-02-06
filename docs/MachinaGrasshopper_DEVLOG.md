@@ -13,19 +13,27 @@
 - [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
 
 # REVISIONS
+## NEXT RELEASE
+- [ ]
+
 ## v.0.5.0
 - [x] Update Machina core to 0.5.0
-- [x] Hide all pre-0.5.0 components
+- [x] Hide most pre-0.5.0 components
+- [x] Remove all obsolete components, and create new ones with GUID to avoid overwrite
+- [x] Make components have the option to choose between abs/rel
+- [x] Rename `Motion` to `MotionMode`
+- [x] Rename `FeedRate` to `ExtrusionRate`
+- [x] ICONS!! :)
 - [x] Add GH_MutableComponent middleware class
 - [x] Split component classes per file
-- [x] Generate new components with new GuiD, incorporating the abs/rel option 
-- [x] Rename `CreateRobot` to `NewRobot` 
+- [x] Generate new components with new GuiD
+- [x] Rename `CreateRobot` to `NewRobot` , same for `NewTool`
 - [x] Mutable components now accept default values
-- [x] Added namespaces to components
+- [x] Add namespaces to components
 - [x] Add `Temperature`
 - [x] Add `Extrude`
 - [x] Add `ExtrusionRate`
-- [ ] Update sample files
+- [x] Update sample files
 
 
 ## v.0.4.1

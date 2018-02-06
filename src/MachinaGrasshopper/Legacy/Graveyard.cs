@@ -275,7 +275,7 @@ namespace MachinaGrasshopper.Graveyard
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_ActionMode;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_MotionMode;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -393,6 +393,7 @@ namespace MachinaGrasshopper.Graveyard
     //  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ███████╗
     //  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
     //                                                     
+    [Obsolete("Updated", false)]
     public class Rotate : GH_Component
     {
         public Rotate() : base(
@@ -429,6 +430,7 @@ namespace MachinaGrasshopper.Graveyard
         }
     }
 
+    [Obsolete("Updated", false)]
     public class RotateTo : GH_Component
     {
         public RotateTo() : base(
@@ -471,6 +473,7 @@ namespace MachinaGrasshopper.Graveyard
     //     ██║   ██║  ██║██║  ██║██║ ╚████║███████║██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║
     //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝
     //                                                                                 
+    [Obsolete("Updated", false)]
     public class Transform : GH_Component
     {
         public Transform() : base(
@@ -517,6 +520,7 @@ namespace MachinaGrasshopper.Graveyard
         }
     }
 
+    [Obsolete("Updated", false)]
     public class TransformTo : GH_Component
     {
         public TransformTo() : base(
@@ -562,7 +566,8 @@ namespace MachinaGrasshopper.Graveyard
     //  ██╔══██║ ██╔██╗ ██╔══╝  ╚════██║
     //  ██║  ██║██╔╝ ██╗███████╗███████║
     //  ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝
-    //                                  
+    //                                 
+    [Obsolete("Updated", false)]
     public class Axes : GH_Component
     {
         public Axes() : base(
@@ -610,7 +615,7 @@ namespace MachinaGrasshopper.Graveyard
             DA.SetData(0, new ActionAxes(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true));
         }
     }
-
+    [Obsolete("Updated", false)]
     public class AxesTo : GH_Component
     {
         public AxesTo() : base(

@@ -21,7 +21,7 @@ namespace MachinaGrasshopper.Robots
         public Version() : base(
             "Version",
             "Version",
-            "Returns version and build numbers of the Machina Core library and Grasshopper API. ",
+            "Returns version and build numbers of the Machina Core library and Grasshopper API.",
             "Machina",
             "Robots")
         { }

@@ -23,7 +23,7 @@ namespace MachinaGrasshopper.Actions
         public ExtrusionRate() : base(
             "ExtrusionRate",
             "ExtrusionRate",
-            "Increases the extrusion rate of filament for 3D printers.",
+            "Changes the extrusion rate of filament for 3D printers.",
             "Machina",
             "Actions")
         { }

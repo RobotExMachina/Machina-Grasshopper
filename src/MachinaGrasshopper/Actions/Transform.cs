@@ -40,7 +40,7 @@ namespace MachinaGrasshopper.Actions
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
             // Absolute
-            mpManager.AddComponentNames(false, "TransformTo", "TransformTo", "Performs a compound absolute transformation to target Plane. The device's new absolute position and orientation will be those of the plane.");
+            mpManager.AddComponentNames(false, "TransformTo", "TransformTo", "Performs a compound absolute transformation to target Plane. The device's new absolute position and orientation will be those of the Plane.");
             mpManager.AddParameter(false, typeof(Param_Plane), "Plane", "P", "Target Plane to transform to", GH_ParamAccess.item);
 
             // Relative

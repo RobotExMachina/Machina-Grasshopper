@@ -27,7 +27,7 @@ namespace MachinaGrasshopper.Tools
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "T", "Tool name", GH_ParamAccess.item, "Tool Ex Machina");
+            pManager.AddTextParameter("Name", "T", "Tool name", GH_ParamAccess.item, "ToolExMachina");
             pManager.AddPlaneParameter("BasePlane", "BP", "Base Plane where the Tool will be attached to the Robot", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddPlaneParameter("TCPPlane", "TP", "Plane of the Tool Tip Center (TCP)", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddNumberParameter("Weight", "W", "Tool weight in Kg", GH_ParamAccess.item, 1);

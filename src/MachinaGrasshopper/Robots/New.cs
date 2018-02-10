@@ -31,13 +31,13 @@ namespace MachinaGrasshopper.Robots
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "A name for this Robot", GH_ParamAccess.item, "Robot Ex Machina");
-            pManager.AddTextParameter("Brand", "B", "Input \"ABB\", \"UR\", \"KUKA\", \"Zmoprh\" or \"HUMAN\" (if you only need a human-readable representation of the actions of this Robot...)", GH_ParamAccess.item, "HUMAN");
+            pManager.AddTextParameter("Name", "N", "A name for this Robot", GH_ParamAccess.item, "RobotExMachina");
+            pManager.AddTextParameter("Brand", "B", "Input \"ABB\", \"UR\", \"KUKA\", \"ZMorph\" or \"HUMAN\" (if you only need a human-readable representation of the actions of this Robot...)", GH_ParamAccess.item, "HUMAN");
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot", "R", "Your brand new Machina Robot object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot", "R", "Your brand new Machina Robot object.", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

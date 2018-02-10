@@ -45,7 +45,7 @@ namespace MachinaGrasshopper.Actions
 
             // Relative
             mpManager.AddComponentNames(true, "Speed", "Speed", "Sets the speed at which future actions will execute.");
-            mpManager.AddParameter(true, typeof(Param_Number), "SpeedInc", "S", "Speed increment in in mm/s or deg/sec.", GH_ParamAccess.item);
+            mpManager.AddParameter(true, typeof(Param_Number), "SpeedInc", "S", "Speed increment in mm/s or deg/sec.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -58,6 +58,12 @@ namespace MachinaGrasshopper.Actions
             double speed = 0;
 
             if (!DA.GetData(0, ref speed)) return;
+
+            if (speed < 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The speed value cannot be negative");
+                return;
+            }
 
             DA.SetData(0, new ActionSpeed((int)Math.Round(speed), this.Relative));
         }

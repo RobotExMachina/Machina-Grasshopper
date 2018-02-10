@@ -31,7 +31,7 @@ namespace MachinaGrasshopper.Robots
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot", "R", "Robot to change the io name to", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot", "R", "Robot to change the IO name to", GH_ParamAccess.item);
             pManager.AddTextParameter("Name", "N", "New IO name", GH_ParamAccess.item, "Digital_IO_1");
             pManager.AddIntegerParameter("Pin", "N", "Pin number", GH_ParamAccess.item, 1);
             pManager.AddBooleanParameter("Digital", "d", "Is this a digital pin?", GH_ParamAccess.item, true);

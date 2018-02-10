@@ -28,7 +28,7 @@ namespace MachinaGrasshopper.Actions
         public Axes() : base(
             "Axes",
             "Axes",
-            "Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
+            "Changes the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
             "Machina",
             "Actions")
         { }
@@ -61,7 +61,7 @@ namespace MachinaGrasshopper.Actions
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Action", "A", "Axis Action", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Action", "A", "Axes Action", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

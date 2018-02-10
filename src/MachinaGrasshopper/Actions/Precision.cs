@@ -39,7 +39,7 @@ namespace MachinaGrasshopper.Actions
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
             // Absolute
-            mpManager.AddComponentNames(false, "PrecisionTo", "PrecisionTo", "Change the precision at which future actions will execute. Precision is measured as the radius of the smooth interpolation between motion targets. This is usually refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.");
+            mpManager.AddComponentNames(false, "PrecisionTo", "PrecisionTo", "Set the precision at which future actions will execute. Precision is measured as the radius of the smooth interpolation between motion targets. This is usually refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.");
             mpManager.AddParameter(false, typeof(Param_Number), "Radius", "R", "Radius value in mm.", GH_ParamAccess.item);
 
             // Relative

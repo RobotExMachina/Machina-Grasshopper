@@ -40,12 +40,12 @@ namespace MachinaGrasshopper.Actions
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
             // Absolute
-            mpManager.AddComponentNames(false, "SpeedTo", "SpeedTo", "Increases the speed at which future actions will execute.");
-            mpManager.AddParameter(false, typeof(Param_Number), "Speed", "S", "Speed value in mm/s or deg/sec.", GH_ParamAccess.item);
+            mpManager.AddComponentNames(false, "SpeedTo", "SpeedTo", "Increases the TCP speed at which future actions will execute.");
+            mpManager.AddParameter(false, typeof(Param_Number), "Speed", "S", "Speed value in mm/s.", GH_ParamAccess.item);
 
             // Relative
-            mpManager.AddComponentNames(true, "Speed", "Speed", "Sets the speed at which future actions will execute.");
-            mpManager.AddParameter(true, typeof(Param_Number), "SpeedInc", "S", "Speed increment in mm/s or deg/sec.", GH_ParamAccess.item);
+            mpManager.AddComponentNames(true, "Speed", "Speed", "Sets the TCP speed at which future actions will execute.");
+            mpManager.AddParameter(true, typeof(Param_Number), "SpeedInc", "S", "Speed increment in mm/s.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

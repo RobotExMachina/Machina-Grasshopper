@@ -293,7 +293,7 @@ namespace MachinaGrasshopper.Graveyard
 
             if (!DA.GetData(0, ref type)) return;
 
-            Machina.MotionType t = Machina.MotionType.Undefined;
+            Machina.MotionType t = Machina.MotionType.Linear;
 
             type = type.ToLower();
             if (type.Equals("linear"))
@@ -305,11 +305,11 @@ namespace MachinaGrasshopper.Graveyard
                 t = Machina.MotionType.Joint;
             }
 
-            if (t == Machina.MotionType.Undefined)
-            {
-                base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\" as String.");
-                return;
-            }
+            //if (t == null)
+            //{
+            //    base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\" as String.");
+            //    return;
+            //}
 
             DA.SetData(0, new ActionMotion(t));
         }

@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Machina">
-      <HintPath>refs\Machina.dll</HintPath>
+      <HintPath>assemblies\Machina.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,8 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Acceleration.cs" />
     <Compile Include="Actions\Extrude.cs" />
     <Compile Include="Actions\ExtrusionRate.cs" />
+    <Compile Include="Actions\JointAcceleration.cs" />
+    <Compile Include="Actions\JointSpeed.cs" />
+    <Compile Include="Actions\RotationSpeed.cs" />
     <Compile Include="Actions\Temperature.cs" />
     <Compile Include="Actions\WriteAnalog.cs" />
     <Compile Include="Actions\WriteDigital.cs" />

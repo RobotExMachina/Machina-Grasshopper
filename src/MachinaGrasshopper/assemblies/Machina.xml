@@ -3081,19 +3081,19 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.IssueWriteToDigitalIORequest(System.Int32,System.Boolean)">
+        <member name="M:Machina.Control.IssueWriteToDigitalIORequest(System.String,System.Boolean,System.Boolean)">
             <summary>
             Issue a request to turn digital IO on/off.
             </summary>
-            <param name="pinNum"></param>
+            <param name="pinId"></param>
             <param name="isOn"></param>
             <returns></returns>
         </member>
-        <member name="M:Machina.Control.IssueWriteToAnalogIORequest(System.Int32,System.Double)">
+        <member name="M:Machina.Control.IssueWriteToAnalogIORequest(System.String,System.Double,System.Boolean)">
             <summary>
             Issue a request to write to analog pin.
             </summary>
-            <param name="pinNum"></param>
+            <param name="pinId"></param>
             <param name="value"></param>
             <returns></returns>
         </member>
@@ -3386,15 +3386,6 @@
             uploads it to the controller and runs it.
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Machina.Robot.SetIOName(System.String,System.Int32,System.Boolean)">
-            <summary>
-            ABB IOs must have a name corresponding to their definition in the controller. This function is useful to give them
-            a custom name that matches the controller's, and is used in code generation.
-            </summary>
-            <param name="ioName"></param>
-            <param name="pinNumber"></param>
-            <param name="isDigital"></param>
         </member>
         <member name="M:Machina.Robot.Speed">
             <summary>
@@ -3814,19 +3805,37 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Machina.Robot.WriteDigital(System.Int32,System.Boolean)">
+        <member name="M:Machina.Robot.WriteDigital(System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Writes to the digital IO pin.
             </summary>
             <param name="pinNumber"></param>
             <param name="isOn"></param>
+            <param name="toolPin">Is this pin on the tool?</param>
         </member>
-        <member name="M:Machina.Robot.WriteAnalog(System.Int32,System.Double)">
+        <member name="M:Machina.Robot.WriteDigital(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Writes to the digital IO pin.
+            </summary>
+            <param name="pinId">Pin name.</param>
+            <param name="isOn"></param>
+            <param name="toolPin">Is this pin on the tool?</param>
+        </member>
+        <member name="M:Machina.Robot.WriteAnalog(System.Int32,System.Double,System.Boolean)">
             <summary>
             Writes to the analog IO pin.
             </summary>
             <param name="pinNumber"></param>
             <param name="value"></param>
+            <param name="toolPin">Is this pin on the tool?</param>
+        </member>
+        <member name="M:Machina.Robot.WriteAnalog(System.String,System.Double,System.Boolean)">
+            <summary>
+            Writes to the analog IO pin.
+            </summary>
+            <param name="pinId">Pin name.</param>
+            <param name="value"></param>
+            <param name="toolPin">Is this pin on the tool?</param>
         </member>
         <member name="M:Machina.Robot.ReadDigital(System.Int32)">
             <summary>
@@ -3841,18 +3850,6 @@
             </summary>
             <param name="pinNumber"></param>
             <returns></returns>
-        </member>
-        <member name="M:Machina.Robot.TurnOn(System.Int32)">
-            <summary>
-            Turn digital IO on. Is alias for `WriteDigital(pinNumber, true)`
-            </summary>
-            <param name="pinNumber"></param>
-        </member>
-        <member name="M:Machina.Robot.TurnOff(System.Int32)">
-            <summary>
-            Turn digital IO off. Is alias for `WriteDigital(pinNumber, false)`
-            </summary>
-            <param name="pinNumber"></param>
         </member>
         <member name="M:Machina.Robot.Extrude(System.Boolean)">
             <summary>
@@ -4393,6 +4390,13 @@
             <param name="bytes"></param>
             <param name="byteCount">If 0, the whole byte array will be used.</param>
             <param name="bytesAreLittleEndian">Is the byte array little endian? This will be used to define how to translate the buffer to this system's endianness.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Machina.Util.SafeProgramName(System.String)">
+            <summary>
+            Returns a string with safe ASCII characters to be used as a robot program name. 
+            </summary>
+            <param name="name"></param>
             <returns></returns>
         </member>
     </members>

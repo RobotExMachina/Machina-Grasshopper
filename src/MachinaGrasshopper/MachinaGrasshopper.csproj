@@ -108,16 +108,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Robots\SetIOName.cs" />
-    <Compile Include="Robots\New.cs" />
+    <Compile Include="Robots\Create.cs" />
     <Compile Include="Robots\Version.cs" />
-    <Compile Include="Tools\New.cs" />
+    <Compile Include="Tools\Create.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -145,10 +145,9 @@
     <Content Include="Resources\Icons\Programs.CompileProgram.png" />
     <Content Include="Resources\Icons\Programs.DisplayProgram.png" />
     <Content Include="Resources\Icons\Programs.WriteToFile.png" />
-    <Content Include="Resources\Icons\Robots.New.png" />
-    <Content Include="Resources\Icons\Robots.SetIOName.png" />
+    <Content Include="Resources\Icons\Robots.Create.png" />
     <Content Include="Resources\Icons\Robots.Version.png" />
-    <Content Include="Resources\Icons\Tools.New.png" />
+    <Content Include="Resources\Icons\Tools.Create.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -187,16 +187,13 @@
   <data name="Programs_WriteToFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\programs.writetofile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Robots_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\robots.new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Robots_SetIOName" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\robots.setioname.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Robots_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\robots.create.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Robots_Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\robots.version.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Tools_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons\tools.new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Tools_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\tools.create.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

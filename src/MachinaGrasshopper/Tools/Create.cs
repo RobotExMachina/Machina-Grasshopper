@@ -13,17 +13,17 @@ namespace MachinaGrasshopper.Tools
     //     ██║   ╚██████╔╝╚██████╔╝███████╗██╗██║ ╚████║███████╗╚███╔███╔╝
     //     ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝ 
     //                                                                    
-    public class New : GH_Component
+    public class ToolCreate : GH_Component
     {
-        public New() : base(
-            "NewTool",
-            "NewTool",
+        public ToolCreate() : base(
+            "Tool.Create",
+            "Tool.Create",
             "Create a new Tool object.", 
             "Machina", 
             "Tools") { }
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("19e1c38a-94f8-41b6-b5a5-0a549fdf0123");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Tools_New;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Tools_Create;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {

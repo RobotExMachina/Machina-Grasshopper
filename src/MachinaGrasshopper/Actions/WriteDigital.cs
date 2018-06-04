@@ -31,8 +31,9 @@ namespace MachinaGrasshopper.Actions
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DigitalPinNumber", "N", "Digital pin number", GH_ParamAccess.item, 1);
+            pManager.AddTextParameter("DigitalPin", "N", "Digital pin name or number", GH_ParamAccess.item, "1");
             pManager.AddBooleanParameter("On", "ON", "Turn on?", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("ToolPin", "t", "Is this pin on the robot's tool?", GH_ParamAccess.item, false);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -42,13 +43,15 @@ namespace MachinaGrasshopper.Actions
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            int id = 1;
+            string name = "1";
             bool on = false;
+            bool tool = false;
 
-            if (!DA.GetData(0, ref id)) return;
+            if (!DA.GetData(0, ref name)) return;
             if (!DA.GetData(1, ref on)) return;
+            if (!DA.GetData(2, ref tool)) return;
 
-            DA.SetData(0, new ActionIODigital(id, on));
+            DA.SetData(0, new ActionIODigital(name, on, tool));
         }
     }
 }

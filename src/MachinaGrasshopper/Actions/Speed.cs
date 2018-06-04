@@ -59,12 +59,6 @@ namespace MachinaGrasshopper.Actions
 
             if (!DA.GetData(0, ref speed)) return;
 
-            if (speed < 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The speed value cannot be negative");
-                return;
-            }
-
             DA.SetData(0, new ActionSpeed((int)Math.Round(speed), this.Relative));
         }
     }

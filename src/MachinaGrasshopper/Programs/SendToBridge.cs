@@ -45,8 +45,8 @@ namespace MachinaGrasshopper.Programs
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Instructions", "I", "Streamed Instructions", GH_ParamAccess.list);
             pManager.AddTextParameter("Sent?", "ok", "Correctly sent?", GH_ParamAccess.item);
+            pManager.AddTextParameter("Instructions", "I", "Streamed Instructions", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -63,7 +63,6 @@ namespace MachinaGrasshopper.Programs
             List<string> instructions = new List<string>();
             if (send)
             {
-                
                 string ins = "";
                 using (var ws = new WebSocket(url))
                 {
@@ -80,10 +79,10 @@ namespace MachinaGrasshopper.Programs
             }
             else
             {
-                DA.SetData(1, "Nothing sent");
+                DA.SetData(0, "Nothing sent");
             }
-            DA.SetDataList(0, instructions);
 
+            DA.SetDataList(1, instructions);
         }
     }
 }

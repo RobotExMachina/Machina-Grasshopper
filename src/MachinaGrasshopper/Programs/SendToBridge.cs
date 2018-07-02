@@ -70,6 +70,16 @@ namespace MachinaGrasshopper.Programs
 
                     foreach (Machina.Action a in actions)
                     {
+                        // If attaching a tool, send the tool description first.
+                        // This is quick and dirty, a result of this component not taking the robot object as an input.
+                        // How coud this be improved...? Should tool creation be an action?
+                        if (a.type == Machina.ActionType.Attach)
+                        {
+                            ActionAttach aa = (ActionAttach)a;
+                            ins = aa.tool.ToInstruction();
+                            instructions.Add(ins);
+                        }
+
                         ins = a.ToInstruction();
                         instructions.Add(ins);
                         ws.Send(ins);

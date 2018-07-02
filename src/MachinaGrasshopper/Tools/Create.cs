@@ -59,11 +59,11 @@ namespace MachinaGrasshopper.Tools
             }
 
             Point3d cog = 0.5 * tcppl.Origin;
-            Tool tool = new Tool(name,
-                new Machina.Point(tcppl.OriginX, tcppl.OriginY, tcppl.OriginZ),
-                new Orientation(tcppl.XAxis.X, tcppl.XAxis.Y, tcppl.XAxis.Z, tcppl.YAxis.X, tcppl.YAxis.Y, tcppl.YAxis.Z),
+            Tool tool = Tool.Create(name,
+                tcppl.OriginX, tcppl.OriginY, tcppl.OriginZ,
+                tcppl.XAxis.X, tcppl.XAxis.Y, tcppl.XAxis.Z, tcppl.YAxis.X, tcppl.YAxis.Y, tcppl.YAxis.Z,
                 w,
-                new Machina.Point(cog.X, cog.Y, cog.Z));
+                cog.X, cog.Y, cog.Z);
 
             DA.SetData(0, tool);
         }

@@ -24,6 +24,8 @@ namespace MachinaGrasshopper.Programs
         //                                                       
 
         private bool _sentOnce = false;
+        private WebSocket _ws;
+        private string _url;
                                                        
         public SendToBridge() : base(
             "SendToBridge",
@@ -38,62 +40,88 @@ namespace MachinaGrasshopper.Programs
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Actions", "A", "A program in the form of a list of Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("BridgeURL", "URL", "The URL of the Machina Bridge App.", GH_ParamAccess.item, "ws://127.0.0.1:6999/Bridge");
+            pManager.AddBooleanParameter("Connect?", "C", "Connect to Machina Bridge App?", GH_ParamAccess.item, false);
+            pManager.AddGenericParameter("Actions", "A", "A program in the form of a list of Actions", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Send", "S", "Send Actions?", GH_ParamAccess.item, false);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddBooleanParameter("Connected?", "C", "Is the connection to the Bridge live?", GH_ParamAccess.item);
             pManager.AddTextParameter("Sent?", "ok", "Correctly sent?", GH_ParamAccess.item);
             pManager.AddTextParameter("Instructions", "I", "Streamed Instructions", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            
-            List<Machina.Action> actions = new List<Machina.Action>();
             string url = "";
+            bool connect = false;
+            List<Machina.Action> actions = new List<Machina.Action>();
             bool send = false;
 
-            if (!DA.GetDataList(0, actions)) return;
-            if (!DA.GetData(1, ref url)) return;
-            if (!DA.GetData(2, ref send)) return;
+            if (!DA.GetData(0, ref url)) return;
+            if (!DA.GetData(1, ref connect)) return;
+            if (!DA.GetDataList(2, actions)) return;
+            if (!DA.GetData(3, ref send)) return;
 
             List<string> instructions = new List<string>();
-            if (send)
+
+            bool connectedResult;
+            if (connect)
             {
-                string ins = "";
-                using (var ws = new WebSocket(url))
+                if (_ws == null || !_ws.IsAlive)
                 {
-                    ws.Connect();
+                    _ws = new WebSocket(url);
+                    _ws.Connect();
+                }
+                connectedResult = _ws.IsAlive;
 
-                    foreach (Machina.Action a in actions)
-                    {
-                        // If attaching a tool, send the tool description first.
-                        // This is quick and dirty, a result of this component not taking the robot object as an input.
-                        // How coud this be improved...? Should tool creation be an action?
-                        if (a.type == Machina.ActionType.Attach)
-                        {
-                            ActionAttach aa = (ActionAttach)a;
-                            ins = aa.tool.ToInstruction();
-                            instructions.Add(ins);
-                            ws.Send(ins);
-                        }
-
-                        ins = a.ToInstruction();
-                        instructions.Add(ins);
-                        ws.Send(ins);
-                    }
-                    DA.SetData(1, "Sent!");
+                if (!connectedResult)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not connect to Machina Bridge App");
+                    return;
                 }
             }
             else
             {
-                DA.SetData(0, "Nothing sent");
+                if (_ws != null)
+                {
+                    _ws.Close();
+                }
+                connectedResult = _ws.IsAlive;
+            }
+            DA.SetData(0, connectedResult);
+            
+            if (send && connectedResult)
+            {
+                string ins = "";
+                    
+                foreach (Machina.Action a in actions)
+                {
+                    // If attaching a tool, send the tool description first.
+                    // This is quick and dirty, a result of this component not taking the robot object as an input.
+                    // How coud this be improved...? Should tool creation be an action?
+                    if (a.type == Machina.ActionType.Attach)
+                    {
+                        ActionAttach aa = (ActionAttach)a;
+                        ins = aa.tool.ToInstruction();
+                        instructions.Add(ins);
+                        _ws.Send(ins);
+                    }
+
+                    ins = a.ToInstruction();
+                    instructions.Add(ins);
+                    _ws.Send(ins);
+                }
+                DA.SetData(1, "Sent!");
+            }
+            else
+            {
+                DA.SetData(1, "Nothing sent");
             }
 
-            DA.SetDataList(1, instructions);
+            DA.SetDataList(2, instructions);
         }
     }
 }

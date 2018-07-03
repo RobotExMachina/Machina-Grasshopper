@@ -78,6 +78,7 @@ namespace MachinaGrasshopper.Programs
                             ActionAttach aa = (ActionAttach)a;
                             ins = aa.tool.ToInstruction();
                             instructions.Add(ins);
+                            ws.Send(ins);
                         }
 
                         ins = a.ToInstruction();

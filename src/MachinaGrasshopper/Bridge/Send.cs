@@ -66,7 +66,7 @@ namespace MachinaGrasshopper.Bridge
 
             if (ws == null || !ws.IsAlive)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Brdge connection.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
                 return;
             }
 

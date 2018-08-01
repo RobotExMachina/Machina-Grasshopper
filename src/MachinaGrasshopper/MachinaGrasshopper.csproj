@@ -162,7 +162,17 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Erase "$(TargetPath)"</PostBuildEvent>
+Erase "$(TargetPath)"
+
+IF ($(ConfigurationName)) == (Debug) GOTO END
+cd $(ProjectDir)
+cd..
+cd..
+cd dist/nightly
+copy /y "$(TargetDir)Machina.dll" Machina.dll
+copy /y "$(TargetDir)$(ProjectName).gha" $(ProjectName).gha
+copy /y "$(TargetDir)websocket-sharp.dll" websocket-sharp.dll
+:END</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|AnyCPU' ">
     <StartArguments>

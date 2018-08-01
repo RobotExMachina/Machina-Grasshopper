@@ -21,6 +21,8 @@
 - [x] Deprecate `SendToBridge`, to be replaced by a new set of dedicated `Connect/Send/Read` components.
 - [x] Improve `GH_MutableComponent` architecture to accept optional input parameters
 - [x] Add `ExternalAxes/To`
+- [ ] Split `SendToBridge` into `Connect` and `Send`
+- [ ] 
 
 
 

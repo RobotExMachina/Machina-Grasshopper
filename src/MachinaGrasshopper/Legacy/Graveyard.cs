@@ -742,7 +742,7 @@ namespace MachinaGrasshopper.Graveyard
             "Machina",
             "Programs")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("4442d8a9-3b6e-4197-ad58-93caa6c83e3e");
         protected override System.Drawing.Bitmap Icon => null;
 

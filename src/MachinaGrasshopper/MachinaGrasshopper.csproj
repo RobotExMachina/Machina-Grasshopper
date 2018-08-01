@@ -93,6 +93,7 @@
     <Compile Include="Actions\Move.cs" />
     <Compile Include="Actions\Wait.cs" />
     <Compile Include="Bridge\Connect.cs" />
+    <Compile Include="Bridge\Send.cs" />
     <Compile Include="GH_Utils\GH_ComponentNames.cs" />
     <Compile Include="GH_Utils\GH_InputParamProps.cs" />
     <Compile Include="GH_Utils\GH_MutableComponent.cs" />

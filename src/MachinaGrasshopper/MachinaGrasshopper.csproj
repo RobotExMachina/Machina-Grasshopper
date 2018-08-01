@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Acceleration.cs" />
+    <Compile Include="Actions\ExternalAxes.cs" />
     <Compile Include="Actions\Extrude.cs" />
     <Compile Include="Actions\ExtrusionRate.cs" />
     <Compile Include="Actions\JointAcceleration.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Legacy\Graveyard.cs" />
     <Compile Include="Programs\CompileProgram.cs" />
     <Compile Include="Programs\DisplayProgram.cs" />
-    <Compile Include="Programs\SendToBridge.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -151,6 +151,9 @@
       <Project>{15951838-f9d6-4988-a103-b7c72bfe81a2}</Project>
       <Name>Machina</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bridge\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

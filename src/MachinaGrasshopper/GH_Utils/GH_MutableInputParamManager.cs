@@ -38,7 +38,22 @@ namespace MachinaGrasshopper.GH_Utils
         /// <param name="access">Access level</param>
         public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access)
         {
-            this.AddParameter(relative, dataType, name, nickname, description, access, null);
+            this.AddParameter(relative, dataType, name, nickname, description, access, null, false);
+        }
+
+        /// <summary>
+        /// Adds a mutable input parameter to this component. 
+        /// </summary>
+        /// <param name="relative">Is this parameter for relative or absolute mode?</param>
+        /// <param name="dataType">GH_Param type, as in `typeof(Param_Plane)`</param>
+        /// <param name="name">Parameter name</param>
+        /// <param name="nickname">Parameter nickname</param>
+        /// <param name="description">Parameter description</param>
+        /// <param name="access">Access level</param>
+        /// <param name="isOptional">Must this input have a connected value?</param>
+        public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access, bool isOptional)
+        {
+            this.AddParameter(relative, dataType, name, nickname, description, access, null, isOptional);
         }
 
         /// <summary>
@@ -53,9 +68,20 @@ namespace MachinaGrasshopper.GH_Utils
         /// <param name="defaultValue">Default value</param>
         public void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access, object defaultValue)
         {
-            GH_InputParamProps p = new GH_InputParamProps(dataType, name, nickname, description, access, defaultValue);
+            this.AddParameter(relative, dataType, name, nickname, description, access, defaultValue, false);
+        }
+
+
+        /// <summary>
+        /// The generic overload "contructor"
+        /// </summary>
+        internal void AddParameter(bool relative, Type dataType, string name, string nickname, string description, GH_ParamAccess access, object defaultValue, bool isOptional)
+        {
+            GH_InputParamProps p = new GH_InputParamProps(dataType, name, nickname, description, access, defaultValue, isOptional);
             inputs[relative].Add(p);
         }
+
+
 
         /// <summary>
         /// Add mutable component names to the constructor. These names will show up when the component is dropped on the document,

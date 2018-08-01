@@ -20,8 +20,9 @@ namespace MachinaGrasshopper.GH_Utils
         public string name, nickname, description;
         public GH_ParamAccess access;
         public object defaultValue = null;
+        public bool optional = false;
 
-        public GH_InputParamProps(Type type, string name, string nickname, string description, GH_ParamAccess access, object defaultValue)
+        public GH_InputParamProps(Type type, string name, string nickname, string description, GH_ParamAccess access, object defaultValue, bool optional)
         {
             this.dataType = type;
             this.name = name;
@@ -29,6 +30,7 @@ namespace MachinaGrasshopper.GH_Utils
             this.description = description;
             this.access = access;
             this.defaultValue = defaultValue;
+            this.optional = optional;
         }
 
         public override string ToString()

@@ -11,13 +11,17 @@
 # TODO
 - [ ] Wrap Machina types as parameters deriving from GH_Goo
 - [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
-- [ ] Add `ExternalAxes/To`
 
 
 # REVISIONS
 ---
 # v0.6.4
-- [x] Deprecate `SendToBridge`, to be replaced by a new set of dedicated `Connect/Send/Reas` components.
+
+## BUILD 1407
+- [x] Deprecate `SendToBridge`, to be replaced by a new set of dedicated `Connect/Send/Read` components.
+- [x] Improve `GH_MutableComponent` architecture to accept optional input parameters
+- [x] Add `ExternalAxes/To`
+
 
 
 ---

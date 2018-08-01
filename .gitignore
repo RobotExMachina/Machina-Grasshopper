@@ -293,3 +293,4 @@ desktop.ini
 
 # JLX
 *.rhl
+dist/nightly

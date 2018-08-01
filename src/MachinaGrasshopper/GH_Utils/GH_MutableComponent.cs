@@ -113,7 +113,8 @@ namespace MachinaGrasshopper.GH_Utils
             //foreach (var input in mpManager.inputs[this.Relative]) AddParameterFunctionMap[input.dataType](pManager, input);
 
             // Please don't look at this... 
-            foreach (var p in mpManager.inputs[this.Relative]) RegisterTypedParam(pManager, p); 
+            int it = 0;
+            foreach (var p in mpManager.inputs[this.Relative]) RegisterTypedParam(pManager, p, it++); 
             
 
             // Do some tricks with the names of the mutable input (is this the right place to put this?)
@@ -168,7 +169,7 @@ namespace MachinaGrasshopper.GH_Utils
 
         //// Wanted to do this programmatically with a dictionary of delegates, but couldn't really make it work... :(
         //AddParameterFunctionMap[input.dataType](pManager, input);
-        protected void RegisterTypedParam(GH_InputParamManager pManager, GH_InputParamProps p)
+        protected void RegisterTypedParam(GH_InputParamManager pManager, GH_InputParamProps p, int index)
         {
             // I am so embarrased about having to do this... urgh X(
             if (p.defaultValue == null)
@@ -262,6 +263,12 @@ namespace MachinaGrasshopper.GH_Utils
                 {
                     this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Something went wrong registering input parameter {p.dataType} with value {p.defaultValue}");
                 }
+            }
+
+            // If this last input is optional, flag it
+            if (p.optional)
+            {
+                pManager[index].Optional = true;
             }
 
         }

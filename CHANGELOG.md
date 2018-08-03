@@ -24,6 +24,7 @@
 - [x] Split `SendToBridge` into `Connect` and `Send`
 - [x] Change `ExternalAxes/To` to new core `ExternalAxis/To`
 - [x] Add `CustomCode` component
+- [x] Improved socket reliability
 
 
 

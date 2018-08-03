@@ -51,7 +51,7 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddBooleanParameter("Connected?", "C", "Is the connection to the Bridge live?", GH_ParamAccess.item);
+            pManager.AddTextParameter("Messages", "msg", "What's going on?", GH_ParamAccess.list);
             pManager.AddGenericParameter("Bridge", "MB", "The (websocket) object managing connection to the Machina Bridge", GH_ParamAccess.item);
         }
 
@@ -67,21 +67,33 @@ namespace MachinaGrasshopper.Bridge
 
             url += "?name=" + clientName;
 
-            _ms = new MachinaBridgeSocket(clientName);
+            _ms = _ms ?? new MachinaBridgeSocket(clientName);
 
-            bool connectedResult;
+            bool connectedResult = false;
+            List<string> msgs = new List<string>();
+
             // @TODO: move all socket management inside the wrapper
             if (connect)
             {
-                if (_ms.socket == null || !_ms.socket.IsAlive)
+                if (_ms.socket == null)
                 {
                     _ms.socket = new WebSocket(url);
-                    _ms.socket.Connect();
-                    _ms.socket.OnMessage += (sender, e) => _ms.Log(e.Data);
                 }
+
+                if (!_ms.socket.IsAlive)
+                {
+                    _ms.socket.Connect();
+                    _ms.socket.OnMessage += Socket_OnMessage;
+                    _ms.socket.OnClose += Socket_OnClose;
+                }
+
                 connectedResult = _ms.socket.IsAlive;
 
-                if (!connectedResult)
+                if (connectedResult)
+                {
+                    msgs.Add("Connected to Machina Bridge");
+                } 
+                else
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not connect to Machina Bridge app");
                     return;
@@ -91,14 +103,31 @@ namespace MachinaGrasshopper.Bridge
             {
                 if (_ms.socket != null)
                 {
-                    _ms.socket.Close();
+                    _ms.socket.Close(CloseStatusCode.Normal, "k thx bye!");
+                    _ms.socket = null;
                     _ms.Flush();
+
+                    msgs.Add("Disconnected from the bridge");
                 }
                 connectedResult = false;
             }
 
-            DA.SetData(0, connectedResult);
+            DA.SetDataList(0, msgs);
             DA.SetData(1, connectedResult ? _ms : null);
+        }
+
+        private void Socket_OnMessage(object sender, MessageEventArgs e)
+        {
+            _ms.Log(e.Data);
+        }
+
+        private void Socket_OnClose(object sender, CloseEventArgs e)
+        {
+            // Was getting duplicate logging when connecting/disconneting/connecting again...
+            // When closing, remove all handlers.
+            // Apparently, this is safe (although not thread-safe) even if no handlers were attached: https://stackoverflow.com/a/7065771/1934487
+            _ms.socket.OnMessage -= Socket_OnMessage;
+            _ms.socket.OnClose -= Socket_OnClose;
         }
     }
 }

@@ -9,6 +9,7 @@ using Rhino.Geometry;
 
 using Machina;
 using WebSocketSharp;
+using MachinaGrasshopper.Utils;
 
 namespace MachinaGrasshopper.Bridge
 {
@@ -28,7 +29,7 @@ namespace MachinaGrasshopper.Bridge
     //                                                                
     public class Connect : GH_Component
     {
-        private WebSocket _ws;
+        private MachinaBridgeSocket _ms;
 
         public Connect() : base(
             "Connect",
@@ -66,15 +67,19 @@ namespace MachinaGrasshopper.Bridge
 
             url += "?name=" + clientName;
 
+            _ms = new MachinaBridgeSocket(clientName);
+
             bool connectedResult;
+            // @TODO: move all socket management inside the wrapper
             if (connect)
             {
-                if (_ws == null || !_ws.IsAlive)
+                if (_ms.socket == null || !_ms.socket.IsAlive)
                 {
-                    _ws = new WebSocket(url);
-                    _ws.Connect();
+                    _ms.socket = new WebSocket(url);
+                    _ms.socket.Connect();
+                    _ms.socket.OnMessage += (sender, e) => _ms.Log(e.Data);
                 }
-                connectedResult = _ws.IsAlive;
+                connectedResult = _ms.socket.IsAlive;
 
                 if (!connectedResult)
                 {
@@ -84,15 +89,16 @@ namespace MachinaGrasshopper.Bridge
             }
             else
             {
-                if (_ws != null)
+                if (_ms.socket != null)
                 {
-                    _ws.Close();
+                    _ms.socket.Close();
+                    _ms.Flush();
                 }
                 connectedResult = false;
             }
 
             DA.SetData(0, connectedResult);
-            DA.SetData(1, connectedResult ? _ws : null);
+            DA.SetData(1, connectedResult ? _ms : null);
         }
     }
 }

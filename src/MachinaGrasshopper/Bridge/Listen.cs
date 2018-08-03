@@ -9,6 +9,7 @@ using Rhino.Geometry;
 
 using Machina;
 using WebSocketSharp;
+using MachinaGrasshopper.Utils;
 
 namespace MachinaGrasshopper.Bridge
 {
@@ -55,29 +56,23 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            WebSocket ws = null;
+            MachinaBridgeSocket ms = null;
+            
             bool autoUpdate = true;
             int millis = 1000;
 
-            if (!DA.GetData(0, ref ws)) return;
+            if (!DA.GetData(0, ref ms)) return;
             if (!DA.GetData(1, ref autoUpdate)) return;
             if (!DA.GetData(2, ref millis)) return;
 
-            if (ws == null || !ws.IsAlive)
+            if (ms.socket == null || !ms.socket.IsAlive)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
                 if (autoUpdate) this.ExpireSolution(true);
                 return;
             }
 
-            List<string> messages = new List<string>();
-
-            // Use socket to listen
-            ws.OnMessage += (sender, e) =>
-            {
-                messages.Add(e.Data);
-            };
-
+            List<string> messages = ms.receivedMessage;
 
             if (autoUpdate)
             {

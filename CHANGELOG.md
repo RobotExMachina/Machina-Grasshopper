@@ -22,6 +22,7 @@
 - [x] Improve `GH_MutableComponent` architecture to accept optional input parameters
 - [x] Add `ExternalAxes/To`
 - [x] Split `SendToBridge` into `Connect` and `Send`
+- [x] Change `ExternalAxes/To` to new core `ExternalAxis/To`
 - [ ]
 
 

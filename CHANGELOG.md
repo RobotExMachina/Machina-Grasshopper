@@ -11,9 +11,19 @@
 # TODO
 - [ ] Wrap Machina types as parameters deriving from GH_Goo
 - [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
+- [ ] Add a `ToInstruction()` component --> how about if the compiler is a `MACHINA` robot?! :) Implement this in core
+
+
 
 
 # REVISIONS
+# v0.7.0
+
+## BUILD 1408
+- First stub at `Listen` component with full data ins --> Need to improve outputs to be persistent unless value changes: https://discourse.mcneel.com/t/how-to-trigger-updates-down-only-selected-outputs-of-component/68441
+- 
+
+
 ---
 # v0.6.4
 

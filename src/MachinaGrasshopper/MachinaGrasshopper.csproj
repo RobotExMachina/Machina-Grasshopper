@@ -43,9 +43,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="RhinoCommon">
       <SpecificVersion>False</SpecificVersion>
@@ -94,6 +97,7 @@
     <Compile Include="Actions\Move.cs" />
     <Compile Include="Actions\Wait.cs" />
     <Compile Include="Bridge\Connect.cs" />
+    <Compile Include="Bridge\ImmutabilityTest.cs" />
     <Compile Include="Bridge\Listen.cs" />
     <Compile Include="Bridge\Send.cs" />
     <Compile Include="GH_Utils\GH_ComponentNames.cs" />
@@ -152,12 +156,11 @@
     <Content Include="Resources\Icons\Tools.Create.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Machina\Machina\Machina.csproj">
+    <ProjectReference Include="..\..\..\Machina\src\Machina\Machina.csproj">
       <Project>{15951838-f9d6-4988-a103-b7c72bfe81a2}</Project>
       <Name>Machina</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

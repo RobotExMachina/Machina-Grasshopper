@@ -57,14 +57,21 @@ namespace MachinaGrasshopper.Bridge
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Bridge", "MB", "The (websocket) object managing connection to the Machina Bridge", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Autoupdate", "AUTO", "Keep listenting connection alive? The alternative is connecting a timer to this component.", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("Autoupdate", "AUTO", "Keep listening while connection alive? The alternative is connecting a timer to this component.", GH_ParamAccess.item, true);
             pManager.AddIntegerParameter("Interval", "Int", "Refresh interval in milliseconds.", GH_ParamAccess.item, 66);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+
+            pManager.AddTextParameter("lastMessages", "Msg", "Last few messages received from the bridge.", GH_ParamAccess.list);
+
+            pManager.AddPlaneParameter("lastTCP", "TCP", "Last known position of the TCP.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("lastAxes", "Q", "Last known rotational values of robot axes.", GH_ParamAccess.list);
             pManager.AddTextParameter("lastAction", "A", "Last Action that was executed by the robot.", GH_ParamAccess.item);
             pManager.AddNumberParameter("remainingActions", "r", "How many Actions are left in the robot queue to be executed?", GH_ParamAccess.item);
+
+            pManager.AddTextParameter("log", "log", "console", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -77,6 +84,9 @@ namespace MachinaGrasshopper.Bridge
             if (!DA.GetData(0, ref ms)) return;
             if (!DA.GetData(1, ref autoUpdate)) return;
             if (!DA.GetData(2, ref millis)) return;
+
+            // Some sanity
+            if (millis < 10) millis = 10;
 
             if (ms == null || ms.socket == null || !ms.socket.IsAlive)
             {

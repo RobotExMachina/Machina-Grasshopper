@@ -28,7 +28,7 @@ namespace MachinaGrasshopper.Bridge
         public string[] PreviousData { get; set; }
 
         public SmartUpdateComponentMultipleInputs()
-          : base("Smart Update Multiple Inputs", "SmupdateMI", "Only trigger an update if a value changes.", "Test", "Test")
+          : base("Smart Update Multiple Inputs", "SmupdateMI", "Only trigger an update if a value changes.", "Machina", "Test")
         {
             UpdateOutput = new bool[IOCount];
             PreviousData = new string[IOCount];
@@ -39,6 +39,7 @@ namespace MachinaGrasshopper.Bridge
             }
         }
         public override Guid ComponentGuid => new Guid("3736547e-360a-4fff-9ed5-a05406cc43c1");
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {

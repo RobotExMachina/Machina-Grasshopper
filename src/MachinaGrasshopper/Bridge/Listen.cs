@@ -91,7 +91,7 @@ namespace MachinaGrasshopper.Bridge
             if (ms == null || ms.socket == null || !ms.socket.IsAlive)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
-                if (autoUpdate) this.ExpireSolution(true);
+                if (autoUpdate) this.ExpireSolution(true);  // why was this here...? Necessary?
                 return;
             }
 

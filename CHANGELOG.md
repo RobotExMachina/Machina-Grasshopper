@@ -21,7 +21,7 @@
 
 ## BUILD 1408
 - First stub at `Listen` component with full data ins --> Need to improve outputs to be persistent unless value changes: https://discourse.mcneel.com/t/how-to-trigger-updates-down-only-selected-outputs-of-component/68441
-- 
+- Fix `ExternalAxis` component
 
 
 ---

@@ -29,11 +29,11 @@ namespace MachinaGrasshopper.Bridge
     public class ActionCompleted : GH_Component
     {
 
-        private bool _updateOutputs;
         private int _lastRem, _currentRem;
         private string _lastAction, _currentAction;
-        private int _ticks = 0;
 
+        private bool _updateOutputs;
+        private int _ticks = 0;
         private List<string> _lastMessages;
         private int _lastLogCheck;
 
@@ -105,6 +105,7 @@ namespace MachinaGrasshopper.Bridge
             // Some sanity
             if (millis < 10) millis = 10;
 
+            // Output the values precomputed in the last solution.
             DA.SetData(0, _lastAction);
             DA.SetData(1, _lastRem);
             DA.SetData(2, _ticks++);
@@ -112,12 +113,6 @@ namespace MachinaGrasshopper.Bridge
             if (ms == null || ms.socket == null || !ms.socket.IsAlive)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
-                //if (autoUpdate)
-                //{
-                //    this.OnPingDocument().ScheduleSolution(millis, doc => {
-                //        this.ExpireSolution(false);
-                //    });
-                //}
                 return;
             }
 
@@ -125,6 +120,8 @@ namespace MachinaGrasshopper.Bridge
             if (_updateOutputs)
             {
                 _updateOutputs = false;
+
+                // This is redundant, right?
                 _lastRem = _currentRem;
                 _lastAction = _currentAction;
 
@@ -143,7 +140,7 @@ namespace MachinaGrasshopper.Bridge
             bool rescheduleRightAway = false;
             if (_lastLogCheck != ms.logged)
             {
-                UpdateOutputs(ms);
+                UpdateCurrentValues(ms);
                 _lastLogCheck = ms.logged;
 
                 // We may be receiving the same action multiple times (like the user is sending
@@ -169,7 +166,7 @@ namespace MachinaGrasshopper.Bridge
 
             if (rescheduleRightAway)
             {
-                this.OnPingDocument().ScheduleSolution(millis, doc => {
+                this.OnPingDocument().ScheduleSolution(5, doc => {
                     this.ExpireSolution(false);
                 });
             }
@@ -181,15 +178,16 @@ namespace MachinaGrasshopper.Bridge
             }
         }
 
-        private void Callback(GH_Document doc)
-        {
-            // The logic is all in our expiration method, but we do have 
-            // to expire this component.
-            if (_updateOutputs)
-                ExpireSolution(false);
-        }
+        // No need for this anymore, since this component autoupdates
+        //private void Callback(GH_Document doc)
+        //{
+        //    // The logic is all in our expiration method, but we do have 
+        //    // to expire this component.
+        //    if (_updateOutputs)
+        //        ExpireSolution(false);
+        //}
 
-        private void UpdateOutputs(MachinaBridgeSocket ms)
+        private void UpdateCurrentValues(MachinaBridgeSocket ms)
         {
             _lastMessages = ms.receivedMessages;
 

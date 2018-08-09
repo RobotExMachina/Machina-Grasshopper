@@ -12,12 +12,13 @@ namespace MachinaGrasshopper.Bridge
     public sealed class SmartUpdateComponent : GH_Component
     {
         public SmartUpdateComponent()
-          : base("Smart Update", "Smupdate", "Only trigger an update if a value changes.", "Test", "Test")
+          : base("Smart Update", "Smupdate", "Only trigger an update if a value changes.", "Machina", "Test")
         {
             UpdateOutput = true;
             PreviousData = "none";
         }
         public override Guid ComponentGuid => new Guid("{60F1F671-78F5-4A23-87EA-CC2BF6B6C296}");
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {

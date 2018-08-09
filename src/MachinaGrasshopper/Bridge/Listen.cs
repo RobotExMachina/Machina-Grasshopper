@@ -63,15 +63,8 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-
-            pManager.AddTextParameter("lastMessages", "Msg", "Last few messages received from the bridge.", GH_ParamAccess.list);
-
-            pManager.AddPlaneParameter("lastTCP", "TCP", "Last known position of the TCP.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("lastAxes", "Q", "Last known rotational values of robot axes.", GH_ParamAccess.list);
             pManager.AddTextParameter("lastAction", "A", "Last Action that was executed by the robot.", GH_ParamAccess.item);
             pManager.AddNumberParameter("remainingActions", "r", "How many Actions are left in the robot queue to be executed?", GH_ParamAccess.item);
-
-            pManager.AddTextParameter("log", "log", "console", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

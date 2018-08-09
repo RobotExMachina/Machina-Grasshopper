@@ -102,6 +102,7 @@
     <Compile Include="Bridge\ImmutabilityTest.cs" />
     <Compile Include="Bridge\Listen.cs" />
     <Compile Include="Bridge\Send.cs" />
+    <Compile Include="Bridge\SmartUpdateComponentMultipleInputs.cs" />
     <Compile Include="Bridge\SmartUpdateComponent.cs" />
     <Compile Include="Bridge\SmartUpdateComponent2.cs" />
     <Compile Include="GH_Utils\GH_ComponentNames.cs" />

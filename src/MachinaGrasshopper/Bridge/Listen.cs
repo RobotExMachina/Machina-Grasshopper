@@ -58,17 +58,16 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("BridgeMessage", "Msg", "Last messags received from the bridge.", GH_ParamAccess.list);
+            pManager.AddTextParameter("BridgeMessage", "Msg", "Last messags received from the bridge. Will only update once per received message.", GH_ParamAccess.list);
         }
 
         protected override void ExpireDownStreamObjects()
         {
+            // Only expire the output if it needs an update
             if (_updateOut)
             {
                 Params.Output[0].ExpireSolution(false);
             }
-
-            //Params.Output[1].ExpireSolution(false);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -78,7 +77,6 @@ namespace MachinaGrasshopper.Bridge
             DA.DisableGapLogic();
 
             MachinaBridgeSocket ms = null;
-
             bool autoUpdate = true;
             int millis = 1000;
 
@@ -97,13 +95,13 @@ namespace MachinaGrasshopper.Bridge
             // Output the last received message from the last cycle
             DA.SetData(0, _lastMsg);
 
-            // Stop triggering updates if the buffer is empty
+            // Stop triggering expiration updates if the buffer is empty
             int size = ms.BufferSize();
             if (_updateOut && size == 0)
             {
                 _updateOut = false;
 
-                // Go back to regular autoupdate
+                // And go back to regular autoupdate
                 if (autoUpdate)
                 {
                     this.OnPingDocument().ScheduleSolution(millis, doc => {
@@ -114,7 +112,7 @@ namespace MachinaGrasshopper.Bridge
                 return;
             }
             
-            // If messagges logged by the MS, trigger a chain of immediate updates
+            // If there are messagges logged by the MS, trigger a chain of expiration updates
             if (size > 0)
             {
                 _updateOut = true;

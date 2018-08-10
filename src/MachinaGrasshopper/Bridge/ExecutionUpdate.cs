@@ -29,6 +29,8 @@ namespace MachinaGrasshopper.Bridge
 
     public class ExecutionUpdate : GH_Component
     {
+        private bool[] _updateOutputs;
+
         private object[] _lastPosObj, _currPosObj;
         private string _lastPosStr, _currPosStr;
         private object[] _lastOriObj, _currOriObj;
@@ -43,10 +45,8 @@ namespace MachinaGrasshopper.Bridge
         private string _lastExtaxStr, _currExtaxStr;
         private List<double?> _lastExternalAxes;
 
-        private bool[] _updateOutputs;
-        //private int _ticks = 0;
-        //private List<string> _lastMessages;
-        //private int _lastLogCheck;
+
+        JavaScriptSerializer ser;
 
         public ExecutionUpdate() : base(
             "ExecutionUpdate",
@@ -65,23 +65,23 @@ namespace MachinaGrasshopper.Bridge
             _lastAxes = new List<double?>();
             _lastExternalAxes = new List<double?>();
 
-            //_lastLogCheck = 0;
+            ser = new JavaScriptSerializer();
         }
+
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("f9b4a612-9b28-4557-ab1a-f8ca020765a8");
         protected override System.Drawing.Bitmap Icon => null;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("BridgeMessage", "BM", "The last message received from the Machina Bridge", GH_ParamAccess.item);
+            pManager.AddTextParameter("BridgeMessage", "BM", "The last message received from the Machina Bridge.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddPlaneParameter("lastTCP", "TCP", "Last known position of the TCP.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("lastAxes", "axes", "Last known rotational values of robot axes.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("lastExternalAxes", "extax", "Last known values of external axes.", GH_ParamAccess.list);
-            //pManager.AddNumberParameter("ticks", "ticks", "", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("LastTCP", "TCP", "Last known position of the TCP.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("LastAxes", "axes", "Last known rotational values of robot axes.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("LastExternalAxes", "extax", "Last known values of external axes.", GH_ParamAccess.list);
         }
 
         protected override void ExpireDownStreamObjects()
@@ -93,9 +93,6 @@ namespace MachinaGrasshopper.Bridge
                     Params.Output[i].ExpireSolution(false);
                 }
             }
-
-            //// Always expire the ticks...
-            //Params.Output[_updateOutputs.Length].ExpireSolution(false);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -104,29 +101,14 @@ namespace MachinaGrasshopper.Bridge
             // if we don't assign anything to an output.
             DA.DisableGapLogic();
 
-            //MachinaBridgeSocket ms = null;
-            //bool autoUpdate = true;
-            //int millis = 1000;
-
             string msg = null;
 
             if (!DA.GetData(0, ref msg)) return;
-            //DA.GetData(1, ref autoUpdate);
-            //DA.GetData(2, ref millis);
 
-            //// Some sanity
-            //if (millis < 10) millis = 10;
-
+            // Output the values precomputed in the last solution.
             DA.SetData(0, _lastTCP);
             DA.SetDataList(1, _lastAxes);
             DA.SetDataList(2, _lastExternalAxes);
-            //DA.SetData(3, _ticks++);
-
-            //if (ms == null || ms.socket == null || !ms.socket.IsAlive)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
-            //    return;
-            //}
 
             // Was any output flagged for an update?
             bool doneWithUpdates = false;
@@ -142,14 +124,6 @@ namespace MachinaGrasshopper.Bridge
             // If on the second solution, stop checking and go back to autoupdate
             if (doneWithUpdates)
             {
-                //if (autoUpdate)
-                //{
-                //    this.OnPingDocument().ScheduleSolution(millis, doc =>
-                //    {
-                //        this.ExpireSolution(false);
-                //    });
-                //}
-
                 return;
             }
 
@@ -159,8 +133,6 @@ namespace MachinaGrasshopper.Bridge
             if (true)
             {
                 UpdateCurrentValues(msg);
-
-                //_lastLogCheck = ms.logged;
 
                 // Check and flag each output individually
                 bool equals;
@@ -214,15 +186,35 @@ namespace MachinaGrasshopper.Bridge
                     this.ExpireSolution(false);
                 });
             }
-            //else if (autoUpdate)
-            //{
-            //    this.OnPingDocument().ScheduleSolution(millis, doc =>
-            //    {
-            //        this.ExpireSolution(false);
-            //    });
-            //}
 
         }
+
+
+        private void UpdateCurrentValues(string msg)
+        {
+            dynamic json = ser.Deserialize<dynamic>(msg);
+            string eType = json["event"];
+
+            // Search once for each event type if not found before
+            if (eType.Equals("execution-update"))
+            {
+                // Try get pose
+                _currPosObj = json["pos"];
+                _currOriObj = json["ori"];
+                _currPosStr = DoubleObjectArrayToString(_currPosObj);
+                _currOriStr = DoubleObjectArrayToString(_currOriObj);
+
+                // Try get axes
+                _currAxesObj = json["axes"];
+                _currAxesStr = DoubleObjectArrayToString(_currAxesObj);
+
+                // Try get external axes
+                _currExtaxObj = json["extax"];
+                _currExtaxStr = DoubleObjectArrayToString(_currExtaxObj);
+            }
+        }
+
+
 
         private List<double?> ListFromNullableDoubleObjects(object[] objs)
         {
@@ -249,7 +241,6 @@ namespace MachinaGrasshopper.Bridge
 
             return list;
         }
-
 
         private Plane PlaneFromDoubleObjects(object[] pos, object[] ori)
         {
@@ -279,45 +270,6 @@ namespace MachinaGrasshopper.Bridge
                 }
             }
             return str;
-        }
-
-        private void UpdateCurrentValues(string msg)
-        {
-            //_lastMessages = ms.receivedMessages;
-
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-
-            //string msg, eType;
-            string eType;
-            dynamic json;
-            //for (int i = _lastMessages.Count - 1; i >= 0; i--)
-            //{
-                //msg = _lastMessages[i];
-                json = ser.Deserialize<dynamic>(msg);
-                eType = json["event"];
-
-                // Search once for each event type if not found before
-                if (eType.Equals("execution-update"))
-                {
-                    // Try get pose
-                    _currPosObj = json["pos"];
-                    _currOriObj = json["ori"];
-                    _currPosStr = DoubleObjectArrayToString(_currPosObj);
-                    _currOriStr = DoubleObjectArrayToString(_currOriObj);
-
-                    // Try get axes
-                    _currAxesObj = json["axes"];
-                    _currAxesStr = DoubleObjectArrayToString(_currAxesObj);
-
-                    // Try get external axes
-                    _currExtaxObj = json["extax"];
-                    _currExtaxStr = DoubleObjectArrayToString(_currExtaxObj);
-
-                    // Stop searching any other events.
-                    //break;
-                }
-            //}
-
         }
 
 

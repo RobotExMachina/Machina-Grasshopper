@@ -16,11 +16,6 @@ namespace MachinaGrasshopper.Utils
         public WebSocket socket;
         public string name;
         public List<string> receivedMessages = new List<string>();
-
-        //public int logged = 0;
-        //public int minCount = 6;
-        //public int maxCount = 24;
-
         private object bufferLock = new object();
 
         public MachinaBridgeSocket(string socketName) {
@@ -38,17 +33,6 @@ namespace MachinaGrasshopper.Utils
         }
 
         public int BufferSize() => receivedMessages.Count; 
-
-        //private bool ResizeBuffer()
-        //{
-        //    if (receivedMessages.Count > maxCount)
-        //    {
-        //        receivedMessages = receivedMessages.GetRange(receivedMessages.Count - minCount - 1, minCount);
-        //        logged = receivedMessages.Count;
-        //        return true;
-        //    }
-        //    return false;
-        //}
 
         public string FetchFirst(bool remove)
         {
@@ -69,9 +53,5 @@ namespace MachinaGrasshopper.Utils
                 return first;
             }
         }
-
-
-
-
     }
 }

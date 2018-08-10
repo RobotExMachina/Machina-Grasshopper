@@ -21,6 +21,7 @@
 
 ## BUILD 1411
 - Improved `Listen` and event listerners, much cleaner "API"
+- Add `10_RealTime3DPrinting` sample.
 
 
 ## BUILD 1408

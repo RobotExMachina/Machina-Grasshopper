@@ -1,102 +1,142 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//using System.Web.Script.Serialization;
+using System.Web.Script.Serialization;
 
-//using Grasshopper.Kernel;
-//using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-//using Machina;
-//using WebSocketSharp;
-//using MachinaGrasshopper.Utils;
+using Machina;
+using WebSocketSharp;
+using MachinaGrasshopper.Utils;
 
-//namespace MachinaGrasshopper.Bridge
-//{
-//    //  ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗  
-//    //  ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝  
-//    //  ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗    
-//    //  ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝    
-//    //  ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗  
-//    //  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝  
-//    //                                                
-//    //  ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
-//    //  ██║     ██║██╔════╝╚══██╔══╝██╔════╝████╗  ██║
-//    //  ██║     ██║███████╗   ██║   █████╗  ██╔██╗ ██║
-//    //  ██║     ██║╚════██║   ██║   ██╔══╝  ██║╚██╗██║
-//    //  ███████╗██║███████║   ██║   ███████╗██║ ╚████║
-//    //  ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
-//    //                                                
+namespace MachinaGrasshopper.Bridge
+{
+    //  ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗  
+    //  ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝  
+    //  ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗    
+    //  ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝    
+    //  ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗  
+    //  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝  
+    //                                                
+    //  ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
+    //  ██║     ██║██╔════╝╚══██╔══╝██╔════╝████╗  ██║
+    //  ██║     ██║███████╗   ██║   █████╗  ██╔██╗ ██║
+    //  ██║     ██║╚════██║   ██║   ██╔══╝  ██║╚██╗██║
+    //  ███████╗██║███████║   ██║   ███████╗██║ ╚████║
+    //  ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
+    //                                                
 
-//    public class Listen : GH_Component
-//    {
+    public class Listen : GH_Component
+    {
 
-//        private List<string> _lastMessages;
+        private bool _updateOut;
+        private string _lastMsg;
 
-//        private int _lastLogCheck = 0;
+        public Listen() : base(
+            "Listen",
+            "Listen",
+            "Listen to messages from the Machina Bridge.",
+            "Machina",
+            "Bridge")
+        {
+            _updateOut = true;
+        }
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("8281b3ed-8d72-4e0a-8d11-efecd3b49954");
+        protected override System.Drawing.Bitmap Icon => null;
 
-//        private List<string> _console = new List<string>();
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Bridge", "MB", "The (websocket) object managing connection to the Machina Bridge", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Autoupdate", "AUTO", "Keep listening while connection alive? The alternative is connecting a timer to this component.", GH_ParamAccess.item, true);
+            pManager.AddIntegerParameter("Interval", "Int", "Refresh interval in milliseconds.", GH_ParamAccess.item, 66);
+        }
 
-//        public Listen() : base(
-//            "Listen",
-//            "Listen",
-//            "Listen to messages from the Machina Bridge.",
-//            "Machina",
-//            "Bridge")
-//        { }
-//        public override GH_Exposure Exposure => GH_Exposure.primary;
-//        public override Guid ComponentGuid => new Guid("d5c0770c-3c48-4f19-bf01-2c4ad5b18efb");
-//        protected override System.Drawing.Bitmap Icon => null;
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddTextParameter("BridgeMessage", "Msg", "Last messags received from the bridge.", GH_ParamAccess.list);
+        }
 
-//        protected override void RegisterInputParams(GH_InputParamManager pManager)
-//        {
-//            pManager.AddGenericParameter("Bridge", "MB", "The (websocket) object managing connection to the Machina Bridge", GH_ParamAccess.item);
-//            pManager.AddBooleanParameter("Autoupdate", "AUTO", "Keep listening while connection alive? The alternative is connecting a timer to this component.", GH_ParamAccess.item, true);
-//            pManager.AddIntegerParameter("Interval", "Int", "Refresh interval in milliseconds.", GH_ParamAccess.item, 66);
-//        }
+        protected override void ExpireDownStreamObjects()
+        {
+            if (_updateOut)
+            {
+                Params.Output[0].ExpireSolution(false);
+            }
 
-//        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-//        {
-//            pManager.AddTextParameter("ReceivedMessages", "Msgs", "Last few messages received from the bridge.", GH_ParamAccess.list);
-//        }
+            //Params.Output[1].ExpireSolution(false);
+        }
 
-//        protected override void SolveInstance(IGH_DataAccess DA)
-//        {
-//            MachinaBridgeSocket ms = null;
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            // This stops the component from assigning nulls 
+            // if we don't assign anything to an output.
+            DA.DisableGapLogic();
+
+            MachinaBridgeSocket ms = null;
+
+            bool autoUpdate = true;
+            int millis = 1000;
+
+            if (!DA.GetData(0, ref ms)) return;
+            if (!DA.GetData(1, ref autoUpdate)) return;
+            if (!DA.GetData(2, ref millis)) return;
             
-//            bool autoUpdate = true;
-//            int millis = 1000;
+            // Some sanity
+            if (millis < 10) millis = 10;
+            if (ms == null || ms.socket == null || !ms.socket.IsAlive)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
+                return;
+            }
 
-//            if (!DA.GetData(0, ref ms)) return;
-//            if (!DA.GetData(1, ref autoUpdate)) return;
-//            if (!DA.GetData(2, ref millis)) return;
+            // Output the last received message from the last cycle
+            DA.SetData(0, _lastMsg);
 
-//            // Some sanity
-//            if (millis < 10) millis = 10;
+            // Stop triggering updates if the buffer is empty
+            int size = ms.BufferSize();
+            if (_updateOut && size == 0)
+            {
+                _updateOut = false;
 
-//            if (ms == null || ms.socket == null || !ms.socket.IsAlive)
-//            {
-//                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
-//                return;
-//            }
+                // Go back to regular autoupdate
+                if (autoUpdate)
+                {
+                    this.OnPingDocument().ScheduleSolution(millis, doc => {
+                        this.ExpireSolution(false);
+                    });
+                }
 
-//            if (_lastLogCheck != ms.logged)
-//            {
-//                _lastLogCheck = ms.logged;
-//            }
-
-//            _lastMessages = ms.receivedMessages;
-//            DA.SetDataList(0, _lastMessages);
+                return;
+            }
             
-//            if (autoUpdate)
-//            {
-//                this.OnPingDocument().ScheduleSolution(millis, doc => {
-//                    this.ExpireSolution(false);
-//                });
-//            }
-//        }
+            // If messagges logged by the MS, trigger a chain of immediate updates
+            if (size > 0)
+            {
+                _updateOut = true;
+                _lastMsg = ms.FetchFirst(true);
 
-//    }
-//}
+                // Schedule a new solution right away
+                this.OnPingDocument().ScheduleSolution(5, doc => {
+                    this.ExpireSolution(false);
+                });
+
+                return;
+            }
+
+            // Otherwise, back to reguar autoupdate
+            if (autoUpdate)
+            {
+                this.OnPingDocument().ScheduleSolution(millis, doc =>
+                {
+                    this.ExpireSolution(false);
+                });
+            }
+        }
+
+    }
+}

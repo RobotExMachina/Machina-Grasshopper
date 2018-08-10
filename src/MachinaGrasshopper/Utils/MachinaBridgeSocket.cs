@@ -16,10 +16,12 @@ namespace MachinaGrasshopper.Utils
         public WebSocket socket;
         public string name;
         public List<string> receivedMessages = new List<string>();
-        public int logged = 0;
 
-        public int minCount = 6;
-        public int maxCount = 24;
+        //public int logged = 0;
+        //public int minCount = 6;
+        //public int maxCount = 24;
+
+        private object bufferLock = new object();
 
         public MachinaBridgeSocket(string socketName) {
             this.name = socketName;
@@ -28,26 +30,44 @@ namespace MachinaGrasshopper.Utils
         public void Log(string msg)
         {
             receivedMessages.Add(msg);
-            logged++;
-
-            //ResizeBuffer();
         }
 
         public void Flush()
         {
             receivedMessages.Clear();
-            logged = 0;
         }
 
-        private bool ResizeBuffer()
+        public int BufferSize() => receivedMessages.Count; 
+
+        //private bool ResizeBuffer()
+        //{
+        //    if (receivedMessages.Count > maxCount)
+        //    {
+        //        receivedMessages = receivedMessages.GetRange(receivedMessages.Count - minCount - 1, minCount);
+        //        logged = receivedMessages.Count;
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+        public string FetchFirst(bool remove)
         {
-            if (receivedMessages.Count > maxCount)
+            lock(bufferLock)
             {
-                receivedMessages = receivedMessages.GetRange(receivedMessages.Count - minCount - 1, minCount);
-                logged = receivedMessages.Count;
-                return true;
+                if (receivedMessages.Count == 0)
+                {
+                    return null;
+                }
+
+                string first = receivedMessages[0];
+
+                if (remove)
+                {
+                    receivedMessages.RemoveAt(0);
+                }
+
+                return first;
             }
-            return false;
         }
 
 

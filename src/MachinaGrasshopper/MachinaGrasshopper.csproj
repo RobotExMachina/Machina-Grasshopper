@@ -100,6 +100,9 @@
     <Compile Include="Bridge\Connect.cs" />
     <Compile Include="Bridge\ExecutionUpdate.cs" />
     <Compile Include="Bridge\Listen.cs" />
+    <Compile Include="Bridge\NEWActionCompleted.cs" />
+    <Compile Include="Bridge\NEWExecutionUpdate.cs" />
+    <Compile Include="Bridge\NEWListen.cs" />
     <Compile Include="Bridge\Send.cs" />
     <Compile Include="Bridge\SmartUpdateComponentMultipleInputs.cs" />
     <Compile Include="Bridge\SmartUpdateComponent.cs" />

@@ -29,16 +29,19 @@ namespace MachinaGrasshopper.Bridge
 
     public class ExecutionUpdate : GH_Component
     {
-        private object[] _lastPos, _currPos;
+        private object[] _lastPosObj, _currPosObj;
         private string _lastPosStr, _currPosStr;
-        private object[] _lastOri, _currOri;
+        private object[] _lastOriObj, _currOriObj;
         private string _lastOriStr, _currOriStr;
-
         private Plane _lastTCP;
 
-        //private Plane _lastTCP, _currentTCP;
-        private List<double?> _lastAxes, _currentAxes;
-        private List<double?> _lastExternalAxes, _currentExternalAxes;
+        private object[] _lastAxesObj, _currAxesObj;
+        private string _lastAxesStr, _currAxesStr;
+        private List<double?> _lastAxes; 
+
+        private object[] _lastExtaxObj, _currExtaxObj;
+        private string _lastExtaxStr, _currExtaxStr;
+        private List<double?> _lastExternalAxes;
 
         private bool[] _updateOutputs;
         private int _ticks = 0;
@@ -57,6 +60,11 @@ namespace MachinaGrasshopper.Bridge
             {
                 _updateOutputs[i] = true;
             }
+
+            // Initialize the lists as empty so that they trigger ineuqality with null persed objs?
+            _lastAxes = new List<double?>();
+            _lastExternalAxes = new List<double?>();
+
             _lastLogCheck = 0;
         }
         public override GH_Exposure Exposure => GH_Exposure.secondary;
@@ -110,8 +118,8 @@ namespace MachinaGrasshopper.Bridge
             if (millis < 10) millis = 10;
 
             DA.SetData(0, _lastTCP);
-            DA.SetData(1, _lastAxes);
-            DA.SetData(2, _lastExternalAxes);
+            DA.SetDataList(1, _lastAxes);
+            DA.SetDataList(2, _lastExternalAxes);
             DA.SetData(3, _ticks++);
 
             if (ms == null || ms.socket == null || !ms.socket.IsAlive)
@@ -122,30 +130,13 @@ namespace MachinaGrasshopper.Bridge
 
             // Was any output flagged for an update?
             bool doneWithUpdates = false;
-
-            doneWithUpdates |= _updateOutputs[0];
-            if (_updateOutputs[0])
+            for (int i = 0; i < _updateOutputs.Length; i++)
             {
-                _updateOutputs[0] = false;
-                //_lastTCP = _currentTCP;
-                //_lastPosStr = _currentPosStr;
-                //_lastOriStr = _currentOriStr;
-                //_lastTCP = PlaneFromStrings(_lastPosStr, _lastOriStr);
-
-            }
-
-            doneWithUpdates |= _updateOutputs[1];
-            if (_updateOutputs[1])
-            {
-                _updateOutputs[1] = false;
-                _lastAxes = _currentAxes;
-            }
-
-            doneWithUpdates |= _updateOutputs[2];
-            if (_updateOutputs[2])
-            {
-                _updateOutputs[2] = false;
-                _lastExternalAxes = _currentExternalAxes;
+                doneWithUpdates |= _updateOutputs[i];
+                if (_updateOutputs[i])
+                {
+                    _updateOutputs[i] = false;
+                }
             }
 
             // If on the second solution, stop checking and go back to autoupdate
@@ -175,39 +166,45 @@ namespace MachinaGrasshopper.Bridge
                 bool equals;
 
                 // Compare TCP by its string representation (urgh...)
-                _currPosStr = DoubleObjectArrayToString(_currPos);
-                _currOriStr = DoubleObjectArrayToString(_currOri);
-                equals = string.Equals(_lastPosStr, _currPosStr) && string.Equals(_lastOriStr, _currOriStr);
-
+                equals = string.Equals(_lastPosStr, _currPosStr) && string.Equals(_lastOriStr, _currOriStr);  // if nulls, this will also work
                 rescheduleRightAway |= equals;
                 if (!equals)
                 {
                     _updateOutputs[0] = true;
 
-                    _lastPos = _currPos;
-                    _lastOri = _currOri;
+                    _lastPosObj = _currPosObj;
+                    _lastOriObj = _currOriObj;
                     _lastPosStr = _currPosStr;
                     _lastOriStr = _currOriStr;
-                    _lastTCP = PlaneFromDoubleObjects(_lastPos, _lastOri);
+                    _lastTCP = PlaneFromDoubleObjects(_lastPosObj, _lastOriObj);
                 }
 
-                // Compare axes by 
+                // Compare axes by string representation too
+                equals = string.Equals(_lastAxesStr, _currAxesStr);
+                rescheduleRightAway |= equals;
+                if (!equals)
+                {
+                    _updateOutputs[1] = true;
 
+                    _lastAxesObj = _currAxesObj;
+                    _lastAxesStr = _currAxesStr;
 
+                    _lastAxes = ListFromNullableDoubleObjects(_lastAxesObj);
+                }
 
+                // Compare external axes by string representation... OMG I hope no one ever reads this code...
+                equals = string.Equals(_lastExtaxStr, _currExtaxStr);
+                rescheduleRightAway |= equals;
+                if (!equals)
+                {
+                    _updateOutputs[2] = true;
 
-                //if (_lastRem != _currentRem || !string.Equals(_lastAction, _currentAction))
-                //{
-                //    _updateOutputs = true;
-                //    _lastRem = _currentRem;
-                //    _lastAction = _currentAction;
+                    _lastExtaxObj = _currExtaxObj;
+                    _lastExtaxStr = _currExtaxStr;
 
-                //    //// Schedule a new solution right away filtered by _updateOutputs necessity
-                //    //var doc = OnPingDocument();
-                //    //// doc?.ScheduleSolution(5, Callback);
-                //    //doc?.ScheduleSolution(5, document => this.ExpireSolution(false));
-                //    rescheduleRightAway = true;
-                //}
+                    _lastExternalAxes = ListFromNullableDoubleObjects(_lastExtaxObj);
+                }
+
             }
 
             if (rescheduleRightAway)
@@ -225,6 +222,32 @@ namespace MachinaGrasshopper.Bridge
                 });
             }
 
+        }
+
+        private List<double?> ListFromNullableDoubleObjects(object[] objs)
+        {
+            List<double?> list = new List<double?>();
+            if (objs == null)
+            {
+                // if received data is null, we want a list of 6 nulls representing it...
+                list.Add(null);  // so lazy... XD
+
+                return list;
+            }
+
+            foreach (var obj in objs)
+            {
+                try
+                {
+                    list.Add(Convert.ToDouble(obj));
+                }
+                catch
+                {
+                    list.Add(null);
+                }
+            }
+
+            return list;
         }
 
 
@@ -249,7 +272,7 @@ namespace MachinaGrasshopper.Bridge
             string str = "";
             for (int i = 0; i < objs.Length; i++)
             {
-                str += objs[i].ToString();
+                str += objs[i]?.ToString() ?? "null";
                 if (i < objs.Length - 1)
                 {
                     str += ',';
@@ -275,95 +298,20 @@ namespace MachinaGrasshopper.Bridge
                 // Search once for each event type if not found before
                 if (eType.Equals("execution-update"))
                 {
-                    //Try get pose
-                    _currPos = json["pos"];
-                    _currOri = json["ori"];
+                    // Try get pose
+                    _currPosObj = json["pos"];
+                    _currOriObj = json["ori"];
+                    _currPosStr = DoubleObjectArrayToString(_currPosObj);
+                    _currOriStr = DoubleObjectArrayToString(_currOriObj);
 
-                    ////Try get pose
-                    //object[] pos = json["pos"];
-                    //object[] ori = json["ori"];
-                    //if (pos != null && ori != null)
-                    //{
-                    //    _currPos = pos;
-                    //    _currOri = ori;
-                    //}
-                    //else
-                    //{
-                    //    _currPos = null;
-                    //    _currOri = null;
-                    //}
+                    // Try get axes
+                    _currAxesObj = json["axes"];
+                    _currAxesStr = DoubleObjectArrayToString(_currAxesObj);
 
-
-                    //// Try get pose
-                    //try
-                    //{
-                    //    object[] pos = json["pos"];
-                    //    object[] ori = json["ori"];
-                    //    if (pos != null && ori != null)
-                    //    {
-                    //        _currentTCP = new Plane(
-                    //            new Point3d(Convert.ToDouble(pos[0]), Convert.ToDouble(pos[1]), Convert.ToDouble(pos[2])),
-                    //            new Vector3d(Convert.ToDouble(ori[0]), Convert.ToDouble(ori[1]), Convert.ToDouble(ori[2])),
-                    //            new Vector3d(Convert.ToDouble(ori[3]), Convert.ToDouble(ori[4]), Convert.ToDouble(ori[5]))
-                    //        );
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    //_console.Add("Exception: " + ex.ToString());
-                    //    _currentTCP = Plane.Unset;
-                    //}
-
-                    //// Try get axes
-                    //try
-                    //{
-                    //    object[] axes = json["axes"];
-                    //    if (axes != null)
-                    //    {
-                    //        foreach (var obj in axes)
-                    //        {
-                    //            _currentAxes.Add(Convert.ToDouble(obj));
-                    //        }
-                    //    }
-                    //}
-                    //catch
-                    //{
-                    //    for (int j = 0; j < 6; j++)
-                    //    {
-                    //        _currentAxes.Add(null);
-                    //    }
-
-                    //}
-
-                    //// Try get external axes
-                    //try
-                    //{
-                    //    object[] extax = json["extax"];
-                    //    if (extax != null)
-                    //    {
-                    //        double val;
-                    //        foreach (var obj in extax)
-                    //        {
-                    //            if (Double.TryParse(obj.ToString(), out val))
-                    //            {
-                    //                _currentExternalAxes.Add(val);
-                    //            }
-                    //            else
-                    //            {
-                    //                _currentExternalAxes.Add(null);
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //catch
-                    //{
-                    //    for (int j = 0; j < 6; j++)
-                    //    {
-                    //        _currentExternalAxes.Add(null);
-                    //    }
-
-                    //}
-
+                    // Try get external axes
+                    _currExtaxObj = json["extax"];
+                    _currExtaxStr = DoubleObjectArrayToString(_currExtaxObj);
+                    
                     // Stop searching any other events.
                     break;
                 }

@@ -44,7 +44,7 @@ namespace MachinaGrasshopper.Programs
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Machina.Robot bot = null;
+            Robot bot = null;
             List<Machina.Action> actions = new List<Machina.Action>();
             bool inline = false;
             bool comments = false;
@@ -54,23 +54,27 @@ namespace MachinaGrasshopper.Programs
             if (!DA.GetData(2, ref inline)) return;
             if (!DA.GetData(3, ref comments)) return;
 
-            //bot.Mode(Machina.ControlMode.Offline);
-            bot.ControlMode(ControlType.Offline);
+            // Create a new instance to avoid inheriting robot states between different compilations
+            // https://github.com/RobotExMachina/Machina-Grasshopper/issues/3
+            Robot compiler = Robot.Create(bot.Name, bot.Brand);
 
+            compiler.ControlMode(ControlType.Offline);
             foreach (Machina.Action a in actions)
             {
-                bot.Do(a);
+                compiler.Do(a);
             }
 
-            List<string> codeLines = bot.Export(inline, comments);
-            StringWriter writer = new StringWriter();
-            for (var i = 0; i < codeLines.Count; i++)
-            {
-                writer.WriteLine(codeLines[i]);
-            }
-            string code = writer.ToString();
+            List<string> codeLines = compiler.Compile(inline, comments);
 
-            DA.SetData(0, code);
+            // I forgot why I chose to spit out one single string, but this makes the panel super freaking heavy. Reverting.
+            //StringWriter writer = new StringWriter();
+            //for (var i = 0; i < codeLines.Count; i++)
+            //{
+            //    writer.WriteLine(codeLines[i]);
+            //}
+            //string code = writer.ToString();
+
+            DA.SetDataList(0, codeLines);
         }
     }
 }

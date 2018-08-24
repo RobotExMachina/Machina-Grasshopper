@@ -17,6 +17,14 @@
 
 
 # REVISIONS
+
+# v.0.7.1
+## BUILD 1412
+- `Compile` now uses a new `Robot` instance to avoid inheriting robot states.
+- Massive refactoring.
+- New icons (thanks [Hakim](https://github.com/HakimHasan)!)
+
+
 # v0.7.0
 
 ## BUILD 1411

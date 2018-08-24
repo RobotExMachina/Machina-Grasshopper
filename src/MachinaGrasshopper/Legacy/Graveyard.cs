@@ -41,7 +41,7 @@ namespace MachinaGrasshopper.Graveyard
             "TurnOn",
             "Turn digital output on. Alias for `WriteDigital(ioNum, true)`",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("8bd5bc0d-249e-4744-8530-cf8fced77492");
@@ -74,7 +74,7 @@ namespace MachinaGrasshopper.Graveyard
             "TurnOff",
             "Turn digital output off. Alias for `WriteDigital(ioNum, false)`",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("15d234aa-2f63-488e-a95e-cc89ffcca3b6");
@@ -117,11 +117,11 @@ namespace MachinaGrasshopper.Graveyard
             "Precision",
             "Increase the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("eaadd1fc-caa9-442b-af5e-273bc3961b73");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Precision;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -151,11 +151,11 @@ namespace MachinaGrasshopper.Graveyard
             "PrecisionTo",
             "Set the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as \"Zone\", \"Approximate Positioning\" or \"Blending Radius\" in different platforms.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("f7127638-e4bc-4cd1-904d-ad301bd63d9a");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Precision;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Precision;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -193,11 +193,11 @@ namespace MachinaGrasshopper.Graveyard
             "Speed",
             "Increases the speed in mm/s at which future transformation actions will run.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("5ce2951b-fdee-4d67-ab2b-bb97204bfdc7");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Speed;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -226,11 +226,11 @@ namespace MachinaGrasshopper.Graveyard
             "SpeedTo",
             "Sets the speed in mm/s at which future transformation actions will run.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("3067745a-9183-4f51-96af-95efec967888");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Speed;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Speed;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -273,11 +273,11 @@ namespace MachinaGrasshopper.Graveyard
             "MotionType",  // the name that shows up on the non-icon component with 'DFN' off, and in parenthesis after the main name on the yellow bar on tooltip
             "Sets the current type of motion to be applied to future translation actions. This can be \"linear\" (default) for straight line movements in euclidean space, or \"joint\" for smooth interpolation between joint angles. NOTE: \"joint\" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("1a97b12b-0422-46aa-945f-373f9afdc39a");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_MotionMode;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_MotionMode;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -327,11 +327,11 @@ namespace MachinaGrasshopper.Graveyard
             "Move",
             "Moves the device along a speficied vector relative to its current position.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("1969ae91-3dad-4af2-991b-b23e60724873");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Move;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -361,11 +361,11 @@ namespace MachinaGrasshopper.Graveyard
             "MoveTo",
             "Moves the device to an absolute position in global coordinates.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("c90a1258-1dd2-4d14-ab13-8dc53a47b547");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Move;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Move;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -403,11 +403,11 @@ namespace MachinaGrasshopper.Graveyard
             "Rotate",
             "Rotates the device a specified angle in degrees along the specified vector.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("db2e3c56-5973-4f07-8d6a-ba31c659704d");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Rotate;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -440,11 +440,11 @@ namespace MachinaGrasshopper.Graveyard
             "RotateTo",
             "Rotate the devices to an absolute orientation defined by the two main X and Y axes of specified Plane.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("9410b629-1016-486f-8464-85ecfd9500f7");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Rotate;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Rotate;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -483,11 +483,11 @@ namespace MachinaGrasshopper.Graveyard
             "Transform",
             "Performs a compound relative rotation + translation transformation in a single action. Note that when performing relative transformations, the R+T versus T+R order matters.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("81226a72-37d6-4dad-a7a3-711adb51b26e");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Transform;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Transform;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -530,11 +530,11 @@ namespace MachinaGrasshopper.Graveyard
             "TransformTo",
             "Performs a compound absolute rotation + translation transformation, or in other words, sets both a new absolute position and orientation for the device in the same action, based on specified Plane.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("7bf2965f-7fa6-4cf0-84ac-4948b777b478");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Transform;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Transform;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -577,11 +577,11 @@ namespace MachinaGrasshopper.Graveyard
             "Axes",
             "Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("15ea7b44-c5d8-470b-9edb-867cc4c0b1aa");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Axes;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Axes;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -625,11 +625,11 @@ namespace MachinaGrasshopper.Graveyard
             "AxesTo",
             "Set the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.",
             "Machina",
-            "Actions")
+            "Action")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("5b9bc63f-a0f1-4d66-b6a6-679c38ed8014");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Actions_Axes;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_Axes;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -738,9 +738,9 @@ namespace MachinaGrasshopper.Graveyard
         public SendToBridge() : base(
             "SendToBridge",
             "SendToBridge",
-            "Send a list of Actions to the Machina Bridge App to be streamed to a robot.",
+            "Send a list of Action to the Machina Bridge App to be streamed to a robot.",
             "Machina",
-            "Programs")
+            "Program")
         { }
         public override GH_Exposure Exposure => GH_Exposure.hidden;
         public override Guid ComponentGuid => new Guid("4442d8a9-3b6e-4197-ad58-93caa6c83e3e");
@@ -750,7 +750,7 @@ namespace MachinaGrasshopper.Graveyard
         {
             pManager.AddTextParameter("BridgeURL", "URL", "The URL of the Machina Bridge App.", GH_ParamAccess.item, "ws://127.0.0.1:6999/Bridge");
             pManager.AddBooleanParameter("Connect?", "C", "Connect to Machina Bridge App?", GH_ParamAccess.item, false);
-            pManager.AddGenericParameter("Actions", "A", "A program in the form of a list of Actions", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Action", "A", "A program in the form of a list of Action", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Send", "S", "Send Actions?", GH_ParamAccess.item, false);
         }
 

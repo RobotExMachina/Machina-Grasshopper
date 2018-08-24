@@ -70,7 +70,7 @@ namespace MachinaGrasshopper.Bridge
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
         public override Guid ComponentGuid => new Guid("f9b4a612-9b28-4557-ab1a-f8ca020765a8");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Bridge_ExecutionUpdate;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {

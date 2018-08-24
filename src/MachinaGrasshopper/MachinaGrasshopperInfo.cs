@@ -31,7 +31,7 @@ namespace MachinaGrasshopper
         /// Quick and dirty version tracking.
         /// </summary>
         /// <returns></returns>
-        public static string MachinaGrasshopperAPIVersion() => "0.7.0";
+        public static string MachinaGrasshopperAPIVersion() => "0.7.1";
 
 
         // Standard GHInfo overrides

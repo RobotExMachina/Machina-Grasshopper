@@ -63,9 +63,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_ActionMode {
+        internal static System.Drawing.Bitmap Action_Acceleration {
             get {
-                object obj = ResourceManager.GetObject("Actions_ActionMode", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Acceleration", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Attach {
+        internal static System.Drawing.Bitmap Action_ActionMode {
             get {
-                object obj = ResourceManager.GetObject("Actions_Attach", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_ActionMode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Axes {
+        internal static System.Drawing.Bitmap Action_Attach {
             get {
-                object obj = ResourceManager.GetObject("Actions_Axes", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Attach", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Comment {
+        internal static System.Drawing.Bitmap Action_Axes {
             get {
-                object obj = ResourceManager.GetObject("Actions_Comment", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Axes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Detach {
+        internal static System.Drawing.Bitmap Action_Comment {
             get {
-                object obj = ResourceManager.GetObject("Actions_Detach", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Comment", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Extrude {
+        internal static System.Drawing.Bitmap Action_CustomCode {
             get {
-                object obj = ResourceManager.GetObject("Actions_Extrude", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_CustomCode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_ExtrusionRate {
+        internal static System.Drawing.Bitmap Action_Detach {
             get {
-                object obj = ResourceManager.GetObject("Actions_ExtrusionRate", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Detach", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Message {
+        internal static System.Drawing.Bitmap Action_ExternalAxis {
             get {
-                object obj = ResourceManager.GetObject("Actions_Message", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_ExternalAxis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_MotionMode {
+        internal static System.Drawing.Bitmap Action_Extrude {
             get {
-                object obj = ResourceManager.GetObject("Actions_MotionMode", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Extrude", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Move {
+        internal static System.Drawing.Bitmap Action_ExtrusionRate {
             get {
-                object obj = ResourceManager.GetObject("Actions_Move", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_ExtrusionRate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_PopSettings {
+        internal static System.Drawing.Bitmap Action_JointAcceleration {
             get {
-                object obj = ResourceManager.GetObject("Actions_PopSettings", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_JointAcceleration", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,9 +173,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Precision {
+        internal static System.Drawing.Bitmap Action_JointSpeed {
             get {
-                object obj = ResourceManager.GetObject("Actions_Precision", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_JointSpeed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -183,9 +183,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_PushSettings {
+        internal static System.Drawing.Bitmap Action_Message {
             get {
-                object obj = ResourceManager.GetObject("Actions_PushSettings", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Message", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,9 +193,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Rotate {
+        internal static System.Drawing.Bitmap Action_MotionMode {
             get {
-                object obj = ResourceManager.GetObject("Actions_Rotate", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_MotionMode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +203,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Speed {
+        internal static System.Drawing.Bitmap Action_Move {
             get {
-                object obj = ResourceManager.GetObject("Actions_Speed", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Move", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,9 +213,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Temperature {
+        internal static System.Drawing.Bitmap Action_PopSettings {
             get {
-                object obj = ResourceManager.GetObject("Actions_Temperature", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_PopSettings", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,9 +223,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Transform {
+        internal static System.Drawing.Bitmap Action_Precision {
             get {
-                object obj = ResourceManager.GetObject("Actions_Transform", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Precision", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -233,9 +233,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_Wait {
+        internal static System.Drawing.Bitmap Action_PushSettings {
             get {
-                object obj = ResourceManager.GetObject("Actions_Wait", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_PushSettings", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -243,9 +243,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_WriteAnalog {
+        internal static System.Drawing.Bitmap Action_Rotate {
             get {
-                object obj = ResourceManager.GetObject("Actions_WriteAnalog", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Rotate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -253,9 +253,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Actions_WriteDigital {
+        internal static System.Drawing.Bitmap Action_RotationSpeed {
             get {
-                object obj = ResourceManager.GetObject("Actions_WriteDigital", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_RotationSpeed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,9 +263,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Programs_CompileProgram {
+        internal static System.Drawing.Bitmap Action_Speed {
             get {
-                object obj = ResourceManager.GetObject("Programs_CompileProgram", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Speed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -273,9 +273,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Programs_DisplayProgram {
+        internal static System.Drawing.Bitmap Action_Status {
             get {
-                object obj = ResourceManager.GetObject("Programs_DisplayProgram", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Status", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -283,9 +283,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Programs_WriteToFile {
+        internal static System.Drawing.Bitmap Action_Temperature {
             get {
-                object obj = ResourceManager.GetObject("Programs_WriteToFile", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Temperature", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -293,9 +293,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Robots_Create {
+        internal static System.Drawing.Bitmap Action_Transform {
             get {
-                object obj = ResourceManager.GetObject("Robots_Create", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Transform", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,9 +303,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Robots_Version {
+        internal static System.Drawing.Bitmap Action_Wait {
             get {
-                object obj = ResourceManager.GetObject("Robots_Version", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_Wait", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,9 +313,139 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Tools_Create {
+        internal static System.Drawing.Bitmap Action_WriteAnalog {
             get {
-                object obj = ResourceManager.GetObject("Tools_Create", resourceCulture);
+                object obj = ResourceManager.GetObject("Action_WriteAnalog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Action_WriteDigital {
+            get {
+                object obj = ResourceManager.GetObject("Action_WriteDigital", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bridge_ActionCompleted {
+            get {
+                object obj = ResourceManager.GetObject("Bridge_ActionCompleted", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bridge_Connect {
+            get {
+                object obj = ResourceManager.GetObject("Bridge_Connect", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bridge_ExecutionUpdate {
+            get {
+                object obj = ResourceManager.GetObject("Bridge_ExecutionUpdate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bridge_Listen {
+            get {
+                object obj = ResourceManager.GetObject("Bridge_Listen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bridge_Send {
+            get {
+                object obj = ResourceManager.GetObject("Bridge_Send", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Program_Compile {
+            get {
+                object obj = ResourceManager.GetObject("Program_Compile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Program_Display {
+            get {
+                object obj = ResourceManager.GetObject("Program_Display", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Program_WriteToFile {
+            get {
+                object obj = ResourceManager.GetObject("Program_WriteToFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Robot_Create {
+            get {
+                object obj = ResourceManager.GetObject("Robot_Create", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Robot_SetIOName {
+            get {
+                object obj = ResourceManager.GetObject("Robot_SetIOName", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Robot_Version {
+            get {
+                object obj = ResourceManager.GetObject("Robot_Version", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Tool_Create {
+            get {
+                object obj = ResourceManager.GetObject("Tool_Create", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

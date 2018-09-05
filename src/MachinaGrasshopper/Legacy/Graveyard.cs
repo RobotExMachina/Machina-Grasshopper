@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Parameters;
 
 using Machina;
 using WebSocketSharp;
+using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Graveyard
 {
@@ -291,29 +294,7 @@ namespace MachinaGrasshopper.Graveyard
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string type = "";
-
-            if (!DA.GetData(0, ref type)) return;
-
-            Machina.MotionType t = Machina.MotionType.Linear;
-
-            type = type.ToLower();
-            if (type.Equals("linear"))
-            {
-                t = Machina.MotionType.Linear;
-            }
-            else if (type.Equals("joint"))
-            {
-                t = Machina.MotionType.Joint;
-            }
-
-            //if (t == null)
-            //{
-            //    base.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid motion type: please input \"linear\" or \"joint\" as String.");
-            //    return;
-            //}
-
-            DA.SetData(0, new ActionMotion(t));
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Obsolete component, please update Machina and use newer version.");
         }
     }
 
@@ -763,73 +744,144 @@ namespace MachinaGrasshopper.Graveyard
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string url = "";
-            bool connect = false;
-            List<Machina.Action> actions = new List<Machina.Action>();
-            bool send = false;
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Obsolete component, please update Machina and use newer version.");
+        }
 
-            if (!DA.GetData(0, ref url)) return;
-            if (!DA.GetData(1, ref connect)) return;
-            if (!DA.GetDataList(2, actions)) return;
-            if (!DA.GetData(3, ref send)) return;
+    }
 
-            List<string> instructions = new List<string>();
 
-            bool connectedResult;
-            if (connect)
-            {
-                if (_ws == null || !_ws.IsAlive)
-                {
-                    _ws = new WebSocket(url);
-                    _ws.Connect();
-                }
-                connectedResult = _ws.IsAlive;
+    //       ██╗ ██████╗ ██╗███╗   ██╗████████╗ █████╗  ██████╗ ██████╗███████╗██╗     ███████╗██████╗  █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+    //       ██║██╔═══██╗██║████╗  ██║╚══██╔══╝██╔══██╗██╔════╝██╔════╝██╔════╝██║     ██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+    //       ██║██║   ██║██║██╔██╗ ██║   ██║   ███████║██║     ██║     █████╗  ██║     █████╗  ██████╔╝███████║   ██║   ██║██║   ██║██╔██╗ ██║
+    //  ██   ██║██║   ██║██║██║╚██╗██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██║     ██╔══╝  ██╔══██╗██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+    //  ╚█████╔╝╚██████╔╝██║██║ ╚████║   ██║   ██║  ██║╚██████╗╚██████╗███████╗███████╗███████╗██║  ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+    //   ╚════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    //            
+    [Obsolete("Deprecated", false)]
+    public class JointAcceleration : GH_MutableComponent
+    {
+        public JointAcceleration() : base(
+            "JointAcceleration",
+            "JointAcceleration",
+            "Change the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.",
+            "Machina",
+            "Action")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override Guid ComponentGuid => new Guid("eb2e55d0-2cc3-46b5-86e6-d5beaf9cf3c8");
+        protected override System.Drawing.Bitmap Icon => null;
 
-                if (!connectedResult)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not connect to Machina Bridge App");
-                    return;
-                }
-            }
-            else
-            {
-                if (_ws != null)
-                {
-                    _ws.Close();
-                }
-                connectedResult = _ws.IsAlive;
-            }
-            DA.SetData(0, connectedResult);
+        protected override bool ShallowInputMutation => true;
 
-            if (send && connectedResult)
-            {
-                string ins = "";
+        protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
+        {
+            // Absolute
+            mpManager.AddComponentNames(false, "JointAccelerationTo", "JointAccelerationTo", "Set the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.");
+            mpManager.AddParameter(false, typeof(Param_Number), "JointAccelerationInc", "JA", "Maximum joint angular rotation acceleration increment in deg/s^2. Decreasing the total to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
 
-                foreach (Machina.Action a in actions)
-                {
-                    // If attaching a tool, send the tool description first.
-                    // This is quick and dirty, a result of this component not taking the robot object as an input.
-                    // How coud this be improved...? Should tool creation be an action?
-                    if (a.type == Machina.ActionType.Attach)
-                    {
-                        ActionAttach aa = (ActionAttach)a;
-                        ins = aa.tool.ToInstruction();
-                        instructions.Add(ins);
-                        _ws.Send(ins);
-                    }
+            // Relative
+            mpManager.AddComponentNames(true, "JointAcceleration", "JointAcceleration", "Increase the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.");
+            mpManager.AddParameter(true, typeof(Param_Number), "JointAccelerationInc", "JA", "Maximum joint angular rotation acceleration increment in deg/s^2. Decreasing the total to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
+        }
 
-                    ins = a.ToInstruction();
-                    instructions.Add(ins);
-                    _ws.Send(ins);
-                }
-                DA.SetData(1, "Sent!");
-            }
-            else
-            {
-                DA.SetData(1, "Nothing sent");
-            }
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "JointAcceleration Action", GH_ParamAccess.item);
+        }
 
-            DA.SetDataList(2, instructions);
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Obsolete component, please update Acceleration instead.");
+        }
+    }
+
+    //       ██╗ ██████╗ ██╗███╗   ██╗████████╗███████╗██████╗ ███████╗███████╗██████╗ 
+    //       ██║██╔═══██╗██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗
+    //       ██║██║   ██║██║██╔██╗ ██║   ██║   ███████╗██████╔╝█████╗  █████╗  ██║  ██║
+    //  ██   ██║██║   ██║██║██║╚██╗██║   ██║   ╚════██║██╔═══╝ ██╔══╝  ██╔══╝  ██║  ██║
+    //  ╚█████╔╝╚██████╔╝██║██║ ╚████║   ██║   ███████║██║     ███████╗███████╗██████╔╝
+    //   ╚════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝     ╚══════╝╚══════╝╚═════╝ 
+    //                      
+    [Obsolete("Deprecated", false)]
+    public class JointSpeed : GH_MutableComponent
+    {
+        public JointSpeed() : base(
+            "JointSpeed",
+            "JointSpeed",
+            "Change the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold.",
+            "Machina",
+            "Action")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override Guid ComponentGuid => new Guid("b39c9746-43f0-4fdb-bab4-37b920690dbc");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override bool ShallowInputMutation => true;
+
+        protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
+        {
+            // Absolute
+            mpManager.AddComponentNames(false, "JointSpeedTo", "JointSpeedTo", "Set the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold.");
+            mpManager.AddParameter(false, typeof(Param_Number), "JointSpeed", "JS", "Maximum joint angular rotation speed value in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
+
+            // Relative
+            mpManager.AddComponentNames(true, "JointSpeed", "JointSpeed", "Increase the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold.");
+            mpManager.AddParameter(true, typeof(Param_Number), "JointSpeedInc", "JS", "Maximum joint angular rotation speed increment in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "JointSpeed Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Obsolete component, please update Speed instead.");
+        }
+    }
+
+    //  ██████╗  ██████╗ ████████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗███████╗██████╗ ███████╗███████╗██████╗ 
+    //  ██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗
+    //  ██████╔╝██║   ██║   ██║   ███████║   ██║   ██║██║   ██║██╔██╗ ██║███████╗██████╔╝█████╗  █████╗  ██║  ██║
+    //  ██╔══██╗██║   ██║   ██║   ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║╚════██║██╔═══╝ ██╔══╝  ██╔══╝  ██║  ██║
+    //  ██║  ██║╚██████╔╝   ██║   ██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║███████║██║     ███████╗███████╗██████╔╝
+    //  ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝     ╚══════╝╚══════╝╚═════╝ 
+    //                                                                            
+    [Obsolete("Deprecated", false)]
+    public class RotationSpeed : GH_MutableComponent
+    {
+        public RotationSpeed() : base(
+            "RotationSpeed",
+            "RotationSpeed",
+            "Changes the TCP angular rotation speed value new Actions will be ran at.",
+            "Machina",
+            "Action")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override Guid ComponentGuid => new Guid("fa13c9cf-f136-4d12-ae90-89baa41ce928");
+        protected override System.Drawing.Bitmap Icon => null;
+
+        protected override bool ShallowInputMutation => true;
+
+        protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
+        {
+            // Absolute
+            mpManager.AddComponentNames(false, "RotationSpeedTo", "RotationSpeedTo", "Increases the TCP angular rotation speed value new Actions  will run at.");
+            mpManager.AddParameter(false, typeof(Param_Number), "RotationSpeedInc", "RS", "TCP angular rotation speed increment in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
+
+            // Relative
+            mpManager.AddComponentNames(true, "RotationSpeed", "RotationSpeed", "Sets the TCP angular rotation speed value new Actions will run at.");
+            mpManager.AddParameter(true, typeof(Param_Number), "RotationSpeedInc", "RS", "TCP angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.", GH_ParamAccess.item);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Action", "A", "RotationSpeed Action", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Obsolete component, please update Speed instead.");
         }
     }
 

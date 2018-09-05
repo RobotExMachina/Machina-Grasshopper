@@ -8,15 +8,17 @@
 
 ```
 
-# TODO
+# WISHLIST
 - [ ] Wrap Machina types as parameters deriving from GH_Goo
 - [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
-- [ ] Add a `ToInstruction()` component --> how about if the compiler is a `MACHINA` robot?! :) Implement this in core
 
 
 
 
 # REVISIONS
+# v0.8.1
+
+
 
 # v.0.7.1
 ## BUILD 1412

@@ -17,8 +17,9 @@
 
 # REVISIONS
 # v0.8.1
-
-
+- Deprecate `JointSpeed`, `JointAcceleration` and `RotationSpeed`.
+- Add `DefineTool`
+- Fixed `AttachTool` and `DetachTool`
 
 # v.0.7.1
 ## BUILD 1412

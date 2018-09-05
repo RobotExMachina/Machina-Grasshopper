@@ -27,7 +27,7 @@ namespace MachinaGrasshopper.Action
         public Acceleration() : base(
             "Acceleration",
             "Acceleration",
-            "Changes the TCP acceleration at which future actions will execute.",
+            "Changes the acceleration at which new Actions will be executed. This value will be applied to linear motion in mm/s^2, and rotational or angular motion in deg/s^2.",
             "Machina",
             "Action")
         { }
@@ -40,12 +40,12 @@ namespace MachinaGrasshopper.Action
         protected override void RegisterMutableInputParams(GH_MutableInputParamManager mpManager)
         {
             // Absolute
-            mpManager.AddComponentNames(false, "AccelerationTo", "AccelerationTo", "Increases the TCP acceleration at which future actions will execute.");
-            mpManager.AddParameter(false, typeof(Param_Number), "Acceleration", "A", "TCP acceleration value in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.", GH_ParamAccess.item);
+            mpManager.AddComponentNames(false, "AccelerationTo", "AccelerationTo", "Increases the acceleration at which new Actions will be executed.");
+            mpManager.AddParameter(false, typeof(Param_Number), "Acceleration", "A", "Acceleration value for linear motion in mm/s^2, and rotational or angular motion in deg/s^2", GH_ParamAccess.item);
 
             // Relative
-            mpManager.AddComponentNames(true, "Acceleration", "Acceleration", "Sets the Acceleration at which future actions will execute.");
-            mpManager.AddParameter(true, typeof(Param_Number), "AccelerationInc", "A", "TCP acceleration increment in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.", GH_ParamAccess.item);
+            mpManager.AddComponentNames(true, "Acceleration", "Acceleration", "Sets the acceleration at which new Actions will be executed.");
+            mpManager.AddParameter(true, typeof(Param_Number), "AccelerationInc", "A", "Acceleration increment for linear motion in mm/s^2, and rotational or angular motion in deg/s^2", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

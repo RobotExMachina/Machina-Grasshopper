@@ -12,7 +12,7 @@ using Rhino.PlugIns;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Machina")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © 2016-18")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

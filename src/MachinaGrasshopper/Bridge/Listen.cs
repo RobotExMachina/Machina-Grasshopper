@@ -29,7 +29,6 @@ namespace MachinaGrasshopper.Bridge
     //  ███████╗██║███████║   ██║   ███████╗██║ ╚████║
     //  ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
     //                                                
-
     public class Listen : GH_Component
     {
 

@@ -72,17 +72,15 @@
   <ItemGroup>
     <Compile Include="Action\Acceleration.cs" />
     <Compile Include="Action\CustomCode.cs" />
+    <Compile Include="Action\DefineTool.cs" />
     <Compile Include="Action\ExternalAxis.cs" />
     <Compile Include="Action\Extrude.cs" />
     <Compile Include="Action\ExtrusionRate.cs" />
-    <Compile Include="Action\JointAcceleration.cs" />
-    <Compile Include="Action\JointSpeed.cs" />
-    <Compile Include="Action\RotationSpeed.cs" />
     <Compile Include="Action\Temperature.cs" />
     <Compile Include="Action\WriteAnalog.cs" />
     <Compile Include="Action\WriteDigital.cs" />
-    <Compile Include="Action\Detach.cs" />
-    <Compile Include="Action\Attach.cs" />
+    <Compile Include="Action\DetachTool.cs" />
+    <Compile Include="Action\AttachTool.cs" />
     <Compile Include="Action\Comment.cs" />
     <Compile Include="Action\Message.cs" />
     <Compile Include="Action\MotionMode.cs" />
@@ -96,8 +94,8 @@
     <Compile Include="Action\Rotate.cs" />
     <Compile Include="Action\Move.cs" />
     <Compile Include="Action\Wait.cs" />
+    <Compile Include="Bridge\ActionExecuted.cs" />
     <Compile Include="Bridge\Connect.cs" />
-    <Compile Include="Bridge\ActionCompleted.cs" />
     <Compile Include="Bridge\ExecutionUpdate.cs" />
     <Compile Include="Bridge\Listen.cs" />
     <Compile Include="Bridge\Send.cs" />
@@ -117,10 +115,10 @@
     </Compile>
     <Compile Include="Robot\Create.cs" />
     <Compile Include="Robot\Version.cs" />
-    <Compile Include="Tool\Create.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\MachinaBridgeSocket.cs" />
+    <Compile Include="Utils\TabProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -135,125 +133,44 @@
       <Name>Machina</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\Action.PushSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Rotate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.RotationSpeed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Speed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Status.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Temperature.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Transform.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Wait.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.WriteAnalog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.WriteDigital.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Bridge.ActionCompleted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Bridge.Connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Bridge.ExecutionUpdate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Bridge.Listen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Bridge.Send.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Program.Compile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Program.Display.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Program.WriteToFile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Robot.Create.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Robot.SetIOName.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Robot.Version.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Acceleration.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.ActionMode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Attach.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Axes.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Comment.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.CustomCode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Detach.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.ExternalAxis.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Extrude.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.ExtrusionRate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.JointAcceleration.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.JointSpeed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Message.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.MotionMode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Move.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.PopSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Action.Precision.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Icons\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Tool.Create.png" />
+    <Content Include="Resources\Action.Acceleration.png" />
+    <Content Include="Resources\Action.AttachTool.png" />
+    <Content Include="Resources\Action.Axes.png" />
+    <Content Include="Resources\Action.Comment.png" />
+    <Content Include="Resources\Action.CustomCode.png" />
+    <Content Include="Resources\Action.DefineTool.png" />
+    <Content Include="Resources\Action.DetachTool.png" />
+    <Content Include="Resources\Action.ExternalAxis.png" />
+    <Content Include="Resources\Action.Extrude.png" />
+    <Content Include="Resources\Action.ExtrusionRate.png" />
+    <Content Include="Resources\Action.Message.png" />
+    <Content Include="Resources\Action.MotionMode.png" />
+    <Content Include="Resources\Action.Move.png" />
+    <Content Include="Resources\Action.PopSettings.png" />
+    <Content Include="Resources\Action.Precision.png" />
+    <Content Include="Resources\Action.PushSettings.png" />
+    <Content Include="Resources\Action.Rotate.png" />
+    <Content Include="Resources\Action.Speed.png" />
+    <Content Include="Resources\Action.Temperature.png" />
+    <Content Include="Resources\Action.Transform.png" />
+    <Content Include="Resources\Action.Wait.png" />
+    <Content Include="Resources\Action.WriteAnalog.png" />
+    <Content Include="Resources\Action.WriteDigital.png" />
+    <Content Include="Resources\Bridge.ActionExecuted.png" />
+    <Content Include="Resources\Bridge.ActionIssued.png" />
+    <Content Include="Resources\Bridge.ActionReleased.png" />
+    <Content Include="Resources\Bridge.Connect.png" />
+    <Content Include="Resources\Bridge.Listen.png" />
+    <Content Include="Resources\Bridge.MotionUpdate.png" />
+    <Content Include="Resources\Bridge.Send.png" />
+    <Content Include="Resources\Machina.Head.png" />
+    <Content Include="Resources\Machina.Robot.png" />
+    <Content Include="Resources\Program.Compile.png" />
+    <Content Include="Resources\Program.Display.png" />
+    <Content Include="Resources\Robot.Create.png" />
+    <Content Include="Resources\Robot.Version.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -85,7 +85,7 @@ namespace MachinaGrasshopper.Action
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DA.SetData(0, new ActionMotion(CurrentMotionMode));
+            DA.SetData(0, new ActionMotionMode(CurrentMotionMode));
         }
 
         /// <summary>

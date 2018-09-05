@@ -323,9 +323,9 @@ namespace MachinaGrasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Bridge_Connet {
+        internal static System.Drawing.Bitmap Bridge_Connect {
             get {
-                object obj = ResourceManager.GetObject("Bridge_Connet", resourceCulture);
+                object obj = ResourceManager.GetObject("Bridge_Connect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

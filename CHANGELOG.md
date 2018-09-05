@@ -20,6 +20,7 @@
 - Deprecate `JointSpeed`, `JointAcceleration` and `RotationSpeed`.
 - Add `DefineTool`
 - Fixed `AttachTool` and `DetachTool`
+- `ActionExecuted` is now replacing `ActionCompleted` and `ExecutionUpdate`
 
 # v.0.7.1
 ## BUILD 1412

@@ -15,41 +15,40 @@ using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Bridge
 {
-    //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗                   
-    //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║                   
-    //  ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║                   
-    //  ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║                   
-    //  ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║                   
-    //  ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                   
-    //                                                                    
-    //  ███████╗██╗  ██╗███████╗ ██████╗██╗   ██╗████████╗███████╗██████╗ 
-    //  ██╔════╝╚██╗██╔╝██╔════╝██╔════╝██║   ██║╚══██╔══╝██╔════╝██╔══██╗
-    //  █████╗   ╚███╔╝ █████╗  ██║     ██║   ██║   ██║   █████╗  ██║  ██║
-    //  ██╔══╝   ██╔██╗ ██╔══╝  ██║     ██║   ██║   ██║   ██╔══╝  ██║  ██║
-    //  ███████╗██╔╝ ██╗███████╗╚██████╗╚██████╔╝   ██║   ███████╗██████╔╝
-    //  ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝    ╚═╝   ╚══════╝╚═════╝ 
-    //                                                                    
-    public class ActionExecuted : GH_Component
+    //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗                 
+    //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║                 
+    //  ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║                 
+    //  ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║                 
+    //  ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║                 
+    //  ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                 
+    //                                                                  
+    //  ██████╗ ███████╗██╗     ███████╗ █████╗ ███████╗███████╗██████╗ 
+    //  ██╔══██╗██╔════╝██║     ██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗
+    //  ██████╔╝█████╗  ██║     █████╗  ███████║███████╗█████╗  ██║  ██║
+    //  ██╔══██╗██╔══╝  ██║     ██╔══╝  ██╔══██║╚════██║██╔══╝  ██║  ██║
+    //  ██║  ██║███████╗███████╗███████╗██║  ██║███████║███████╗██████╔╝
+    //  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ 
+    //                                                                  
+    public class ActionReleased : GH_Component
     {
         // For new events, all outputs will be updated, even if some of them have the same value (like position might be repeated on a Wait action...).
         private bool _updateOutputs;
-        private const string EVENT_NAME = "action-executed";
+        private const string EVENT_NAME = "action-released";
 
         // Outputs
         private int _prevId, _id;
         private string _instruction;
-        private int _pendingExecutionOnDevice;
-        private int _pendingExecutionTotal;
         private Plane _tcp;
         private double?[] _axes;
         private double?[] _externalAxes;
+        private int _pendingRelease;
 
         private JavaScriptSerializer ser;
 
-        public ActionExecuted() : base(
-            "ActionExecuted",
-            "ActionExecuted",
-            "Will update every time an Action has been successfully executed by the robot.",
+        public ActionReleased() : base(
+            "ActionReleased",
+            "ActionReleased",
+            "Will update every time an Action has been released to the robot and is pending execution.",
             "Machina",
             "Bridge")
         {
@@ -58,8 +57,8 @@ namespace MachinaGrasshopper.Bridge
         }
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
-        public override Guid ComponentGuid => new Guid("6aca9a1e-cdcf-435a-a627-7d8dda85ae6c");
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Bridge_ActionExecuted;
+        public override Guid ComponentGuid => new Guid("34021378-412e-4f12-8b1c-29c04ee74806");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Bridge_ActionReleased;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -68,14 +67,13 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("LastAction", "last", "Last Action that was successfully executed by the robot.", GH_ParamAccess.item);
+            pManager.AddTextParameter("LastAction", "last", "Last Action that was successfully released to the robot.", GH_ParamAccess.item);
 
             pManager.AddPlaneParameter("ActionTCP", "tcp", "Last known TCP position for this Action.", GH_ParamAccess.item);
             pManager.AddNumberParameter("ActionAxes", "axes", "Last known axes for this Action.", GH_ParamAccess.list);
             pManager.AddNumberParameter("ActionExternalAxes", "extax", "Last known external axes for this Action.", GH_ParamAccess.list);
 
-            pManager.AddNumberParameter("PendingActions", "pendTot", "How many Actions are left in the queue to be executed?", GH_ParamAccess.item);
-            pManager.AddNumberParameter("PendingActionsOnDevice", "pendDev", "How many Actions are left on the device to be executed? This only accounts for the ones that have already been released to it.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("PendingActions", "pend", "How many actions are pending release to device?", GH_ParamAccess.item);
         }
 
         protected override void ExpireDownStreamObjects()
@@ -104,8 +102,7 @@ namespace MachinaGrasshopper.Bridge
             DA.SetData(1, _tcp);
             DA.SetDataList(2, _axes);
             DA.SetDataList(3, _externalAxes);
-            DA.SetData(4, _pendingExecutionTotal);
-            DA.SetData(5, _pendingExecutionOnDevice);
+            DA.SetData(4, _pendingRelease);
 
             // If on second solution, stop checking.
             if (_updateOutputs)
@@ -181,8 +178,7 @@ namespace MachinaGrasshopper.Bridge
             _axes = Helpers.NullableDoublesFromObjects(json["axes"]);
             _externalAxes = Helpers.NullableDoublesFromObjects(json["extax"]);
 
-            _pendingExecutionOnDevice = json["pendDev"];
-            _pendingExecutionTotal = json["pendTot"];
+            _pendingRelease = json["pend"];
         }
     }
 }

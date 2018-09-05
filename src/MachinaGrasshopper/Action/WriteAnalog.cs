@@ -25,7 +25,7 @@ namespace MachinaGrasshopper.Action
             "Machina",
             "Action")
         { }
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
         public override Guid ComponentGuid => new Guid("ace7ecb7-2a7a-4a39-b181-73d00c412b82");
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Action_WriteAnalog;
 

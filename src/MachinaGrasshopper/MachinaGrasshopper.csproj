@@ -95,11 +95,13 @@
     <Compile Include="Action\Move.cs" />
     <Compile Include="Action\Wait.cs" />
     <Compile Include="Bridge\ActionExecuted.cs" />
+    <Compile Include="Bridge\ActionIssued.cs" />
+    <Compile Include="Bridge\ActionReleased.cs" />
     <Compile Include="Bridge\Connect.cs" />
-    <Compile Include="Bridge\ExecutionUpdate.cs" />
     <Compile Include="Bridge\Listen.cs" />
+    <Compile Include="Bridge\MotionUpdate.cs" />
     <Compile Include="Bridge\Send.cs" />
-    <Compile Include="Bridge\SmartUpdateComponentSamples.cs" />
+    <Compile Include="GH_Utils\SmartUpdateComponentSamples.cs" />
     <Compile Include="GH_Utils\GH_ComponentNames.cs" />
     <Compile Include="GH_Utils\GH_InputParamProps.cs" />
     <Compile Include="GH_Utils\GH_MutableComponent.cs" />
@@ -114,6 +116,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Robot\Create.cs" />
+    <Compile Include="Robot\Logger.cs" />
     <Compile Include="Robot\Version.cs" />
     <Compile Include="MachinaGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,7 +136,6 @@
       <Name>Machina</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\Action.Acceleration.png" />
     <Content Include="Resources\Action.AttachTool.png" />
@@ -170,6 +172,7 @@
     <Content Include="Resources\Program.Compile.png" />
     <Content Include="Resources\Program.Display.png" />
     <Content Include="Resources\Robot.Create.png" />
+    <Content Include="Resources\Robot.Logger.png" />
     <Content Include="Resources\Robot.Version.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

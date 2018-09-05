@@ -21,7 +21,10 @@
 - Add `DefineTool`
 - Fixed `AttachTool` and `DetachTool`
 - `ActionExecuted` is now replacing `ActionCompleted` and `ExecutionUpdate`
+- Add `ActionReleased` and `ActionIssued` listeners
+- Add `MotionUpdate` listener
 
+---
 # v.0.7.1
 ## BUILD 1412
 - `Compile` now uses a new `Robot` instance to avoid inheriting robot states.

@@ -23,6 +23,7 @@
 - `ActionExecuted` is now replacing `ActionCompleted` and `ExecutionUpdate`
 - Add `ActionReleased` and `ActionIssued` listeners
 - Add `MotionUpdate` listener
+- Add `Logger`
 
 ---
 # v.0.7.1

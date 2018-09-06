@@ -81,7 +81,7 @@ namespace MachinaGrasshopper.GH_Utils
             {
                 try
                 {
-                    d[i] = Convert.ToDouble(objs);
+                    d[i] = Convert.ToDouble(objs[i]);
                 }
                 catch
                 {
@@ -117,26 +117,34 @@ namespace MachinaGrasshopper.GH_Utils
 
         internal static bool AreSimilar(double?[] a, double?[] b, double epsilon)
         {
-            if (a.Length != b.Length) return false;
-
-            double diff;
-            for (int i = 0; i < a.Length; i++)
+            if (a == null && b == null)
             {
-                try
+                return true;
+            }
+
+            try
+            {
+                if (a.Length != b.Length) return false;
+
+                double diff;
+                for (int i = 0; i < a.Length; i++)
                 {
                     if (a[i] == null && b[i] == null) continue;
                     diff = (double)(a[i] - b[i]);
                     if (Math.Abs(diff) > epsilon)
+                    {
                         return false;
+                    }
                 }
-                catch
-                {
-                    // Something went wrong with casting...
-                    return false;
-                }
+                
+                // If here, they were similar
+                return true;
             }
-
-            return true;
+            catch
+            {
+                return false;
+            }
+            
         }
 
     }

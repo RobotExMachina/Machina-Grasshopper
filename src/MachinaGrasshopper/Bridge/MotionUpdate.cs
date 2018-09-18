@@ -66,9 +66,9 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPlaneParameter("ActionTCP", "tcp", "Last known real-time TCP position.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("ActionAxes", "axes", "Last known real-time robot axes.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ActionExternalAxes", "extax", "Last known real-time external axes.", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("TCP", "tcp", "Last known real-time TCP position.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Axes", "axes", "Last known real-time robot axes.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ExternalAxes", "extax", "Last known real-time external axes.", GH_ParamAccess.list);
 
         }
 

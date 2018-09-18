@@ -16,6 +16,9 @@
 
 
 # REVISIONS
+# v0.8.2
+- Update sample files
+
 # v0.8.1
 - Deprecate `JointSpeed`, `JointAcceleration` and `RotationSpeed`.
 - Add `DefineTool`

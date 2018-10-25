@@ -19,9 +19,9 @@
 
 # REVISIONS
 # v0.8.4
-[x] Update core with bug fixes
-[ ] Add `ArmAngle`
-[ ] `ExternalAxis` now accepts a third parameter as the target for this action: cartesian targets, joint targets or all.
+- Update core with bug fixes
+- Add `ArmAngle`
+- `ExternalAxis` now accepts a third parameter as the target for this action: cartesian targets, joint targets or all.
 
 
 

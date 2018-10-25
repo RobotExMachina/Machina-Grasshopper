@@ -49,7 +49,7 @@ namespace MachinaGrasshopper.Action
             mpManager.AddComponentNames(true, "ExternalAxis", "ExternalAxis", "Increase the values of one of the robot's external axes.");
             mpManager.AddParameter(true, typeof(Param_Integer), "AxisNumber", "EAid", "Axis number from 1 to 6.", GH_ParamAccess.item);
             mpManager.AddParameter(true, typeof(Param_Number), "Increment", "inc", "New value in mm or degrees.", GH_ParamAccess.item);
-            mpManager.AddParameter(false, typeof(Param_String), "Target", "t", "Which set of External Axes to target? \"All\", \"Cartesian\" or \"Joint\"?", GH_ParamAccess.item, "All");
+            mpManager.AddParameter(true, typeof(Param_String), "Target", "t", "Which set of External Axes to target? \"All\", \"Cartesian\" or \"Joint\"?", GH_ParamAccess.item, "All");
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action\Acceleration.cs" />
+    <Compile Include="Action\ArmAngle.cs" />
     <Compile Include="Action\CustomCode.cs" />
     <Compile Include="Action\DefineTool.cs" />
     <Compile Include="Action\ExternalAxis.cs" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Action.Acceleration.png" />
+    <None Include="Resources\Action.ArmAngle.png" />
     <Content Include="Resources\Action.AttachTool.png" />
     <Content Include="Resources\Action.Axes.png" />
     <Content Include="Resources\Action.Comment.png" />

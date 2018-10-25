@@ -11,11 +11,20 @@
 # WISHLIST
 - [ ] Wrap Machina types as parameters deriving from GH_Goo
 - [ ] Watch Long's videos... ;) http://developer.rhino3d.com/videos/
-
+- [ ] Add option to listener to skip messages
+- [ ] Add option to listen only to whatever we are subscribed to
+- [ ] Add some kind of direct text-based instruction, like `Do("foo")`
 
 
 
 # REVISIONS
+# v0.8.4
+[x] Update core with bug fixes
+[ ] Add `ArmAngle`
+[ ] `ExternalAxis` now accepts a third parameter as the target for this action: cartesian targets, joint targets or all.
+
+
+
 # v0.8.2
 - Update sample files
 
@@ -37,7 +46,6 @@
 
 
 # v0.7.0
-
 ## BUILD 1411
 - Improved `Listen` and event listerners, much cleaner "API"
 - Add `10_RealTime3DPrinting` sample.

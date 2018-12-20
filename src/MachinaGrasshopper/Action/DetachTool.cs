@@ -9,19 +9,19 @@ using Machina;
 
 namespace MachinaGrasshopper.Action
 {
-    //  ██████╗ ███████╗████████╗ █████╗  ██████╗██╗  ██╗
-    //  ██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║  ██║
-    //  ██║  ██║█████╗     ██║   ███████║██║     ███████║
-    //  ██║  ██║██╔══╝     ██║   ██╔══██║██║     ██╔══██║
-    //  ██████╔╝███████╗   ██║   ██║  ██║╚██████╗██║  ██║
-    //  ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
-    //                                                   
+    //  ██████╗ ███████╗████████╗ █████╗  ██████╗██╗  ██╗████████╗ ██████╗  ██████╗ ██╗     
+    //  ██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║  ██║╚══██╔══╝██╔═══██╗██╔═══██╗██║     
+    //  ██║  ██║█████╗     ██║   ███████║██║     ███████║   ██║   ██║   ██║██║   ██║██║     
+    //  ██║  ██║██╔══╝     ██║   ██╔══██║██║     ██╔══██║   ██║   ██║   ██║██║   ██║██║     
+    //  ██████╔╝███████╗   ██║   ██║  ██║╚██████╗██║  ██║   ██║   ╚██████╔╝╚██████╔╝███████╗
+    //  ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+    //                                                                                      
     public class DetachTool : GH_Component
     {
         public DetachTool() : base(
             "DetachTool",
             "DetachTool",
-            "Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.",
+            "Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be reverted back to the Robot's flange.",
             "Machina",
             "Action")
         { }

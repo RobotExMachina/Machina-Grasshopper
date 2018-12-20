@@ -75,7 +75,7 @@ namespace MachinaGrasshopper.Action
             catch
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, 
-                    $"\"{part}\" is not a valid target part for temperature changes, please specify one of the following: {GH_Utils.Helpers.EnumerateList(Enum.GetNames(typeof(RobotPartType)), "or")}.");
+                    $"\"{part}\" is not a valid target part for temperature changes, please specify one of the following: {Machina.Utilities.Strings.EnumerateArray(Enum.GetNames(typeof(RobotPartType)), separator: " or ")}.");
                 return;
             }
             

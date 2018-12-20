@@ -138,9 +138,9 @@ namespace MachinaGrasshopper.Bridge
                 UpdateCurrentValues(json);
 
                 // If values are new, schedule new solution
-                if (!Helpers.AreSimilar(_axes, _prevAxes, SIMILARITY_EPSILON) ||
-                    !Helpers.AreSimilar(_externalAxes, _externalAxes, SIMILARITY_EPSILON) ||
-                    !Helpers.AreSimilar(_tcp, _prevTcp, SIMILARITY_EPSILON))  // If all axes are the same, can the TCP have changed? Is this check redundant?
+                if (!Machina.Utilities.Numeric.AreSimilar(_axes, _prevAxes, SIMILARITY_EPSILON) ||
+                    !Machina.Utilities.Numeric.AreSimilar(_externalAxes, _externalAxes, SIMILARITY_EPSILON) ||
+                    !GH_Helpers.AreSimilar(_tcp, _prevTcp, SIMILARITY_EPSILON))  // If all axes are the same, can the TCP have changed? Is this check redundant?
                 {
                     return true;
                 }
@@ -156,8 +156,8 @@ namespace MachinaGrasshopper.Bridge
         /// <param name="msg"></param>
         private void UpdateCurrentValues(dynamic json)
         {
-            var pos = Helpers.NullableDoublesFromObjects(json["pos"]);
-            var ori = Helpers.NullableDoublesFromObjects(json["ori"]);
+            var pos = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["pos"]);
+            var ori = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["ori"]);
             if (pos == null || ori == null)
             {
                 _tcp = Plane.Unset;
@@ -171,8 +171,8 @@ namespace MachinaGrasshopper.Bridge
                 );
             }
 
-            _axes = Helpers.NullableDoublesFromObjects(json["axes"]);
-            _externalAxes = Helpers.NullableDoublesFromObjects(json["extax"]);
+            _axes = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["axes"]);
+            _externalAxes = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["extax"]);
         }
     }
 }

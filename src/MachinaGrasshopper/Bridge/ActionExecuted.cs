@@ -163,8 +163,8 @@ namespace MachinaGrasshopper.Bridge
             // @TODO: make this more programmatic, tie it to ActionExecutedArgs props
             _instruction = json["last"];
 
-            var pos = Helpers.NullableDoublesFromObjects(json["pos"]);
-            var ori = Helpers.NullableDoublesFromObjects(json["ori"]);
+            var pos = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["pos"]);
+            var ori = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["ori"]);
             if (pos == null || ori == null)
             {
                 _tcp = Plane.Unset;
@@ -178,8 +178,8 @@ namespace MachinaGrasshopper.Bridge
                 );
             }
 
-            _axes = Helpers.NullableDoublesFromObjects(json["axes"]);
-            _externalAxes = Helpers.NullableDoublesFromObjects(json["extax"]);
+            _axes = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["axes"]);
+            _externalAxes = Machina.Utilities.Conversion.NullableDoublesFromObjects(json["extax"]);
 
             _pendingExecutionOnDevice = json["pendDev"];
             _pendingExecutionTotal = json["pendTot"];

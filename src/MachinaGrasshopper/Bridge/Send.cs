@@ -65,7 +65,7 @@ namespace MachinaGrasshopper.Bridge
             if (!DA.GetDataList(1, actions)) return;
             if (!DA.GetData(2, ref send)) return;
 
-            if (ms.socket == null || !ms.socket.IsAlive)
+            if (ms == null || ms.socket == null || !ms.socket.IsAlive)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not valid Bridge connection.");
                 return;

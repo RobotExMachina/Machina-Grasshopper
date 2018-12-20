@@ -21,7 +21,7 @@ namespace MachinaGrasshopper.Action
         public CustomCode() : base(
             "CustomCode",
             "CustomCode",
-            "Insert a line of custom code directly into a compiled program. This is useful for obscure instructions that are not covered by Machina's API. Note that this Action cannot be checked for validity by Machina, and you are responsible for correct syntax. This Action is non-streamable. ",
+            "Insert a line of custom code directly into a compiled program. This is useful for obscure instructions that are not covered by Machina's API. Note that this Action cannot be checked for validity by Machina, and you are responsible for correct syntax.",
             "Machina",
             "Action")
         { }

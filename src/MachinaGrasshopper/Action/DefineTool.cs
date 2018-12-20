@@ -11,6 +11,13 @@ using Machina;
 
 namespace MachinaGrasshopper.Action
 {
+    //  ██████╗ ███████╗███████╗██╗███╗   ██╗███████╗████████╗ ██████╗  ██████╗ ██╗     
+    //  ██╔══██╗██╔════╝██╔════╝██║████╗  ██║██╔════╝╚══██╔══╝██╔═══██╗██╔═══██╗██║     
+    //  ██║  ██║█████╗  █████╗  ██║██╔██╗ ██║█████╗     ██║   ██║   ██║██║   ██║██║     
+    //  ██║  ██║██╔══╝  ██╔══╝  ██║██║╚██╗██║██╔══╝     ██║   ██║   ██║██║   ██║██║     
+    //  ██████╔╝███████╗██║     ██║██║ ╚████║███████╗   ██║   ╚██████╔╝╚██████╔╝███████╗
+    //  ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+    //                                                                                  
     public class DefineTool : GH_Component
     {
         public DefineTool() : base(
@@ -29,7 +36,7 @@ namespace MachinaGrasshopper.Action
             pManager.AddTextParameter("Name", "T", "Tool name", GH_ParamAccess.item, "ToolExMachina");
             pManager.AddPlaneParameter("BasePlane", "BP", "Base Plane where the Tool will be attached to the Robot", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddPlaneParameter("TCPPlane", "TP", "Plane of the Tool Tip Center (TCP)", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddNumberParameter("Weight", "W", "Tool weight in Kg", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Weight", "W", "Tool weight in Kg", GH_ParamAccess.item, 0.1);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

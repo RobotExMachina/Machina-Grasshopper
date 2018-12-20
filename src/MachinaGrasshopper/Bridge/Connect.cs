@@ -34,7 +34,7 @@ namespace MachinaGrasshopper.Bridge
         public Connect() : base(
             "Connect",
             "Connect",
-            "Attempt to connect to the Machina Bridge.",
+            "Establish connection with the Machina Bridge.",
             "Machina",
             "Bridge")
         { }
@@ -51,7 +51,7 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Messages", "msg", "What's going on?", GH_ParamAccess.list);
+            pManager.AddTextParameter("Status", "log", "Status messages", GH_ParamAccess.list);
             pManager.AddGenericParameter("Bridge", "MB", "The (websocket) object managing connection to the Machina Bridge", GH_ParamAccess.item);
         }
 

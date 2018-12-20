@@ -42,12 +42,15 @@ namespace MachinaGrasshopper.Robot
         {
             _messages.Add(msg);
 
-            int diff = _messages.Count - _maxCount;
-            if (diff > 0)
+            if (_maxCount > 0)
             {
-                for (int i = 0; i < diff; i++)
+                int diff = _messages.Count - _maxCount;
+                if (diff > 0)
                 {
-                    _messages.RemoveAt(0);
+                    for (int i = 0; i < diff; i++)
+                    {
+                        _messages.RemoveAt(0);
+                    }
                 }
             }
         }
@@ -58,8 +61,8 @@ namespace MachinaGrasshopper.Robot
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Level", "L", "Define the level of logging desired for the WriteLine logger: 0 None, 1 Error, 2 Warning, 3 Info (default), 4 Verbose or 5 Debug.", GH_ParamAccess.item, 3);
-            pManager.AddIntegerParameter("MaxMessages", "C", "Max number of displayed log messages. If 0, messages will be permanent", GH_ParamAccess.item, 10);
+            pManager.AddIntegerParameter("Level", "L", "Define the level of logging desired for the WriteLine logger: 0 None, 1 Error, 2 Warning, 3 Info, 4 Verbose or 5 Debug (default).", GH_ParamAccess.item, 5);
+            pManager.AddIntegerParameter("MaxMessages", "C", "Max number of displayed log messages. If 0, messages will be permanent", GH_ParamAccess.item, 0);
             pManager.AddIntegerParameter("UpdateInterval", "I", "Refresh interval in milliseconds. 0 or less will disable autoupdate", GH_ParamAccess.item, 250);
         }
 

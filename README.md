@@ -23,10 +23,21 @@ In order to install Machina for Grasshopper, you need to follow the following st
 ## Tutorials
 There are a bunch of Grasshopper files in the `samples` folder that comes with this package. These files will help you understand how to setup a Machina project. I will write a dedicated walkthrough section sometime soon...
 
-Machina is its infancy, and rapid changes are happening with every commit! Make sure you always have the most up-to-date version.
+A full set of tutorials on how to use the Machina framework can be found here:
 
-## Related Projects
-Machina for Grasshopper is built on top of [__Machina__](https://github.com/garciadelcastillo/Machina), an open-source platform for action-based control of mechanical actuators. To understand the meaning of each Action node, please check the [Walkthrough](https://github.com/garciadelcastillo/Machina/blob/master/docs/Walkthrough.md) or [Reference](https://github.com/garciadelcastillo/Machina/blob/master/docs/Reference.md) sections.
+[![MACHINA TUTORIALS](assets/machina_tutorials_banner.png)](https://www.youtube.com/playlist?list=PLvxxYImPCApXj3tHVKmpTS_AuMPngnA47)
+Tutorials playlist: https://www.youtube.com/playlist?list=PLvxxYImPCApXj3tHVKmpTS_AuMPngnA47
+
+Instructions on how to setup your machine to work with the Machina framework can be found here: https://www.youtube.com/playlist?list=PLvxxYImPCApUffcv_KtdR-sQydA4O4CPH.
+
+## Projects
+
+A playlist of projects built by the community with different Machina flavors:
+https://www.youtube.com/playlist?list=PLvxxYImPCApXZ-yBCUtGzVWb2ZhduaSXR
+
+🤖x❤️
+
+Machina for Grasshopper is built on top of [__Machina__](https://github.com/garciadelcastillo/Machina), an open-source platform for action-based control of mechanical actuators.
 
 Machina is also available for [Autodesk's Dynamo](https://github.com/garciadelcastillo/Machina-Dynamo). Their API and Actions list is 99% identical.
 

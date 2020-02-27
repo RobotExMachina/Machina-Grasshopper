@@ -40,7 +40,8 @@ namespace MachinaGrasshopper.Program
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Code", "C", "Device-specific program code", GH_ParamAccess.list);
+            //pManager.AddTextParameter("Code", "C", "Device-specific program code", GH_ParamAccess.item);
+            pManager.AddGenericParameter("RobotProgram", "P", "Device-specific program", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -65,17 +66,9 @@ namespace MachinaGrasshopper.Program
                 compiler.Issue(a);
             }
 
-            List<string> codeLines = compiler.Compile(inline, comments);
-
-            // I forgot why I chose to spit out one single string, but this makes the panel super freaking heavy. Reverting.
-            //StringWriter writer = new StringWriter();
-            //for (var i = 0; i < codeLines.Count; i++)
-            //{
-            //    writer.WriteLine(codeLines[i]);
-            //}
-            //string code = writer.ToString();
-
-            DA.SetDataList(0, codeLines);
+            Machina.Types.Data.RobotProgram program = compiler.Compile(inline, comments);
+                        
+            DA.SetData(0, program);
         }
     }
 }

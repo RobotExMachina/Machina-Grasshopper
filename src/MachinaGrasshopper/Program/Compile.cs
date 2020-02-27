@@ -64,7 +64,6 @@ namespace MachinaGrasshopper.Program
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Can't compile a Program with `null` Actions, please review the Action list.");
                     return;
                 }
-
             }
 
             // Create a new instance to avoid inheriting robot states between different compilations

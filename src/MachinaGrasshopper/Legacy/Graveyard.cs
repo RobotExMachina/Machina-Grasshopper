@@ -13,6 +13,9 @@ using Grasshopper.Kernel.Parameters;
 using WebSocketSharp;
 
 using Machina;
+using Machina.Types.Geometry;
+using MPoint = Machina.Types.Geometry.Point;
+using MVector = Machina.Types.Geometry.Vector;
 
 using MachinaGrasshopper.GH_Utils;
 
@@ -334,7 +337,7 @@ namespace MachinaGrasshopper.Graveyard
 
             if (!DA.GetData(0, ref v)) return;
 
-            DA.SetData(0, new ActionTranslation(new Machina.Vector(v.X, v.Y, v.Z), true));
+            DA.SetData(0, new ActionTranslation(new Vector(v.X, v.Y, v.Z), true));
         }
     }
 
@@ -368,7 +371,7 @@ namespace MachinaGrasshopper.Graveyard
 
             if (!DA.GetData(0, ref p)) return;
 
-            DA.SetData(0, new ActionTranslation(new Machina.Point(p.X, p.Y, p.Z), false));
+            DA.SetData(0, new ActionTranslation(new MPoint(p.X, p.Y, p.Z), false));
         }
     }
 
@@ -447,7 +450,7 @@ namespace MachinaGrasshopper.Graveyard
 
             if (!DA.GetData(0, ref pl)) return;
 
-            DA.SetData(0, new ActionRotation(new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
+            DA.SetData(0, new ActionRotation(new Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z), false));
         }
     }
 
@@ -500,7 +503,7 @@ namespace MachinaGrasshopper.Graveyard
             if (!DA.GetData(3, ref trans)) return;
 
             DA.SetData(0, new ActionTransformation(
-                new Machina.Vector(dir.X, dir.Y, dir.Z),
+                new MVector(dir.X, dir.Y, dir.Z),
                 new Rotation(axis.X, axis.Y, axis.Z, ang),
                 true,
                 trans));
@@ -538,8 +541,8 @@ namespace MachinaGrasshopper.Graveyard
             if (!DA.GetData(0, ref pl)) return;
 
             DA.SetData(0, new ActionTransformation(
-                new Machina.Vector(pl.Origin.X, pl.Origin.Y, pl.Origin.Z),
-                new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z),
+                new MVector(pl.Origin.X, pl.Origin.Y, pl.Origin.Z),
+                new Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z),
                 false,
                 true));
         }

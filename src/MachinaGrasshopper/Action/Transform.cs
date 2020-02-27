@@ -10,6 +10,10 @@ using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
 using Machina;
+using Machina.Types.Geometry;
+using MPoint = Machina.Types.Geometry.Point;
+using MVector = Machina.Types.Geometry.Vector;
+using MOrientation = Machina.Types.Geometry.Orientation;
 using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Action
@@ -71,7 +75,7 @@ namespace MachinaGrasshopper.Action
                 if (!DA.GetData(3, ref trans)) return;
 
                 DA.SetData(0, new ActionTransformation(
-                    new Machina.Vector(dir.X, dir.Y, dir.Z),
+                    new MVector(dir.X, dir.Y, dir.Z),
                     new Rotation(axis.X, axis.Y, axis.Z, ang),
                     true,
                     trans));
@@ -83,8 +87,8 @@ namespace MachinaGrasshopper.Action
                 if (!DA.GetData(0, ref pl)) return;
 
                 DA.SetData(0, new ActionTransformation(
-                    new Machina.Vector(pl.Origin.X, pl.Origin.Y, pl.Origin.Z),
-                    new Machina.Orientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z),
+                    new MVector(pl.Origin.X, pl.Origin.Y, pl.Origin.Z),
+                    new MOrientation(pl.XAxis.X, pl.XAxis.Y, pl.XAxis.Z, pl.YAxis.X, pl.YAxis.Y, pl.YAxis.Z),
                     false,
                     true));
             }

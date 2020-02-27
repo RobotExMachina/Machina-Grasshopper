@@ -10,6 +10,10 @@ using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
 using Machina;
+using Machina.Types.Geometry;
+using MPoint = Machina.Types.Geometry.Point;
+using MVector = Machina.Types.Geometry.Vector;
+using MOrientation = Machina.Types.Geometry.Orientation;
 using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Action
@@ -76,7 +80,7 @@ namespace MachinaGrasshopper.Action
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Point in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Point as a Vector for relative motion.");
                 }
                 GH_Point p = obj as GH_Point;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
+                DA.SetData(0, new ActionTranslation(new MVector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
             }
 
             else if (obj is GH_Plane)
@@ -86,7 +90,7 @@ namespace MachinaGrasshopper.Action
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Plane in Relative mode, did you mean to work in Absolute mode instead? This Move action will take the Plane's origin Point as a Vector for relative motion.");
                 }
                 GH_Plane p = obj as GH_Plane;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.OriginX, p.Value.OriginY, p.Value.OriginZ), this.Relative));
+                DA.SetData(0, new ActionTranslation(new MVector(p.Value.OriginX, p.Value.OriginY, p.Value.OriginZ), this.Relative));
             }
 
             else if (obj is GH_Vector)
@@ -96,7 +100,7 @@ namespace MachinaGrasshopper.Action
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "WARNING: using Vector in Absolute mode, did you mean to work in Relative mode instead? This Move action will take the Vector's coordinates as the target Point for absolute motion.");
                 }
                 GH_Vector p = obj as GH_Vector;
-                DA.SetData(0, new ActionTranslation(new Machina.Vector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
+                DA.SetData(0, new ActionTranslation(new MVector(p.Value.X, p.Value.Y, p.Value.Z), this.Relative));
             }
 
             else

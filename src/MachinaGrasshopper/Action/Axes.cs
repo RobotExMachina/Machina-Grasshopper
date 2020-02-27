@@ -10,6 +10,7 @@ using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 
 using Machina;
+using Machina.Types.Geometry;
 using MachinaGrasshopper.GH_Utils;
 
 namespace MachinaGrasshopper.Action

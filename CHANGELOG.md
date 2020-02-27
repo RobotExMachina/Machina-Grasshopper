@@ -21,7 +21,7 @@
 # v0.8.12
 - [x] Updated `Do` to `Issue`
 - [x] Update `Compile` component to spit out a `RobotProgram` instance
-- [ ] Update `DisplayProgram` to render it 
+- [x] Update `DisplayProgram` to render it 
 - [ ] Update `WriteProgram` to dump the RobotProgram and save it to a folder
 - [ ] Update sample files to reflect these changes (add entwine too).
 

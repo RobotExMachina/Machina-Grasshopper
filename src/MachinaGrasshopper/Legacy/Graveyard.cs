@@ -32,8 +32,50 @@ namespace MachinaGrasshopper.Graveyard
     /// A shrine of peace and remembrance for the heroes of the past, an ode to our proud legacy!
     /// 
     /// Components will be marked 'OLD' if the classname contains the string "obsolete" or the class
-    /// has been decorated with the ObsoleteAttribute.
+    /// has been decorated with the Obsolete Attribute.
     /// </summary>
+
+
+    //  ██████╗ ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗██████╗ ██████╗  ██████╗  ██████╗ ██████╗  █████╗ ███╗   ███╗
+    //  ██╔══██╗██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗██╔═══██╗██╔════╝ ██╔══██╗██╔══██╗████╗ ████║
+    //  ██║  ██║██║███████╗██████╔╝██║     ███████║ ╚████╔╝ ██████╔╝██████╔╝██║   ██║██║  ███╗██████╔╝███████║██╔████╔██║
+    //  ██║  ██║██║╚════██║██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██╔═══╝ ██╔══██╗██║   ██║██║   ██║██╔══██╗██╔══██║██║╚██╔╝██║
+    //  ██████╔╝██║███████║██║     ███████╗██║  ██║   ██║   ██║     ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██║ ╚═╝ ██║
+    //  ╚═════╝ ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝
+    //                         
+    [Obsolete("Updated", false)]
+    public class Display : GH_Component
+    {
+        public Display() : base(
+            "DisplayProgram",
+            "DisplayProgram",
+            "Returns a human-readable representation of a list of Actions.",
+            "Machina",
+            "Program")
+        { }
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("4f53f8c0-014b-4fd2-b764-71e9e49cf67d");
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Program_Display;
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddGenericParameter("Actions", "A", "The list of Actions that conforms a program.", GH_ParamAccess.item);
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        {
+            pManager.AddTextParameter("Program", "P", "Human-readable representation of the program.", GH_ParamAccess.item);
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            Machina.Action a = null;
+
+            if (!DA.GetData(0, ref a)) return;
+
+            DA.SetData(0, a.ToString());
+        }
+    }
 
 
     //  ██╗    ██╗ ██████╗ 

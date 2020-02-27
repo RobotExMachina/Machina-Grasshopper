@@ -132,12 +132,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Machina\src\Machina\Machina.csproj">
-      <Project>{15951838-f9d6-4988-a103-b7c72bfe81a2}</Project>
-      <Name>Machina</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\Action.Acceleration.png" />
     <None Include="Resources\Action.ArmAngle.png" />
     <Content Include="Resources\Action.AttachTool.png" />
@@ -176,6 +170,12 @@
     <Content Include="Resources\Robot.Create.png" />
     <Content Include="Resources\Robot.Logger.png" />
     <Content Include="Resources\Robot.Version.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Machina.NET\src\Machina\Machina.csproj">
+      <Project>{15951838-f9d6-4988-a103-b7c72bfe81a2}</Project>
+      <Name>Machina</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

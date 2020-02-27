@@ -56,6 +56,17 @@ namespace MachinaGrasshopper.Program
             if (!DA.GetData(2, ref inline)) return;
             if (!DA.GetData(3, ref comments)) return;
 
+            // Sanity, avoid users compiling programs with inadvertedly null actions.
+            foreach (var a in actions)
+            {
+                if (a == null)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Can't compile a Program with `null` Actions, please review the Action list.");
+                    return;
+                }
+
+            }
+
             // Create a new instance to avoid inheriting robot states between different compilations
             // https://github.com/RobotExMachina/Machina-Grasshopper/issues/3
             Machina.Robot compiler = Machina.Robot.Create(bot.Name, bot.Brand);

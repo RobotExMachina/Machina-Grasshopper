@@ -22,8 +22,9 @@
 - [x] Updated `Do` to `Issue`
 - [x] Update `Compile` component to spit out a `RobotProgram` instance
 - [x] Update `DisplayProgram` to render it 
-- [ ] Update `WriteProgram` to dump the RobotProgram and save it to a folder
-- [ ] Update sample files to reflect these changes (add entwine too).
+- [x] Update `WriteProgram` to dump the RobotProgram and save it to a folder
+- [x] Update sample files to reflect these changes (add entwine too).
+- [x] Prevent `Compile` from compiling if there is any `null` action.
 
 
 # v0.8.8

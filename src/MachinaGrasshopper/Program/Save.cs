@@ -25,7 +25,7 @@ namespace MachinaGrasshopper.Program
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override Guid ComponentGuid => new Guid("7a2d5912-5dbd-4be1-a94c-64f1d9498384");
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Program_Save;
 
         /// <summary>
         /// Registers all the input parameters for this component.

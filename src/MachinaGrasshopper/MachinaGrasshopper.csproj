@@ -168,6 +168,7 @@
     <Content Include="Resources\Machina.Robot.png" />
     <Content Include="Resources\Program.Compile.png" />
     <Content Include="Resources\Program.Display.png" />
+    <Content Include="Resources\Program.Save.png" />
     <Content Include="Resources\Robot.Create.png" />
     <Content Include="Resources\Robot.Logger.png" />
     <Content Include="Resources\Robot.Version.png" />

@@ -1,11 +1,12 @@
-﻿using Grasshopper.Kernel;
-using Machina;
+﻿using Machina;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using Grasshopper.Kernel;
 
 namespace MachinaGrasshopper.Program
 {
@@ -61,7 +62,7 @@ namespace MachinaGrasshopper.Program
             compiler.ControlMode(ControlType.Offline);
             foreach (Machina.Action a in actions)
             {
-                compiler.Do(a);
+                compiler.Issue(a);
             }
 
             List<string> codeLines = compiler.Compile(inline, comments);

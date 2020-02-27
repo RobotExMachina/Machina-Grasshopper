@@ -18,9 +18,13 @@
 
 
 # REVISIONS
+# v0.8.12
+- Updated `Do` to `Issue`
+- 
+
 # v0.8.8
 - Core update
-- Fixes
+- Fixes to `Logger`
 
 # v0.8.4
 - Update core with bug fixes

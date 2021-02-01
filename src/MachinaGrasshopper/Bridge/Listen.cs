@@ -60,14 +60,7 @@ namespace MachinaGrasshopper.Bridge
             pManager.AddTextParameter("BridgeMessage", "Msg", "Last messags received from the bridge. Will only update once per received message.", GH_ParamAccess.list);
         }
 
-        protected override void ExpireDownStreamObjects()
-        {
-            // Only expire the output if it needs an update
-            if (_updateOut)
-            {
-                Params.Output[0].ExpireSolution(false);
-            }
-        }
+        
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
@@ -125,13 +118,22 @@ namespace MachinaGrasshopper.Bridge
                 return;
             }
 
-            // Otherwise, back to reguar autoupdate
+            // Otherwise, back to regular autoupdate
             if (autoUpdate)
             {
                 this.OnPingDocument().ScheduleSolution(millis, doc =>
                 {
                     this.ExpireSolution(false);
                 });
+            }
+        }
+
+        protected override void ExpireDownStreamObjects()
+        {
+            // Only expire the output if it needs an update
+            if (_updateOut)
+            {
+                Params.Output[0].ExpireSolution(false);
             }
         }
 

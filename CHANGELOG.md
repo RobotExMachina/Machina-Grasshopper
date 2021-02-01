@@ -19,6 +19,7 @@
 
 # REVISIONS
 # v0.8.12
+- [x] Updated core to incorporate KUKA fixes and multiple file export (thanks Alex and Matty!) 
 - [x] Updated `Do` to `Issue`
 - [x] Update `Compile` component to spit out a `RobotProgram` instance
 - [x] Update `DisplayProgram` to render it 

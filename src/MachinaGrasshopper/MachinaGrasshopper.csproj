@@ -96,6 +96,7 @@
     <Compile Include="Action\Move.cs" />
     <Compile Include="Action\Wait.cs" />
     <Compile Include="Bridge\ActionExecuted.cs" />
+    <Compile Include="Bridge\ActionExecutedGated.cs" />
     <Compile Include="Bridge\ActionIssued.cs" />
     <Compile Include="Bridge\ActionReleased.cs" />
     <Compile Include="Bridge\Connect.cs" />
@@ -217,5 +218,6 @@ copy /y "$(TargetDir)websocket-sharp.dll" websocket-sharp.dll
     </StartArguments>
     <StartAction>Program</StartAction>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 </Project>

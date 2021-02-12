@@ -111,7 +111,8 @@ namespace MachinaGrasshopper.Bridge
                 _lastMsg = ms.FetchFirst(true);
 
                 // Schedule a new solution right away
-                this.OnPingDocument().ScheduleSolution(5, doc => {
+                this.OnPingDocument().ScheduleSolution(5, doc => 
+                {
                     this.ExpireSolution(false);
                 });
 

@@ -29,11 +29,14 @@ namespace MachinaGrasshopper.Bridge
     //  ███████╗██╔╝ ██╗███████╗╚██████╗╚██████╔╝   ██║   ███████╗██████╔╝
     //  ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝    ╚═╝   ╚══════╝╚═════╝ 
     //                                                                    
-    public class ActionExecuted : GH_Component
+
+    // WORK IN PROGRESS! 
+    public class ActionExecutedGated : GH_Component
     {
         // For new events, all outputs will be updated, even if some of them have the same value (like position might be repeated on a Wait action...).
         private bool _updateOutputs;
         private const string EVENT_NAME = "action-executed";
+        private readonly int UPDATE_DELAY = 2000;
 
         // Outputs
         private List<string> _receivedMessages;
@@ -47,9 +50,9 @@ namespace MachinaGrasshopper.Bridge
 
         private JavaScriptSerializer _serializer;
 
-        public ActionExecuted() : base(
-            "ActionExecuted",
-            "ActionExecuted",
+        public ActionExecutedGated() : base(
+            "ActionExecutedGated",
+            "ActionExecutedGated",
             "Will update every time an Action has been successfully executed by the robot.",
             "Machina",
             "Bridge")
@@ -59,8 +62,8 @@ namespace MachinaGrasshopper.Bridge
             _receivedMessages = new List<string>();
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
-        public override Guid ComponentGuid => new Guid("6aca9a1e-cdcf-435a-a627-7d8dda85ae6c");
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override Guid ComponentGuid => new Guid("6aca9a1e-cdcf-435a-a627-7d8dda85ae6f");
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Bridge_ActionExecuted;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -78,18 +81,21 @@ namespace MachinaGrasshopper.Bridge
 
             pManager.AddNumberParameter("PendingActions", "pendTot", "How many Actions are left in the queue to be executed?", GH_ParamAccess.item);
             pManager.AddNumberParameter("PendingActionsOnDevice", "pendDev", "How many Actions are left on the device to be executed? This only accounts for the ones that have already been released to it.", GH_ParamAccess.item);
+
+            pManager.AddTextParameter("MSGS", "", "", GH_ParamAccess.list);
+            pManager.AddNumberParameter("MSGCOUNT", "", "", GH_ParamAccess.item);
         }
 
-        //protected override void ExpireDownStreamObjects()
-        //{
-        //    if (_updateOutputs)
-        //    {
-        //        for (int i = 0; i < Params.Output.Count; i++)
-        //        {
-        //            Params.Output[i].ExpireSolution(false);
-        //        }
-        //    }
-        //}
+        protected override void ExpireDownStreamObjects()
+        {
+            if (_updateOutputs)
+            {
+                for (int i = 0; i < Params.Output.Count; i++)
+                {
+                    Params.Output[i].ExpireSolution(false);
+                }
+            }
+        }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
@@ -98,63 +104,23 @@ namespace MachinaGrasshopper.Bridge
             DA.DisableGapLogic();
 
             string msg = null;
-            if (!DA.GetData(0, ref msg)) return;
 
-            // WHY WAS I DOING THIS, IF `LISTEN` ALREADY CAPS THE UPDATE?
-            // NOT NECESSARY, AND I THINK IT'S CAUSING ERRORS (GETTING STUCK AT 1 ACTION PENDING)
-            // --> Necessary so that when Listen fetches a non-execute action, it 
-            // doesn't trigger an update with empty/null outputs
-            // --> Anyway, temporarily disabling Expired solutions, it's just not working reliably.
-            // --> User will have to deal with flickery solutions
+            //if (!DA.GetData(0, ref msg)) return;
+            DA.GetData(0, ref msg);
 
-            //// Output the values precomputed in the last solution.
-            //DA.SetData(0, _instruction);
-            //DA.SetData(1, _tcp);
-            //DA.SetDataList(2, _axes);
-            //DA.SetDataList(3, _externalAxes);
-            //DA.SetData(4, _pendingExecutionTotal);
-            //DA.SetData(5, _pendingExecutionOnDevice);
-            //DA.SetData(6, null);
-            //DA.SetData(7, _receivedMessages.Count);
-
-            //// If on second solution, stop checking.
-            //if (_updateOutputs)
-            //{
-            //    _updateOutputs = false;
-            //    return;
-            //}
-
-            //// Otherwise, search for updated values (only if new messages have been received 
-            //// by the Listener), and schedule a new solution if they are new.
-            //bool rescheduleRightAway = ReceivedNewMessage(msg);
-
-            //// If new data came in, schedule a new solution immediately and flag outputs to expire. 
-            //if (rescheduleRightAway)
-            //{
-            //    _updateOutputs = true;
-
-            //    this.OnPingDocument().ScheduleSolution(5, doc =>
-            //    {
-            //        this.ExpireSolution(false);
-            //    });
-            //}
-
-
-            // NO GATED UPDATES
-            // Parse message
-            bool valid = ReceivedNewMessage(msg);
-
-            // Output the parsed values.
-            if (valid)
+            // Add message to list
+            if (msg != null)
             {
-                DA.SetData(0, _instruction);
-                DA.SetData(1, _tcp);
-                DA.SetDataList(2, _axes);
-                DA.SetDataList(3, _externalAxes);
-                DA.SetData(4, _pendingExecutionTotal);
-                DA.SetData(5, _pendingExecutionOnDevice);
+                dynamic json = _serializer.Deserialize<dynamic>(msg);
+                string eType = json["event"];
+                if (eType.Equals(EVENT_NAME))
+                {
+                    
+                }
             }
- 
+
+
+
         }
 
         /// <summary>
@@ -173,6 +139,7 @@ namespace MachinaGrasshopper.Bridge
                 _id = json["id"];
                 if (_id != _prevId)
                 {
+                    //_receivedMessages.Add(msg);
                     UpdateCurrentValues(json);
                     _prevId = _id;
                     return true;

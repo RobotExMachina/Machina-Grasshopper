@@ -76,16 +76,16 @@ namespace MachinaGrasshopper.Bridge
             pManager.AddNumberParameter("PendingActions", "pend", "How many actions are pending release to device?", GH_ParamAccess.item);
         }
 
-        protected override void ExpireDownStreamObjects()
-        {
-            if (_updateOutputs)
-            {
-                for (int i = 0; i < Params.Output.Count; i++)
-                {
-                    Params.Output[i].ExpireSolution(false);
-                }
-            }
-        }
+        //protected override void ExpireDownStreamObjects()
+        //{
+        //    if (_updateOutputs)
+        //    {
+        //        for (int i = 0; i < Params.Output.Count; i++)
+        //        {
+        //            Params.Output[i].ExpireSolution(false);
+        //        }
+        //    }
+        //}
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
@@ -97,33 +97,49 @@ namespace MachinaGrasshopper.Bridge
 
             if (!DA.GetData(0, ref msg)) return;
 
-            // Output the values precomputed in the last solution.
-            DA.SetData(0, _instruction);
-            DA.SetData(1, _tcp);
-            DA.SetDataList(2, _axes);
-            DA.SetDataList(3, _externalAxes);
-            DA.SetData(4, _pendingRelease);
+            // TEMPORARILY DEACTIVATED GATED OUTPUT, wasn't working well
 
-            // If on second solution, stop checking.
-            if (_updateOutputs)
+            //// Output the values precomputed in the last solution.
+            //DA.SetData(0, _instruction);
+            //DA.SetData(1, _tcp);
+            //DA.SetDataList(2, _axes);
+            //DA.SetDataList(3, _externalAxes);
+            //DA.SetData(4, _pendingRelease);
+
+            //// If on second solution, stop checking.
+            //if (_updateOutputs)
+            //{
+            //    _updateOutputs = false;
+            //    return;
+            //}
+
+            //// Otherwise, search for updated values (only if new messages have been received 
+            //// by the Listener), and schedule a new solution if they are new.
+            //bool rescheduleRightAway = ReceivedNewMessage(msg);
+
+            //// If new data came in, schedule a new solution immediately and flag outputs to expire. 
+            //if (rescheduleRightAway)
+            //{
+            //    _updateOutputs = true;
+
+            //    this.OnPingDocument().ScheduleSolution(5, doc =>
+            //    {
+            //        this.ExpireSolution(false);
+            //    });
+            //}
+
+            // NO GATED UPDATES
+            // Parse message
+            bool valid = ReceivedNewMessage(msg);
+
+            // Output the parsed values.
+            if (valid)
             {
-                _updateOutputs = false;
-                return;
-            }
-
-            // Otherwise, search for updated values (only if new messages have been received 
-            // by the Listener), and schedule a new solution if they are new.
-            bool rescheduleRightAway = ReceivedNewMessage(msg);
-
-            // If new data came in, schedule a new solution immediately and flag outputs to expire. 
-            if (rescheduleRightAway)
-            {
-                _updateOutputs = true;
-
-                this.OnPingDocument().ScheduleSolution(5, doc =>
-                {
-                    this.ExpireSolution(false);
-                });
+                DA.SetData(0, _instruction);
+                DA.SetData(1, _tcp);
+                DA.SetDataList(2, _axes);
+                DA.SetDataList(3, _externalAxes);
+                DA.SetData(4, _pendingRelease);
             }
         }
 

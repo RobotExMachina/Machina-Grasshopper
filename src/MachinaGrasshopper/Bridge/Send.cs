@@ -77,6 +77,17 @@ namespace MachinaGrasshopper.Bridge
             {
                 string ins = "";
 
+                // Check if any action is null, and don't send anything! 
+                foreach (Machina.Action a in actions)
+                {
+                    if (a == null)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Found a 'null' Action, cannot send to Bridge");
+                        DA.SetData(0, "Nothing sent");
+                        return;
+                    }
+                }
+
                 foreach (Machina.Action a in actions)
                 {
                     // "DefineTool" is now an Action on its own, so shouldn't need this!

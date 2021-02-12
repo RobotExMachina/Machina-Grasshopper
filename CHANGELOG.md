@@ -18,6 +18,9 @@
 
 
 # REVISIONS
+# v0.8.12c
+- [x] Disabled gated output for `ActionExecuted` and company, wasn't working well. Will review in the future.
+
 # v0.8.12
 - [x] Updated core to incorporate KUKA fixes and multiple file export (thanks Alex and Matty!) 
 - [x] Updated `Do` to `Issue`

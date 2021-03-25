@@ -100,6 +100,15 @@ namespace MachinaGrasshopper.Bridge
             string msg = null;
             if (!DA.GetData(0, ref msg)) return;
 
+            // Some sanity: users sometimes connect the Bridge from `Connect` to this input, 
+            // rather than the message coming out of `Listen`. Display alert.
+            if (msg.Equals("MachinaGrasshopper.Utils.MachinaBridgeSocket"))
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component requires a \"Msg\" from the \"Listen\" component as input");
+                return;
+            }
+
+
             // WHY WAS I DOING THIS, IF `LISTEN` ALREADY CAPS THE UPDATE?
             // NOT NECESSARY, AND I THINK IT'S CAUSING ERRORS (GETTING STUCK AT 1 ACTION PENDING)
             // --> Necessary so that when Listen fetches a non-execute action, it 
@@ -166,17 +175,25 @@ namespace MachinaGrasshopper.Bridge
         {
             if (msg == null) return false;
 
-            dynamic json = _serializer.Deserialize<dynamic>(msg);
-            string eType = json["event"];
-            if (eType.Equals(EVENT_NAME))
+            try
             {
-                _id = json["id"];
-                if (_id != _prevId)
+                dynamic json = _serializer.Deserialize<dynamic>(msg);
+                string eType = json["event"];
+                if (eType.Equals(EVENT_NAME))
                 {
-                    UpdateCurrentValues(json);
-                    _prevId = _id;
-                    return true;
+                    _id = json["id"];
+                    if (_id != _prevId)
+                    {
+                        UpdateCurrentValues(json);
+                        _prevId = _id;
+                        return true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                string err = "Something went wrong parsing \"" + msg + "\": " + ex;
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, err);
             }
 
             // If here, values were not updated

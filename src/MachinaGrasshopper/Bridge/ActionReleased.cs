@@ -97,6 +97,17 @@ namespace MachinaGrasshopper.Bridge
 
             if (!DA.GetData(0, ref msg)) return;
 
+            // Some sanity: users sometimes connect the Bridge from `Connect` to this input, 
+            // rather than the message coming out of `Listen`. Display alert.
+            if (msg.Equals("MachinaGrasshopper.Utils.MachinaBridgeSocket"))
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component requires a \"Msg\" from the \"Listen\" component as input");
+                return;
+            }
+
+
+
+
             // TEMPORARILY DEACTIVATED GATED OUTPUT, wasn't working well
 
             //// Output the values precomputed in the last solution.

@@ -57,7 +57,7 @@ namespace MachinaGrasshopper.Bridge
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("BridgeMessage", "Msg", "Last messags received from the bridge. Will only update once per received message.", GH_ParamAccess.list);
+            pManager.AddTextParameter("BridgeMessage", "BM", "Last messags received from the bridge. Will only update once per received message.", GH_ParamAccess.list);
         }
 
         

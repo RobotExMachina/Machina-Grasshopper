@@ -45,8 +45,11 @@ namespace MachinaGrasshopper.Bridge
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("URL", "URL", "The URL of the Machina Bridge App. Leave to default unless you know what you are doing ;)", GH_ParamAccess.item, "ws://127.0.0.1:6999/Bridge");
-            pManager.AddTextParameter("Name", "Name", "The name of this connecting client", GH_ParamAccess.item, "Grasshopper");
+            pManager.AddTextParameter("Name", "Name", "The name of this connecting client", GH_ParamAccess.item, "GH");
+            pManager.AddTextParameter("Key", "Key", "Optional authorization key if connecting to a remote server", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Connect?", "C", "Connect to Machina Bridge App?", GH_ParamAccess.item, false);
+
+            pManager[2].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -59,13 +62,19 @@ namespace MachinaGrasshopper.Bridge
         {
             string url = "";
             string clientName = "";
+            string key = "";
             bool connect = false;
 
             if (!DA.GetData(0, ref url)) return;
             if (!DA.GetData(1, ref clientName)) return;
-            if (!DA.GetData(2, ref connect)) return;
+            DA.GetData(2, ref key);
+            if (!DA.GetData(3, ref connect)) return;
 
-            url += "?name=" + clientName;
+            url += "?name=" + clientName + "&client=Grasshopper";
+            if (key != "")
+            {
+                url += "&authkey=" + key;
+            }
 
             _ms = _ms ?? new MachinaBridgeSocket(clientName);
 

@@ -18,6 +18,12 @@
 
 
 # REVISIONS
+
+# v0.8.12e
+- [x] `Bridge Connect` can now connect to a remote Machina server with an auth key
+- [x] Downgraded Machina to Rhino 5+
+- [x] Fixed sample files 
+
 # v0.8.12c
 - [x] Disabled gated output for `ActionExecuted` and company, wasn't working well. Will review in the future.
 
